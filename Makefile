@@ -23,3 +23,12 @@ debug-render:
 # Automated test suite
 auto-test:
 	@node test_runner.js || python test_runner.py 
+
+# Force start server (kills existing server first)
+force-serve:
+	@echo "Stopping any existing servers..."
+	@pkill -f "python.*http.server" || true
+	@sleep 1
+	@echo "Starting wabbazzar development server on http://localhost:8000"
+	@echo "For mobile device testing, use your local IP address"
+	@python3 -m http.server 8000

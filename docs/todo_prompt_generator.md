@@ -60,11 +60,20 @@ For each feature phase:
 ## Makefile Commands (Auto-Whitelisted)
 
 ```makefile
-.PHONY: serve test visual-test verify-render clean-cache debug-render auto-test
+.PHONY: serve test visual-test verify-render clean-cache debug-render auto-test force-serve
 
 # Core development server
 serve:
 	@python3 -m http.server 8000 --bind localhost || python -m SimpleHTTPServer 8000
+
+# Force start server (kills existing server first)
+force-serve:
+	@echo "Stopping any existing servers..."
+	@pkill -f "python.*http.server" || true
+	@sleep 1
+	@echo "Starting development server on http://localhost:8000"
+	@echo "For mobile device testing, use your local IP address"
+	@python3 -m http.server 8000
 
 # Visual testing infrastructure
 visual-test:
@@ -284,6 +293,7 @@ autonomous_development_rules:
 
 makefile_whitelist:
   - make serve
+  - make force-serve
   - make visual-test
   - make verify-render
   - make clean-cache
