@@ -1,0 +1,164 @@
+/* CSS Reset and Custom Properties */
+:root {
+    --bg-black: #000;
+    --text-white: #fff;
+    --accent-blue: #00D4FF;
+    --transition: 0.3s ease;
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Base Styles */
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    background-color: var(--bg-black);
+    color: var(--text-white);
+    font-family: var(--font-primary);
+    font-weight: 400;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Main Container */
+main {
+    width: 100%;
+    max-width: 600px;
+    padding: 2rem;
+    text-align: center;
+}
+
+/* Typography */
+h1 {
+    font-size: 2.5rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+/* Subtle Accent Line - Phase 6 */
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 1px;
+    background-color: var(--accent-blue);
+    opacity: 0.6;
+}
+
+/* Navigation */
+nav ul {
+    list-style: none;
+}
+
+nav li {
+    margin-bottom: 1.2rem;
+}
+
+nav a {
+    color: var(--text-white);
+    text-decoration: none;
+    font-size: 1.125rem;
+    font-weight: 400;
+    display: inline-block;
+    transition: all var(--transition);
+    position: relative;
+}
+
+/* Hover Effects - Phase 3 */
+nav a:hover {
+    color: var(--accent-blue);
+    text-shadow: 0 0 20px var(--accent-blue),
+                 0 0 40px var(--accent-blue);
+}
+
+/* Focus styles for accessibility */
+nav a:focus {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 4px;
+}
+
+/* Responsive Design - Phase 4 */
+@media (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+    
+    main {
+        padding: 1.5rem;
+    }
+    
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 2.5rem;
+    }
+    
+    nav a {
+        font-size: 1rem;
+        padding: 0.5rem 0;
+        /* Ensure touch targets are at least 44px */
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.75rem;
+    }
+}
+
+/* Large screens */
+@media (min-width: 1440px) {
+    html {
+        font-size: 18px;
+    }
+    
+    h1 {
+        font-size: 3rem;
+    }
+}
+
+/* Performance optimizations */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    body {
+        background-color: white;
+        color: black;
+    }
+    
+    nav a {
+        color: black;
+    }
+    
+    h1::after {
+        display: none;
+    }
+} 
