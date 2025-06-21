@@ -16,4 +16,9 @@ Thumbs.db
 
 # Python cache
 __pycache__/
-*.pyc 
+*.pyc
+
+# Generator tools (not for production)
+generate_preview.html
+generate_favicon.html
+SOCIAL_PREVIEW_SETUP.md 
