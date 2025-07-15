@@ -3,3 +3,117 @@ description:
 globs:
 alwaysApply: false
 ---
+# Development Rules for wabbazzar.github.io
+
+## Core Commands
+
+### Server Management
+```bash
+# Force start server (kills existing servers first)
+make force-serve
+
+# Regular server start
+make serve
+```
+
+### Testing Commands
+```bash
+# Visual testing infrastructure
+make visual-test
+
+# Render verification
+make verify-render
+
+# Debug render pipeline
+make debug-render
+
+# Automated test suite
+make auto-test
+```
+
+### Cache Management
+```bash
+# Clear browser cache
+make clean-cache
+```
+
+## Development Principles
+
+### Visual Verification First
+- Never trust console logs alone
+- Every feature must be visually verifiable through automated DOM inspection
+- Build visual test harnesses BEFORE implementing features
+
+### Design Specifications
+- Pure black background (#000)
+- White text (#fff)
+- Electric blue accent (#00D4FF) - only on hover states + one subtle accent line
+- Mobile-first responsive design
+- Centered single column layout
+- Inter font family
+- 0.3s ease transitions
+
+### File Organization
+- Keep all documentation in `docs/` directory
+- Clean up intermediary files after use (don't just gitignore them)
+- Test files should be functional, not temporary
+
+### Git Workflow
+```bash
+# Always test before committing
+make visual-test
+
+# Clean commit messages
+git add -A
+git commit -m "Clear description of changes"
+git push origin main
+```
+
+### Browser Cache Awareness
+All HTML files must include:
+```html
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="version" content="1.0.0">
+```
+
+### Testing Protocol
+1. Visual verification at every step
+2. Test at breakpoints: 320px, 768px, 1024px, 1440px
+3. Verify hover states work correctly
+4. Check performance (< 1 second load time)
+5. Ensure accessibility compliance
+
+### Common Issues & Solutions
+- **Port already in use**: Use `make force-serve` to kill existing servers
+- **Cache issues**: Hard refresh with Cmd+Shift+R (Mac) or Ctrl+Shift+R (Win)
+- **Hover not working**: Check :hover pseudo-class and touch device handling
+- **Layout breaking**: Verify flexbox properties and viewport units
+
+## Project Structure
+```
+wabbazzar.github.io/
+├── index.html          # Main portfolio page
+├── styles.css          # All styling
+├── Makefile           # Development commands
+├── visual_test.html   # Visual testing suite
+├── render_verify.html # Render verification
+├── debug_render.html  # Debug tools
+├── test_runner.js     # Automated tests
+├── README.md          # Public documentation
+├── docs/              # All documentation
+│   ├── spec.md       # Project specification
+│   ├── todo.md       # Development plan
+│   └── dev-rules.mdc # This file
+└── .gitignore        # Git exclusions
+```
+
+## Deployment Checklist
+- [ ] All visual tests pass
+- [ ] No console errors
+- [ ] Performance under 1 second
+- [ ] Links point to correct URLs
+- [ ] Social media meta tags in place
+- [ ] Clean up all temporary files
+- [ ] Documentation updated
