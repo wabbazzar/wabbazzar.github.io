@@ -698,6 +698,12 @@ main { position: relative; z-index: 1; }
     .back-to-top { right: 16px; bottom: 16px; }
 
     .poem-mobile-break { display: inline; }
+
+    /* Smaller ASCII rain so it stays ambient on narrow screens / PWA. */
+    .ascii-phone pre {
+        font-size: 6px;
+        line-height: 6px;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

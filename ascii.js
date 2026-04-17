@@ -281,10 +281,13 @@
             layer.appendChild(a);
 
             const vw = window.innerWidth;
+            const small = vw <= 720;
+            const iconW = small ? 150 : 280;
+            const startY = small ? -180 : -320;
             const phone = {
                 el: a,
-                x: Math.random() * (vw - 280),
-                y: -320,
+                x: Math.random() * (vw - iconW),
+                y: startY,
                 vx: (Math.random() - 0.5) * 0.15,
                 vy: 0.05 + Math.random() * 0.1,
                 rot: (Math.random() - 0.5) * 12,
@@ -320,8 +323,9 @@
         function tick() {
             const vh = window.innerHeight;
             const vw = window.innerWidth;
-            const PHONE_W = 260;
-            const PHONE_H = 260;
+            const small = vw <= 720;
+            const PHONE_W = small ? 150 : 260;
+            const PHONE_H = small ? 150 : 260;
             const R = 200;          // repulsion radius
             const R2 = R * R;
             const STRENGTH = 0.12;
@@ -349,7 +353,7 @@
                 p.x += p.vx;
                 p.y += p.vy;
                 p.rot += p.rotVel;
-                if (p.y > vh + 320 || p.x < -400 || p.x > vw + 400) {
+                if (p.y > vh + (small ? 180 : 320) || p.x < -400 || p.x > vw + 400) {
                     p.el.remove();
                     phones.splice(i, 1);
                     continue;
