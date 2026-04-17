@@ -435,9 +435,9 @@ h1 {
 .ascii-rain {
     position: fixed;
     inset: 0;
-    /* Above main (z:1) so taps on phones land on mobile too.
-       Layer is pointer-events:none; phones opt back in. */
-    z-index: 2;
+    /* Behind main so foreground images/cards always visually dominate.
+       Poem trigger is wired at document level; phones don't need pointer events. */
+    z-index: 0;
     pointer-events: none;
     overflow: hidden;
 }
@@ -446,7 +446,7 @@ h1 {
     position: absolute;
     top: 0;
     left: 0;
-    pointer-events: auto;
+    pointer-events: none;
     text-decoration: none;
     transform-origin: 50% 50%;
     will-change: transform;
@@ -520,6 +520,8 @@ h1 {
     animation: poem-word-in 1.2s ease forwards;
     will-change: opacity;
 }
+
+.poem-mobile-break { display: none; }
 
 .poem-word.shown,
 .poem-line.shown {
@@ -670,6 +672,8 @@ main { position: relative; z-index: 1; }
         --rot: 6deg;
     }
     .back-to-top { right: 16px; bottom: 16px; }
+
+    .poem-mobile-break { display: inline; }
 }
 
 @media (prefers-reduced-motion: reduce) {

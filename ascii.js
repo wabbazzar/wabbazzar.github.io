@@ -223,7 +223,6 @@
             a.href = '#';
             a.setAttribute('aria-hidden', 'true');
             a.tabIndex = -1;
-            a.addEventListener('click', (ev) => { ev.preventDefault(); showPoem(); });
             const pre = document.createElement('pre');
             pre.textContent = g.lines.join('\n');
             a.appendChild(pre);
@@ -251,6 +250,20 @@
         }, { passive: true });
         window.addEventListener('pointerleave', () => { pointer.active = false; });
         window.addEventListener('pointerdown', (ev) => emitRipple(ev.clientX, ev.clientY));
+
+        // Poem opens when a click lands on empty space that a rain phone occupies.
+        // Foreground links/buttons take priority because they capture the event first.
+        document.addEventListener('click', (ev) => {
+            if (document.querySelector('.poem-overlay')) return;
+            if (ev.target.closest && ev.target.closest('a[href], button, input, textarea, select, label, [role="button"]')) return;
+            for (const p of phones) {
+                const r = p.el.getBoundingClientRect();
+                if (ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom) {
+                    showPoem();
+                    return;
+                }
+            }
+        });
 
         function tick() {
             const vh = window.innerHeight;
@@ -383,6 +396,12 @@ Just as we are on our personal journey to and away from the highest self, the un
                 span.style.animationDelay = cursor + 'ms';
                 first.appendChild(span);
                 first.appendChild(document.createTextNode(' '));
+                // On mobile, break the line between "was" and "an anomaly." so the reveal has a rhythm.
+                if (firstWords[i] === 'was') {
+                    const br = document.createElement('br');
+                    br.className = 'poem-mobile-break';
+                    first.appendChild(br);
+                }
                 cursor += FIRST_WORD_MS;
             }
         }
