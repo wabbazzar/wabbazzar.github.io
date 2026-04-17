@@ -179,27 +179,86 @@
         document.body.appendChild(layer);
 
         const COUNT = 90;
+        const wraps = [];
         for (let i = 0; i < COUNT; i++) {
+            const wrap = document.createElement('span');
+            wrap.className = 'star-wrap';
+            wrap.style.left = (Math.random() * 100).toFixed(2) + '%';
+            wrap.style.top = (Math.random() * 100).toFixed(2) + '%';
             const s = document.createElement('span');
-            s.textContent = STAR_CHARS[(Math.random() * STAR_CHARS.length) | 0];
             s.className = 'star';
-            s.style.left = (Math.random() * 100).toFixed(2) + '%';
-            s.style.top = (Math.random() * 100).toFixed(2) + '%';
+            s.textContent = STAR_CHARS[(Math.random() * STAR_CHARS.length) | 0];
             s.style.fontSize = (6 + Math.random() * 10).toFixed(1) + 'px';
             s.style.animationDelay = (Math.random() * -8).toFixed(2) + 's';
             s.style.animationDuration = (4 + Math.random() * 7).toFixed(2) + 's';
-            layer.appendChild(s);
+            wrap.appendChild(s);
+            layer.appendChild(wrap);
+            wraps.push(wrap);
         }
 
-        // Pointer-follow spotlight.
+        // Cache each star's viewport center. Starfield is position:fixed, so only
+        // resizes shift these.
+        function measure() {
+            for (const w of wraps) {
+                const r = w.getBoundingClientRect();
+                w._cx = r.left + r.width / 2;
+                w._cy = r.top + r.height / 2;
+            }
+        }
+        measure();
+        window.addEventListener('resize', measure);
+
+        // Tiny halo that hints at the cursor. Stars do the real work.
         const spot = document.createElement('div');
         spot.className = 'spotlight';
         document.body.appendChild(spot);
+
+        // Gravity push: stars within radius drift outward and swell proportional
+        // to how close the cursor is.
+        const GRAV_R = 180;
+        const GRAV_R2 = GRAV_R * GRAV_R;
+        const MAX_PUSH = 10;     // px
+        const MAX_SWELL = 1.55;  // scale multiplier at center
+        const dirty = new Set();
+
+        function reset(w) {
+            w.style.removeProperty('--px');
+            w.style.removeProperty('--py');
+            w.style.removeProperty('--swell');
+        }
+
         window.addEventListener('pointermove', (ev) => {
             spot.style.transform = `translate3d(${ev.clientX}px, ${ev.clientY}px, 0) translate(-50%, -50%)`;
             spot.style.opacity = '1';
+            const px = ev.clientX, py = ev.clientY;
+            const seen = new Set();
+            for (const w of wraps) {
+                const dx = w._cx - px;
+                const dy = w._cy - py;
+                const d2 = dx * dx + dy * dy;
+                if (d2 < GRAV_R2) {
+                    const d = Math.sqrt(d2);
+                    const t = 1 - d / GRAV_R; // 0..1
+                    const inv = d > 0.5 ? 1 / d : 0;
+                    const mag = t * MAX_PUSH;
+                    w.style.setProperty('--px', (dx * inv * mag).toFixed(1) + 'px');
+                    w.style.setProperty('--py', (dy * inv * mag).toFixed(1) + 'px');
+                    w.style.setProperty('--swell', (1 + t * (MAX_SWELL - 1)).toFixed(2));
+                    dirty.add(w);
+                    seen.add(w);
+                }
+            }
+            // Release stars that left the radius this frame.
+            for (const w of dirty) {
+                if (!seen.has(w)) { reset(w); dirty.delete(w); }
+            }
         }, { passive: true });
-        window.addEventListener('pointerleave', () => { spot.style.opacity = '0'; });
+
+        window.addEventListener('pointerleave', () => {
+            spot.style.opacity = '0';
+            for (const w of dirty) reset(w);
+            dirty.clear();
+        });
     }
 
     function startRain(grids) {

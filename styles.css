@@ -415,20 +415,29 @@ h1 {
     overflow: hidden;
 }
 
-.starfield .star {
+.starfield .star-wrap {
     position: absolute;
+    transform:
+        translate(-50%, -50%)
+        translate(var(--px, 0px), var(--py, 0px))
+        scale(var(--swell, 1));
+    transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    will-change: transform;
+}
+
+.starfield .star {
+    display: block;
     color: rgba(245, 245, 244, 0.35);
     font-family: 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
     line-height: 1;
-    transform: translate(-50%, -50%);
     animation: twinkle 9s ease-in-out infinite;
     will-change: opacity, transform;
     user-select: none;
 }
 
 @keyframes twinkle {
-    0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
-    50%      { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+    0%, 100% { opacity: 0; transform: scale(0.6); }
+    50%      { opacity: 0.55; transform: scale(1); }
 }
 
 /* -------- ASCII gravity rain -------- */
@@ -561,17 +570,17 @@ h1 {
     100% { width: 620px; height: 620px; opacity: 0;    border-width: 1px; }
 }
 
-/* Soft pointer-follow spotlight that brightens stars + ASCII underneath */
+/* Tiny hint of light at the cursor — the gravity-pushed stars do the heavy lifting. */
 .spotlight {
     position: fixed;
     top: 0; left: 0;
-    width: 360px;
-    height: 360px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
     background: radial-gradient(circle,
-        rgba(245, 245, 244, 0.14) 0%,
-        rgba(245, 245, 244, 0.05) 40%,
-        rgba(245, 245, 244, 0) 70%);
+        rgba(245, 245, 244, 0.04) 0%,
+        rgba(245, 245, 244, 0.015) 50%,
+        rgba(245, 245, 244, 0) 75%);
     pointer-events: none;
     z-index: 0;
     opacity: 0;
