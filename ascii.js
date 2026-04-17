@@ -5,7 +5,7 @@
 (() => {
     const SHOTS = [
         { src: 'assets/icons/shredly.png',  href: 'https://shredly.me/' },
-        { src: 'assets/icons/quizly.png',   href: 'https://wabbazzar.github.io/quizly/' },
+        { src: 'assets/icons/quizly.png',   href: 'https://quizly.me/' },
         { src: 'assets/icons/starbird.png', href: 'https://wabbazzar.github.io/starbird/' },
     ];
 
