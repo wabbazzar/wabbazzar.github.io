@@ -641,7 +641,6 @@ main { position: relative; z-index: 1; }
 
 /* Tablet */
 @media (min-width: 721px) and (max-width: 1024px) {
-    .work-grid { grid-template-columns: repeat(2, 1fr); }
     .iphone { width: 260px; margin-left: -130px; margin-top: -282px; }
     .iphone { --spread: 170px; }
     .iphone-stage { height: 640px; }
