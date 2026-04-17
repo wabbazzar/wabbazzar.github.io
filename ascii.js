@@ -360,16 +360,31 @@ Just as we are on our personal journey to and away from the highest self, the un
         const first = document.createElement('p');
         first.className = 'poem-first';
         const firstWords = paragraphs[0].trim().split(/\s+/);
+        const LETTER_MS = 60;
         for (let i = 0; i < firstWords.length; i++) {
+            const isLast = i === firstWords.length - 1;
             // Linger 50% longer before revealing "anomaly" (last word of first line).
-            if (i === firstWords.length - 1) cursor += FIRST_WORD_MS * 0.5;
-            const span = document.createElement('span');
-            span.className = 'poem-word';
-            span.textContent = firstWords[i];
-            span.style.animationDelay = cursor + 'ms';
-            first.appendChild(span);
-            if (i < firstWords.length - 1) first.appendChild(document.createTextNode(' '));
-            cursor += FIRST_WORD_MS;
+            if (isLast) cursor += FIRST_WORD_MS * 0.5;
+            if (isLast) {
+                // Reveal "anomaly" one letter at a time in a quick wave.
+                const chars = Array.from(firstWords[i]);
+                for (let c = 0; c < chars.length; c++) {
+                    const span = document.createElement('span');
+                    span.className = 'poem-word';
+                    span.textContent = chars[c];
+                    span.style.animationDelay = (cursor + c * LETTER_MS) + 'ms';
+                    first.appendChild(span);
+                }
+                cursor += chars.length * LETTER_MS;
+            } else {
+                const span = document.createElement('span');
+                span.className = 'poem-word';
+                span.textContent = firstWords[i];
+                span.style.animationDelay = cursor + 'ms';
+                first.appendChild(span);
+                first.appendChild(document.createTextNode(' '));
+                cursor += FIRST_WORD_MS;
+            }
         }
         inner.appendChild(first);
         cursor += FIRST_PAUSE_MS;
