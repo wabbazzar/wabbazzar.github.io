@@ -354,7 +354,7 @@ Just as we are on our personal journey to and away from the highest self, the un
 
     const FADE_MS = 2800;        // black fade-in duration
     const FIRST_WORD_MS = 420;   // per-word pacing on opening line
-    const FIRST_PAUSE_MS = 900;  // pause after first line
+    const FIRST_PAUSE_MS = 1800; // pause after first line
     const LINE_MS = 1100;        // gap between sentence reveals
 
     function showPoem() {
