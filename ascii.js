@@ -372,37 +372,29 @@ Just as we are on our personal journey to and away from the highest self, the un
         // First line: per-word, slightly larger.
         const first = document.createElement('p');
         first.className = 'poem-first';
+        // Even left-to-right wipe: every character (including spaces) shares the same cadence.
         const firstWords = paragraphs[0].trim().split(/\s+/);
-        const LETTER_MS = 60;
-        for (let i = 0; i < firstWords.length; i++) {
-            const isLast = i === firstWords.length - 1;
-            // Linger 50% longer before revealing "anomaly" (last word of first line).
-            if (isLast) cursor += FIRST_WORD_MS * 0.5;
-            if (isLast) {
-                // Reveal "anomaly" one letter at a time in a quick wave.
-                const chars = Array.from(firstWords[i]);
-                for (let c = 0; c < chars.length; c++) {
-                    const span = document.createElement('span');
-                    span.className = 'poem-word';
-                    span.textContent = chars[c];
-                    span.style.animationDelay = (cursor + c * LETTER_MS) + 'ms';
-                    first.appendChild(span);
-                }
-                cursor += chars.length * LETTER_MS;
-            } else {
-                const span = document.createElement('span');
-                span.className = 'poem-word';
-                span.textContent = firstWords[i];
-                span.style.animationDelay = cursor + 'ms';
-                first.appendChild(span);
+        const CHAR_MS = 60;
+        const PAUSE_BEFORE_ANOMALY = FIRST_WORD_MS * 0.5;
+        for (let w = 0; w < firstWords.length; w++) {
+            const isLast = w === firstWords.length - 1;
+            if (w > 0) {
                 first.appendChild(document.createTextNode(' '));
-                // On mobile, break the line between "was" and "an anomaly." so the reveal has a rhythm.
-                if (firstWords[i] === 'was') {
+                cursor += CHAR_MS;
+                if (firstWords[w - 1] === 'was') {
                     const br = document.createElement('br');
                     br.className = 'poem-mobile-break';
                     first.appendChild(br);
                 }
-                cursor += FIRST_WORD_MS;
+            }
+            if (isLast) cursor += PAUSE_BEFORE_ANOMALY;
+            for (const ch of Array.from(firstWords[w])) {
+                const span = document.createElement('span');
+                span.className = 'poem-word';
+                span.textContent = ch;
+                span.style.animationDelay = cursor + 'ms';
+                first.appendChild(span);
+                cursor += CHAR_MS;
             }
         }
         inner.appendChild(first);
