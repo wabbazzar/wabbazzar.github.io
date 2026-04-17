@@ -342,7 +342,7 @@ Just as we are on our personal journey to and away from the highest self, the un
     const FADE_MS = 2800;        // black fade-in duration
     const FIRST_WORD_MS = 420;   // per-word pacing on opening line
     const FIRST_PAUSE_MS = 900;  // pause after first line
-    const LINE_MS = 700;         // gap between sentence reveals
+    const LINE_MS = 1100;        // gap between sentence reveals
 
     function showPoem() {
         if (document.querySelector('.poem-overlay')) return;
@@ -361,6 +361,8 @@ Just as we are on our personal journey to and away from the highest self, the un
         first.className = 'poem-first';
         const firstWords = paragraphs[0].trim().split(/\s+/);
         for (let i = 0; i < firstWords.length; i++) {
+            // Linger 50% longer before revealing "anomaly" (last word of first line).
+            if (i === firstWords.length - 1) cursor += FIRST_WORD_MS * 0.5;
             const span = document.createElement('span');
             span.className = 'poem-word';
             span.textContent = firstWords[i];

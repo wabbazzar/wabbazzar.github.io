@@ -128,7 +128,9 @@ h1 {
     --lift: 0px;
     --tile-bg: transparent;
     position: relative;
-    border-radius: 22.37%;   /* iOS squircle approximation */
+    /* iOS app icon shape: 22.37% radius + superellipse corners (Apple HIG). */
+    border-radius: 22.37%;
+    corner-shape: squircle;
     aspect-ratio: 1 / 1;
     overflow: hidden;
     background: var(--tile-bg);
@@ -214,6 +216,9 @@ h1 {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* Match the stage squircle — 3D-transformed children can escape overflow clipping. */
+    border-radius: inherit;
+    corner-shape: inherit;
     transform: translateZ(20px);
     transition: transform var(--transition);
 }
@@ -430,7 +435,9 @@ h1 {
 .ascii-rain {
     position: fixed;
     inset: 0;
-    z-index: 0;
+    /* Above main (z:1) so taps on phones land on mobile too.
+       Layer is pointer-events:none; phones opt back in. */
+    z-index: 2;
     pointer-events: none;
     overflow: hidden;
 }
@@ -621,11 +628,30 @@ main { position: relative; z-index: 1; }
     .hero { padding-bottom: 72px; }
     .top-nav { gap: 20px; }
     .work-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
         padding-bottom: 80px;
     }
-    .card-stage { aspect-ratio: 4 / 5; }
+    .card-stage { aspect-ratio: 1 / 1; }
+    /* iOS home-screen caption: name centered under icon, tag as subtle caption. */
+    .card-meta {
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        padding: 10px 0 0;
+        text-align: center;
+    }
+    .card-name {
+        font-size: 0.85rem;
+        line-height: 1.2;
+    }
+    .card-tag {
+        background: transparent;
+        padding: 0;
+        font-size: 0.58rem;
+        letter-spacing: 0.12em;
+        color: var(--text-faint);
+    }
 
     .project { padding: 72px 0 96px; }
     .project-head {
