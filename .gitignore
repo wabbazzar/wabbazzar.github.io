@@ -16,4 +16,7 @@ Thumbs.db
 
 # Python cache
 __pycache__/
-*.pyc 
+*.pyc
+
+# Scratch / dev
+tmp/

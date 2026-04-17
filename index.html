@@ -6,49 +6,229 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="version" content="1.0.0">
-    <meta name="description" content="wabbazzar - Portfolio of Wesley Adam Beckner">
+    <meta name="version" content="4.0.0">
+    <meta name="description" content="wabbazzar">
     <title>wabbazzar</title>
-    
-    <!-- Open Graph / Facebook -->
+
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://wabbazzar.github.io/">
     <meta property="og:title" content="wabbazzar">
-    <meta property="og:description" content="Minimalist portfolio featuring games and creative projects by Wesley Adam Beckner">
     <meta property="og:image" content="https://wabbazzar.github.io/preview.png">
-    
-    <!-- Twitter -->
+
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://wabbazzar.github.io/">
     <meta property="twitter:title" content="wabbazzar">
-    <meta property="twitter:description" content="Minimalist portfolio featuring games and creative projects by Wesley Adam Beckner">
     <meta property="twitter:image" content="https://wabbazzar.github.io/preview.png">
-    
-    <!-- Favicon -->
+
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    
+
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body id="top">
     <main>
-        <h1>wabbazzar</h1>
-        <nav>
-            <ul>
-                <li><a href="/tetris/index.html">tetris</a></li>
-                <li><a href="/snake/index.html">snake</a></li>
-                <li><a href="/cards/index.html">cards</a></li>
-                <li><a href="https://shredly.me/">shredly</a></li>
-                <li><a href="https://heatherandwesley.com/">heather and wesley</a></li>
-                <li><a href="https://wabbazzar.github.io/starbird/">starbird</a></li>
-                <li><a href="https://wabbazzar.github.io/quizly/">quizly</a></li>
-                <li><a href="https://wabbazzar.github.io/puffys-birthday/">puffy</a></li>
-                <li><a href="https://shedly.me/">shedly</a></li>
-            </ul>
-        </nav>
+        <header class="site-header">
+            <a class="brand" href="https://github.com/wabbazzar" target="_blank" rel="noopener">wabbazzar</a>
+            <nav class="top-nav">
+                <a href="#work">Work</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1>Apps &amp; writing<br>by Wesley Beckner.</h1>
+        </section>
+
+        <section id="work" class="work">
+            <div class="work-head">
+                <span class="work-title">Selected Work</span>
+                <span class="work-range">2024&nbsp;&rarr;&nbsp;2026</span>
+            </div>
+
+            <div class="work-grid">
+                <a class="card" href="#detail-shredly" data-app="shredly">
+                    <div class="card-stage tile-shredly">
+                        <img class="app-icon" src="assets/icons/shredly.png" alt="shredly app icon" loading="eager">
+                    </div>
+                    <div class="card-meta">
+                        <span class="card-name">shredly</span>
+                        <span class="card-tag">Fitness</span>
+                    </div>
+                </a>
+
+                <a class="card" href="#detail-quizly" data-app="quizly">
+                    <div class="card-stage tile-quizly">
+                        <img class="app-icon" src="assets/icons/quizly.png" alt="quizly app icon" loading="eager">
+                    </div>
+                    <div class="card-meta">
+                        <span class="card-name">quizly</span>
+                        <span class="card-tag">Learning</span>
+                    </div>
+                </a>
+
+                <a class="card" href="#detail-starbird" data-app="starbird">
+                    <div class="card-stage tile-starbird">
+                        <img class="app-icon" src="assets/icons/starbird.png" alt="starbird app icon" loading="eager">
+                    </div>
+                    <div class="card-meta">
+                        <span class="card-name">starbird</span>
+                        <span class="card-tag">Values</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="project" id="detail-shredly" data-count="5">
+            <div class="project-head">
+                <span class="project-kicker">Shredly</span>
+                <p class="project-tagline">A programming engine for strength, EMOM, AMRAP, circuits, and intervals.</p>
+                <a class="project-link" href="https://shredly.me/" target="_blank" rel="noopener">shredly.me&nbsp;&rarr;</a>
+            </div>
+            <div class="iphone-stage" data-href="https://shredly.me/">
+                <a class="iphone" style="--i:0" href="https://shredly.me/" target="_blank" rel="noopener" aria-label="Open shredly.me"><img src="assets/screenshots/shredly/iphone/02-schedule.png" alt="Schedule" loading="lazy"></a>
+                <a class="iphone" style="--i:1" href="https://shredly.me/" target="_blank" rel="noopener" aria-label="Open shredly.me"><img src="assets/screenshots/shredly/iphone/04-exercise.png" alt="Exercise detail" loading="lazy"></a>
+                <a class="iphone" style="--i:2" href="https://shredly.me/" target="_blank" rel="noopener" aria-label="Open shredly.me"><img src="assets/screenshots/shredly/iphone/01-live.png" alt="Live workout" loading="lazy"></a>
+                <a class="iphone" style="--i:3" href="https://shredly.me/" target="_blank" rel="noopener" aria-label="Open shredly.me"><img src="assets/screenshots/shredly/iphone/03-weight.png" alt="Edit weight" loading="lazy"></a>
+                <a class="iphone" style="--i:4" href="https://shredly.me/" target="_blank" rel="noopener" aria-label="Open shredly.me"><img src="assets/screenshots/shredly/iphone/05-select.png" alt="Select exercise" loading="lazy"></a>
+            </div>
+        </section>
+
+        <section class="project" id="detail-quizly" data-count="4">
+            <div class="project-head">
+                <span class="project-kicker">Quizly</span>
+                <p class="project-tagline">It&rsquo;s not a test. Decks, flashcards, match, and audio for language study.</p>
+                <a class="project-link" href="https://wabbazzar.github.io/quizly/" target="_blank" rel="noopener">quizly&nbsp;&rarr;</a>
+            </div>
+            <div class="iphone-stage" data-href="https://wabbazzar.github.io/quizly/">
+                <a class="iphone" style="--i:0" href="https://wabbazzar.github.io/quizly/" target="_blank" rel="noopener" aria-label="Open quizly"><img src="assets/screenshots/quizly/iphone/01-home.png" alt="Home" loading="lazy"></a>
+                <a class="iphone" style="--i:1" href="https://wabbazzar.github.io/quizly/" target="_blank" rel="noopener" aria-label="Open quizly"><img src="assets/screenshots/quizly/iphone/02-flashcards.png" alt="Flashcards" loading="lazy"></a>
+                <a class="iphone" style="--i:2" href="https://wabbazzar.github.io/quizly/" target="_blank" rel="noopener" aria-label="Open quizly"><img src="assets/screenshots/quizly/iphone/03-match.png" alt="Match" loading="lazy"></a>
+                <a class="iphone" style="--i:3" href="https://wabbazzar.github.io/quizly/" target="_blank" rel="noopener" aria-label="Open quizly"><img src="assets/screenshots/quizly/iphone/04-audio.png" alt="Audio" loading="lazy"></a>
+            </div>
+        </section>
+
+        <section class="project" id="detail-starbird" data-count="3">
+            <div class="project-head">
+                <span class="project-kicker">Starbird</span>
+                <p class="project-tagline">Shop in line with your values. Track which brands align &mdash; and which don&rsquo;t.</p>
+                <a class="project-link" href="https://wabbazzar.github.io/starbird/" target="_blank" rel="noopener">starbird&nbsp;&rarr;</a>
+            </div>
+            <div class="iphone-stage" data-href="https://wabbazzar.github.io/starbird/">
+                <a class="iphone" style="--i:0" href="https://wabbazzar.github.io/starbird/" target="_blank" rel="noopener" aria-label="Open starbird"><img src="assets/screenshots/starbird/iphone/01-brands.png" alt="Brands" loading="lazy"></a>
+                <a class="iphone" style="--i:1" href="https://wabbazzar.github.io/starbird/" target="_blank" rel="noopener" aria-label="Open starbird"><img src="assets/screenshots/starbird/iphone/02-about.png" alt="About" loading="lazy"></a>
+                <a class="iphone" style="--i:2" href="https://wabbazzar.github.io/starbird/" target="_blank" rel="noopener" aria-label="Open starbird"><img src="assets/screenshots/starbird/iphone/03-charts.png" alt="Charts" loading="lazy"></a>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <span>&copy; 2026</span>
+            <span>wesleybeckner@gmail.com</span>
+        </footer>
     </main>
+
+    <a class="back-to-top" href="#top" aria-label="Back to top">&uarr; Top</a>
+
+    <script src="ascii.js" defer></script>
+    <script>
+        (() => {
+            const CYCLE_MS = 2400;
+            document.querySelectorAll('.card').forEach(card => {
+                const stage = card.querySelector('.card-stage');
+                if (!stage) return;
+                const imgs = Array.from(stage.querySelectorAll('img.screen'));
+                if (imgs.length <= 1) return;
+                imgs[0].classList.add('is-active');
+                let i = 0;
+                let timer = null;
+                const start = () => {
+                    if (timer) return;
+                    timer = setInterval(() => {
+                        imgs[i].classList.remove('is-active');
+                        i = (i + 1) % imgs.length;
+                        imgs[i].classList.add('is-active');
+                    }, CYCLE_MS);
+                };
+                const stop = () => {
+                    clearInterval(timer);
+                    timer = null;
+                    imgs.forEach(img => img.classList.remove('is-active'));
+                    i = 0;
+                    imgs[0].classList.add('is-active');
+                };
+                card.addEventListener('mouseenter', start);
+                card.addEventListener('mouseleave', stop);
+                card.addEventListener('focusin', start);
+                card.addEventListener('focusout', stop);
+
+                // Pointer-driven 3D tilt on the card stage.
+                const MAX_TILT = 9; // degrees
+                const onMove = (ev) => {
+                    const r = stage.getBoundingClientRect();
+                    const px = (ev.clientX - r.left) / r.width;
+                    const py = (ev.clientY - r.top) / r.height;
+                    const ry = (px - 0.5) * 2 * MAX_TILT;
+                    const rx = -(py - 0.5) * 2 * MAX_TILT;
+                    stage.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+                    stage.style.setProperty('--rx', rx.toFixed(2) + 'deg');
+                    stage.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+                    stage.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+                };
+                const reset = () => {
+                    stage.style.setProperty('--rx', '0deg');
+                    stage.style.setProperty('--ry', '0deg');
+                };
+                card.addEventListener('pointermove', onMove);
+                card.addEventListener('pointerleave', reset);
+            });
+
+            // Compute symmetric offset for each iPhone in a fan (center = 0).
+            document.querySelectorAll('.project').forEach(section => {
+                const phones = section.querySelectorAll('.iphone');
+                const n = phones.length;
+                const mid = (n - 1) / 2;
+                phones.forEach((p, i) => {
+                    const o = i - mid;
+                    const abs = Math.abs(o);
+                    p.style.setProperty('--o', o.toString());
+                    p.style.setProperty('--abs', abs.toString());
+                    p.style.zIndex = String(10 - Math.round(abs * 10) / 10);
+                });
+            });
+
+            // Reveal on scroll.
+            const io = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) e.target.classList.add('is-visible');
+                });
+            }, { threshold: 0.2 });
+            document.querySelectorAll('.project').forEach(el => io.observe(el));
+
+            // Parallax tilt follows scroll for each stage.
+            const stages = document.querySelectorAll('.iphone-stage');
+            const onScroll = () => {
+                const vh = window.innerHeight;
+                stages.forEach(s => {
+                    const r = s.getBoundingClientRect();
+                    const center = r.top + r.height / 2;
+                    const delta = (center - vh / 2) / vh;
+                    s.style.setProperty('--scroll', delta.toFixed(3));
+                });
+            };
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+
+            // Back-to-top visibility after first viewport.
+            const backToTop = document.querySelector('.back-to-top');
+            if (backToTop) {
+                const toggleBackToTop = () => {
+                    backToTop.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.6);
+                };
+                window.addEventListener('scroll', toggleBackToTop, { passive: true });
+                toggleBackToTop();
+            }
+        })();
+    </script>
 </body>
-</html> 
+</html>
