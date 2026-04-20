@@ -182,6 +182,7 @@ overlay with the same bottom-right `✕ exit` button. They follow the same
 | puffacles   | long-press on the portfolio (shatter animation)              | `puffacles:exit`  |
 | tetris      | fast triple-tap on the portfolio (shatter animation)         | `tetris:exit`     |
 | portavec    | clicking a `wabbazzar.com/portavec/` link (plain cross-fade) | `portavec:exit`   |
+| starbird    | clicking a `wabbazzar.github.io/starbird/` link (cross-fade) | `starbird:exit`   |
 
 The `✕ exit` button lives in the bottom-right of the iframe overlay so
 it doesn't collide with the scoreboards/HUDs that games typically pin

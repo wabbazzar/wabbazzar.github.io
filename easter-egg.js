@@ -9,7 +9,12 @@
 
     const PUFFACLES_URL = "https://wabbazzar.com/puffacles/?bg=wabbazzar";
     const TETRIS_URL = "https://wabbazzar.com/tetris/";
-    const PORTAVEC_HREF_RE = /^https?:\/\/(?:www\.)?wabbazzar\.com\/portavec\/?(?:[?#]|$)/;
+    // Links to these sub-deploys are intercepted and loaded in the iframe
+    // overlay (rather than navigating away). Each entry: [href regex, iframe title].
+    const IFRAME_LINKS = [
+        [/^https?:\/\/(?:www\.)?wabbazzar\.com\/portavec\/?(?:[?#]|$)/, "portavec"],
+        [/^https?:\/\/(?:www\.)?wabbazzar\.(?:github\.io|com)\/starbird\/?(?:[?#]|$)/, "starbird"],
+    ];
 
     // Long-press timing.
     const HOLD_SPARK_MS = 1000;   // silent charge-up before sparks appear
@@ -413,9 +418,13 @@
             if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
             const a = ev.target && ev.target.closest && ev.target.closest("a[href]");
             if (!a) return;
-            if (!PORTAVEC_HREF_RE.test(a.href)) return;
-            ev.preventDefault();
-            openInIframe(a.href, { title: "portavec" });
+            for (const [re, title] of IFRAME_LINKS) {
+                if (re.test(a.href)) {
+                    ev.preventDefault();
+                    openInIframe(a.href, { title });
+                    return;
+                }
+            }
         }
 
         window.addEventListener("pointerdown", onDown);

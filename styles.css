@@ -856,10 +856,11 @@ body.egg-shattering { overflow: hidden; }
 .egg-stage, .egg-spark-layer { will-change: transform, opacity; }
 .egg-hint {
     position: absolute;
-    right: 14px;
-    /* Bottom-right so it doesn't collide with score views, which typically
-       live at the top of game UIs. */
-    bottom: 14px;
+    /* Bottom-right, nudged in from the edge *and* past the iOS safe-area so the
+       button never gets clipped by the home-indicator bar or the rounded screen
+       corner. env() falls back to 0 on platforms without safe-area support. */
+    right: calc(22px + env(safe-area-inset-right, 0px));
+    bottom: calc(22px + env(safe-area-inset-bottom, 0px));
     padding: 6px 10px;
     font: 12px ui-monospace, monospace;
     color: rgba(255, 255, 255, 0.82);
