@@ -1,18 +1,27 @@
-// Long-press easter egg: press and hold anywhere on the page (mouse or
-// finger). The first second is silent; after that sparks appear and build
-// at the touch point; at ~2s the viewport shatters into the puffacles game.
-// Depends on fracture.js for the math + animation, and on the puffacles
-// deploy at https://wabbazzar.com/puffacles/?bg=wabbazzar.
+// Easter eggs + in-iframe launcher:
+//  - long-press anywhere → puffacles (via the fracture shatter animation)
+//  - fast triple-tap anywhere → tetris (same shatter, centered on the 3rd tap)
+//  - clicking a portavec link → portavec in-iframe with a back button
+// All three mount into the same full-screen iframe overlay with a bottom-right
+// exit button. Depends on fracture.js for the shatter math + rendering.
 (function () {
     "use strict";
 
     const PUFFACLES_URL = "https://wabbazzar.com/puffacles/?bg=wabbazzar";
+    const TETRIS_URL = "https://wabbazzar.com/tetris/";
+    const PORTAVEC_HREF_RE = /^https?:\/\/(?:www\.)?wabbazzar\.com\/portavec\/?(?:[?#]|$)/;
 
-    // Timing.
+    // Long-press timing.
     const HOLD_SPARK_MS = 1000;   // silent charge-up before sparks appear
     const HOLD_FIRE_MS = 2000;    // total hold time until shatter fires
     const CANCEL_MOVE_PX = 24;    // jitter tolerance — moving farther cancels (user is scrolling)
     const VIRTUAL_TRI_RADIUS = 70; // half-size of the synthetic triangle centered on the touch
+
+    // Triple-tap timing.
+    const TAP_MAX_DURATION_MS = 280;  // pointerdown→pointerup longer than this isn't a tap
+    const TAP_MAX_MOVE_PX = 12;       // max movement while pressed to still count as a tap
+    const TRIPLE_TAP_WINDOW_MS = 600; // all 3 taps must land within this window
+    const TRIPLE_TAP_MAX_SPREAD_PX = 90; // all 3 taps must be within this radius of the first
 
     // Allow the egg to fire repeatedly by default; flip to `?egg=once` in the URL
     // to opt back into one-shot behavior for production.
@@ -116,11 +125,29 @@
     // ---------- shatter playback ----------
 
     let currentDismiss = null;
+    let stageOpen = false;
 
-    function playShatter(triangle) {
+    // Opens `url` in a full-screen iframe over the page. If `triangle` is
+    // provided, plays the fracture shatter animation on the way in. Otherwise
+    // simply cross-fades the iframe up. In both cases, installs ESC /
+    // postMessage('<label>:exit') / bottom-right button dismissal.
+    //
+    // opts:
+    //   title     — iframe title attribute (also used for the exit postMessage key)
+    //   triangle  — [[x,y],[x,y],[x,y]] to drive the shatter; omit for plain fade
+    //   exitKey   — postMessage key from iframe that triggers dismiss (default: `${title}:exit`)
+    function openInIframe(url, opts) {
+        opts = opts || {};
+        if (stageOpen) return; // guard against double-launch
+        stageOpen = true;
+
+        const title = opts.title || "launcher";
+        const triangle = opts.triangle || null;
+        const exitKey = opts.exitKey || (title + ":exit");
+        const withShatter = !!triangle;
         const viewport = { w: window.innerWidth, h: window.innerHeight };
 
-        // Container stacks: page body -> iframe -> shatter canvas -> (removed when done).
+        // Container stacks: page body -> iframe -> (optional shatter canvas).
         const stage = document.createElement("div");
         stage.className = "egg-stage";
         Object.assign(stage.style, {
@@ -128,18 +155,18 @@
         });
         document.body.appendChild(stage);
 
-        // Tiny hint so users know how to get back out. Clickable because ESC
-        // keydowns don't cross iframe boundaries once the game takes focus.
+        // Bottom-right exit button (clickable because ESC keydowns don't cross
+        // iframe boundaries once the game takes focus).
         const hint = document.createElement("button");
         hint.type = "button";
         hint.className = "egg-hint";
         hint.textContent = "✕ exit";
         stage.appendChild(hint);
 
-        // Game iframe in the back.
+        // Target iframe in the back.
         const iframe = document.createElement("iframe");
-        iframe.src = PUFFACLES_URL;
-        iframe.title = "puffacles";
+        iframe.src = url;
+        iframe.title = title;
         iframe.allow = "fullscreen; gamepad; autoplay; accelerometer; gyroscope";
         Object.assign(iframe.style, {
             position: "absolute", inset: "0", width: "100%", height: "100%",
@@ -148,71 +175,73 @@
         });
         stage.appendChild(iframe);
 
-        // Shatter canvas on top.
-        const cv = document.createElement("canvas");
-        Object.assign(cv.style, {
-            position: "absolute", inset: "0", width: "100%", height: "100%",
-            pointerEvents: "none",
-        });
-        const dpr = Math.min(2, window.devicePixelRatio || 1);
-        cv.width = viewport.w * dpr; cv.height = viewport.h * dpr;
-        const ctx = cv.getContext("2d");
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        stage.appendChild(cv);
+        if (withShatter) {
+            // Shatter canvas on top of the iframe.
+            const cv = document.createElement("canvas");
+            Object.assign(cv.style, {
+                position: "absolute", inset: "0", width: "100%", height: "100%",
+                pointerEvents: "none",
+            });
+            const dpr = Math.min(2, window.devicePixelRatio || 1);
+            cv.width = viewport.w * dpr; cv.height = viewport.h * dpr;
+            const ctx = cv.getContext("2d");
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            stage.appendChild(cv);
 
-        // Page content behind fades out in time with the shatter. Slight delay so the
-        // first cracks appear while the site is still visible underneath.
-        setTimeout(() => document.body.classList.add("egg-shattering"), 260);
+            // Page content behind fades out in time with the shatter.
+            setTimeout(() => document.body.classList.add("egg-shattering"), 260);
 
-        const plan = window.Fracture.planFracture(triangle, viewport, window.Fracture.DEFAULT_PARAMS);
+            const plan = window.Fracture.planFracture(triangle, viewport, window.Fracture.DEFAULT_PARAMS);
+            const theme = {
+                shardColor: "rgba(6, 10, 18, 0.96)",
+                crackColor: "rgba(255, 225, 150, 1)",
+                crackGlow: "rgba(255, 190, 80, 0.55)",
+            };
 
-        // Sample the starfield/background hue to tint shards so they feel like
-        // pieces of the site rather than pure black.
-        const theme = {
-            shardColor: "rgba(6, 10, 18, 0.96)",
-            crackColor: "rgba(255, 225, 150, 1)",
-            crackGlow: "rgba(255, 190, 80, 0.55)",
-        };
+            // Iframe fades in as cracks propagate; input hands off as shards finish.
+            setTimeout(() => { iframe.style.opacity = "1"; }, Math.max(0, plan.network.totalMs * 0.4));
+            const handoffAt = plan.totalMs + 120;
 
-        // Kick the iframe to fade in once cracks start propagating.
-        setTimeout(() => { iframe.style.opacity = "1"; }, Math.max(0, plan.network.totalMs * 0.4));
-        // Hand the game input at roughly the same time shards are done flying.
-        const handoffAt = plan.totalMs + 120;
-
-        const start = performance.now();
-        function frame(now) {
-            const t = now - start;
-            const still = window.Fracture.renderFrame(ctx, plan, t, theme);
-            if (still) {
-                requestAnimationFrame(frame);
-            } else {
-                // Fade the shatter canvas out cleanly, then give iframe full input.
-                cv.style.transition = "opacity 250ms ease-out";
-                cv.style.opacity = "0";
-                setTimeout(() => {
-                    stage.style.pointerEvents = "auto";
-                    iframe.style.pointerEvents = "auto";
-                    cv.remove();
-                }, 260);
+            const start = performance.now();
+            function frame(now) {
+                const t = now - start;
+                const still = window.Fracture.renderFrame(ctx, plan, t, theme);
+                if (still) {
+                    requestAnimationFrame(frame);
+                } else {
+                    cv.style.transition = "opacity 250ms ease-out";
+                    cv.style.opacity = "0";
+                    setTimeout(() => {
+                        stage.style.pointerEvents = "auto";
+                        iframe.style.pointerEvents = "auto";
+                        cv.remove();
+                    }, 260);
+                }
             }
+            requestAnimationFrame(frame);
+            setTimeout(() => {
+                stage.style.pointerEvents = "auto";
+                iframe.style.pointerEvents = "auto";
+            }, handoffAt);
+        } else {
+            // Simple cross-fade: no shatter, just pull the iframe up over the page.
+            document.body.classList.add("egg-shattering");
+            requestAnimationFrame(() => { iframe.style.opacity = "1"; });
+            setTimeout(() => {
+                stage.style.pointerEvents = "auto";
+                iframe.style.pointerEvents = "auto";
+            }, 900);
         }
-        requestAnimationFrame(frame);
 
-        // Safety net.
-        setTimeout(() => {
-            stage.style.pointerEvents = "auto";
-            iframe.style.pointerEvents = "auto";
-        }, handoffAt);
-
-        // Exit path: ESC anywhere (iframe can't eat keydowns when focus is on parent,
-        // but game input often grabs focus — we also listen on window with capture so
-        // the host page gets first shot).
+        // Dismissal: ESC when parent has focus, postMessage from the iframe,
+        // or the visible exit button (works regardless of focus).
         let dismissed = false;
         function dismiss() {
             if (dismissed) return;
             dismissed = true;
             currentDismiss = null;
             window.removeEventListener("keydown", onKey, true);
+            window.removeEventListener("message", onMsg);
             iframe.style.transition = "opacity 450ms ease-out";
             iframe.style.opacity = "0";
             stage.style.pointerEvents = "none";
@@ -220,6 +249,7 @@
             setTimeout(() => {
                 stage.remove();
                 fired = false;
+                stageOpen = false;
             }, 600);
         }
         function onKey(ev) {
@@ -227,7 +257,7 @@
         }
         function onMsg(ev) {
             const d = ev.data;
-            if (d === "puffacles:exit" || (d && d.type === "puffacles:exit")) dismiss();
+            if (d === exitKey || (d && d.type === exitKey)) dismiss();
         }
         window.addEventListener("keydown", onKey, true);
         window.addEventListener("message", onMsg);
@@ -243,8 +273,9 @@
 
         const sparks = startSparks();
 
-        let hold = null;          // { x, y, pointerId, startedAt, sparkTimer, emitInterval, fireTimer }
+        let hold = null;          // long-press state
         let suppressScroll = false;
+        let tapHistory = [];      // ring buffer of recent clean taps (triple-tap detection)
 
         function shouldIgnoreTarget(t) {
             // Don't hijack interactions on actual foreground controls.
@@ -264,8 +295,43 @@
             dbg("hold cancelled:", reason);
         }
 
+        function fireShatter(cx, cy, url, title) {
+            const triangle = triangleAround(cx, cy, VIRTUAL_TRI_RADIUS);
+            if (FIRE_ONCE) fired = true;
+
+            // Swallow the follow-up click so existing handlers (rain-phone poem,
+            // nav links underneath the release point) don't fire alongside us.
+            const eatClick = (c) => { c.stopPropagation(); c.preventDefault(); };
+            window.addEventListener("click", eatClick, { capture: true, once: true });
+            setTimeout(() => window.removeEventListener("click", eatClick, { capture: true }), 400);
+
+            for (const [bx, by] of triangle) sparks.burst(bx, by);
+            setTimeout(() => {
+                openInIframe(url, { triangle, title });
+                setTimeout(() => sparks.destroy(), 400);
+            }, 80);
+        }
+
+        function registerTap(x, y) {
+            const now = performance.now();
+            tapHistory = tapHistory.filter(t => now - t.t < TRIPLE_TAP_WINDOW_MS);
+            tapHistory.push({ t: now, x, y });
+            if (tapHistory.length < 3) return;
+            const first = tapHistory[0];
+            let maxSpread = 0;
+            for (const t of tapHistory) {
+                const d = Math.hypot(t.x - first.x, t.y - first.y);
+                if (d > maxSpread) maxSpread = d;
+            }
+            if (maxSpread > TRIPLE_TAP_MAX_SPREAD_PX) return;
+            // Triple-tap confirmed — consume the history so the 4th tap doesn't re-fire.
+            tapHistory = [];
+            dbg("triple-tap → tetris", { x, y });
+            fireShatter(x, y, TETRIS_URL, "tetris");
+        }
+
         function onDown(ev) {
-            if (fired || hold) return;
+            if (fired || hold || stageOpen) return;
             if (ev.pointerType === "mouse" && ev.button !== 0) return;
             if (shouldIgnoreTarget(ev.target)) return;
 
@@ -277,17 +343,16 @@
                 sparkTimer: 0,
                 emitInterval: 0,
                 fireTimer: 0,
+                sawSparks: false,
+                maxMoved: 0,
             };
             // Arm immediately so iOS Safari's long-press callout never appears.
             document.body.classList.add("egg-arming");
             dbg("hold start", { x, y });
 
-            // After HOLD_SPARK_MS, begin emitting sparks at the hold point with
-            // boost that grows as we approach fire.
             hold.sparkTimer = setTimeout(() => {
                 if (!hold) return;
-                // iOS has committed to NOT scrolling by now (no movement for 1s),
-                // so it's safe to lock touch-action and swallow the context menu.
+                hold.sawSparks = true;
                 document.body.classList.add("egg-capturing");
                 suppressScroll = true;
                 hold.emitInterval = setInterval(() => {
@@ -298,39 +363,34 @@
                 }, 40);
             }, HOLD_SPARK_MS);
 
-            // At HOLD_FIRE_MS: fire.
             hold.fireTimer = setTimeout(() => {
                 if (!hold) return;
                 const { x: fx, y: fy } = hold;
-                const triangle = triangleAround(fx, fy, VIRTUAL_TRI_RADIUS);
                 cancelHold("fire");
-                if (FIRE_ONCE) fired = true;
-
-                // Swallow the follow-up click so existing handlers (rain-phone poem,
-                // nav links underneath the release point) don't fire alongside us.
-                const eatClick = (c) => { c.stopPropagation(); c.preventDefault(); };
-                window.addEventListener("click", eatClick, { capture: true, once: true });
-                setTimeout(() => window.removeEventListener("click", eatClick, { capture: true }), 400);
-
-                for (const [bx, by] of triangle) sparks.burst(bx, by);
-                setTimeout(() => {
-                    playShatter(triangle);
-                    setTimeout(() => sparks.destroy(), 400);
-                }, 80);
+                fireShatter(fx, fy, PUFFACLES_URL, "puffacles");
             }, HOLD_FIRE_MS);
         }
 
         function onMove(ev) {
             if (!hold || ev.pointerId !== hold.pointerId) return;
             const dx = ev.clientX - hold.x, dy = ev.clientY - hold.y;
-            if (dx * dx + dy * dy > CANCEL_MOVE_PX * CANCEL_MOVE_PX) {
+            const d2 = dx * dx + dy * dy;
+            if (d2 > hold.maxMoved) hold.maxMoved = d2;
+            if (d2 > CANCEL_MOVE_PX * CANCEL_MOVE_PX) {
                 cancelHold("moved");
             }
         }
 
         function onUp(ev) {
             if (!hold || ev.pointerId !== hold.pointerId) return;
+            // If the release came fast and clean (no sparks yet, minimal move),
+            // count it as a tap for triple-tap detection.
+            const duration = performance.now() - hold.startedAt;
+            const moved = Math.sqrt(hold.maxMoved);
+            const tapX = hold.x, tapY = hold.y;
+            const cleanTap = !hold.sawSparks && duration < TAP_MAX_DURATION_MS && moved < TAP_MAX_MOVE_PX;
             cancelHold("released");
+            if (cleanTap && !shouldIgnoreTarget(ev.target)) registerTap(tapX, tapY);
         }
 
         function onCancel(ev) {
@@ -338,10 +398,24 @@
             cancelHold("pointercancel");
         }
 
-        // iOS Safari shows a callout menu on long-press of text/images; kill it while
-        // we're actively charging. Needs capture + non-passive to preventDefault.
+        // iOS Safari shows a callout menu on long-press; kill it while charging.
         function onContextMenu(ev) {
             if (suppressScroll) ev.preventDefault();
+        }
+
+        // Intercept portavec links so they open in the same iframe overlay as
+        // the easter-egg targets (with the bottom-right exit button). Only
+        // hijack plain left-clicks — middle-click / cmd+click still opens a
+        // new tab like any other link.
+        function onAnchorClick(ev) {
+            if (ev.defaultPrevented) return;
+            if (ev.button !== 0) return;
+            if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+            const a = ev.target && ev.target.closest && ev.target.closest("a[href]");
+            if (!a) return;
+            if (!PORTAVEC_HREF_RE.test(a.href)) return;
+            ev.preventDefault();
+            openInIframe(a.href, { title: "portavec" });
         }
 
         window.addEventListener("pointerdown", onDown);
@@ -349,6 +423,7 @@
         window.addEventListener("pointerup", onUp);
         window.addEventListener("pointercancel", onCancel);
         window.addEventListener("contextmenu", onContextMenu);
+        document.addEventListener("click", onAnchorClick, true);
     }
 
     if (document.readyState === "loading") {

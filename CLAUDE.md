@@ -5,21 +5,27 @@
 - Use clean, descriptive commit messages without attribution
 - Keep commits concise and focused on the actual changes
 
-## Puffacles contract
+## Iframe integrations (puffacles, tetris, portavec)
 
-This site coordinates with a separate deploy at `https://wabbazzar.com/puffacles/`
-via:
+This site embeds three separate deploys in a full-screen iframe overlay
+with a shared bottom-right `✕ exit` button:
 
-- `ascii-art.json` at the site root (consumed by the game).
-- The long-press easter egg in `easter-egg.js`, which loads the game in an
-  iframe via `PUFFACLES_URL = "https://wabbazzar.com/puffacles/?bg=wabbazzar"`.
-- A `postMessage("puffacles:exit")` handshake for in-game exit.
+- `https://wabbazzar.com/puffacles/` — long-press easter egg. Also consumes
+  `ascii-art.json` at the site root.
+- `https://wabbazzar.com/tetris/` — triple-tap easter egg.
+- `https://wabbazzar.com/portavec/` — intercepted from regular link clicks on
+  the portfolio so portavec loads in-frame (with the exit button serving as
+  the back button) instead of navigating away.
+
+All three accept a `postMessage("<label>:exit")` from the iframe to dismiss.
+URLs are hardcoded in `easter-egg.js`; the portavec click interceptor matches
+via `PORTAVEC_HREF_RE`.
 
 **Before changing any of those interfaces, read [`docs/puffacles-contract.md`](docs/puffacles-contract.md).**
-That file is the authoritative spec shared with the puffacles agent; drifting
-from it silently breaks the game in production. Any change to the JSON shape,
-the iframe URL, or the postMessage protocol requires updating the doc *and*
-coordinating with the puffacles maintainer.
+That file is the authoritative spec; drifting from it silently breaks
+production. Any change to the JSON shape, iframe URLs, or postMessage
+protocol requires updating the doc *and* coordinating with the respective
+sub-deploy maintainer.
 
 ## Regenerating ascii-art.json
 

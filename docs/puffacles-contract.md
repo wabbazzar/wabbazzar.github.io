@@ -171,6 +171,29 @@ The `puffacles:` prefix is reserved for game → site messages. Current:
 Future candidates (not yet implemented): `puffacles:ready`,
 `puffacles:score`, `puffacles:error`.
 
+### Parallel integrations (same handshake pattern)
+
+The site embeds two other sub-deploys in the same full-screen iframe
+overlay with the same bottom-right `✕ exit` button. They follow the same
+`<label>:exit` postMessage convention:
+
+| Integration | Entry                                                        | Exit postMessage  |
+| ----------- | ------------------------------------------------------------ | ----------------- |
+| puffacles   | long-press on the portfolio (shatter animation)              | `puffacles:exit`  |
+| tetris      | fast triple-tap on the portfolio (shatter animation)         | `tetris:exit`     |
+| portavec    | clicking a `wabbazzar.com/portavec/` link (plain cross-fade) | `portavec:exit`   |
+
+The `✕ exit` button lives in the bottom-right of the iframe overlay so
+it doesn't collide with the scoreboards/HUDs that games typically pin
+to the top. Games may display a scoreboard anywhere that avoids that
+corner.
+
+Implementing `<label>:exit` on the sub-deploy is optional but
+encouraged: it lets the game provide its own "Back to wabbazzar" button
+in addition to the parent's overlay button, which is useful on mobile
+where the overlay button may be covered by virtual keyboards or the
+safe-area inset.
+
 ---
 
 ## 4. Ownership split
