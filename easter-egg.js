@@ -168,13 +168,19 @@
         hint.textContent = "✕ exit";
         stage.appendChild(hint);
 
-        // Target iframe in the back.
+        // Target iframe in the back. Position inside the safe-area rectangle
+        // so iOS notch / home bar never obscures the game's top HUD or score.
+        // Falls back to inset:0 on platforms without safe-area support.
         const iframe = document.createElement("iframe");
         iframe.src = url;
         iframe.title = title;
         iframe.allow = "fullscreen; gamepad; autoplay; accelerometer; gyroscope";
         Object.assign(iframe.style, {
-            position: "absolute", inset: "0", width: "100%", height: "100%",
+            position: "absolute",
+            top: "env(safe-area-inset-top, 0px)",
+            right: "env(safe-area-inset-right, 0px)",
+            bottom: "env(safe-area-inset-bottom, 0px)",
+            left: "env(safe-area-inset-left, 0px)",
             border: "0", background: "#000", opacity: "0",
             transition: "opacity 900ms ease-out",
         });
