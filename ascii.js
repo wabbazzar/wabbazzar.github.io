@@ -7,6 +7,7 @@
         { src: 'assets/icons/shredly.png',  href: 'https://shredly.me/' },
         { src: 'assets/icons/quizly.png',   href: 'https://quizly.me/' },
         { src: 'assets/icons/starbird.png', href: 'https://wabbazzar.github.io/starbird/' },
+        { src: 'assets/icons/portavec.png', href: 'https://wabbazzar.com/portavec/' },
     ];
 
     // Near-square grid for the square app icons: monospace cells are ~0.6 wide,
