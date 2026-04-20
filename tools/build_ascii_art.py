@@ -10,6 +10,7 @@ import math
 import os
 from pathlib import Path
 
+import numpy as np
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -24,6 +25,28 @@ MAX_DIM = 600
 THRESHOLD = 40
 FAINT = 25
 
+# iOS-style squircle mask applied before ASCII conversion. Pixels outside the
+# superellipse go to black, which maps to blanks in the ASCII output so the
+# glyphs already show rounded app-icon corners — no mask needed downstream.
+SQUIRCLE_N = 5.0          # exponent; ~5 matches iOS icon shape
+SQUIRCLE_EDGE_PX = 1.2    # antialias band width (in px) across the boundary
+
+
+def apply_squircle_mask(img: Image.Image) -> Image.Image:
+    img = img.convert("RGBA")
+    w, h = img.size
+    arr = np.array(img, dtype=np.uint8)
+    # Normalized coords: (u, v) in [-1, 1] across the icon.
+    ys, xs = np.mgrid[0:h, 0:w].astype(np.float64)
+    u = (xs - (w - 1) / 2.0) / (w / 2.0)
+    v = (ys - (h - 1) / 2.0) / (h / 2.0)
+    d = np.abs(u) ** SQUIRCLE_N + np.abs(v) ** SQUIRCLE_N
+    # Convert distance to alpha: d < 1 inside, d > 1 outside, narrow fade band.
+    band = SQUIRCLE_EDGE_PX / (w / 2.0)
+    alpha = np.clip((1.0 - d) / band + 0.5, 0.0, 1.0)
+    arr[:, :, 3] = np.minimum(arr[:, :, 3], (alpha * 255).astype(np.uint8))
+    return Image.fromarray(arr, "RGBA")
+
 
 def load_luma(path: Path):
     img = Image.open(path).convert("RGBA")
@@ -32,9 +55,12 @@ def load_luma(path: Path):
     w2, h2 = round(w * scale), round(h * scale)
     if (w2, h2) != (w, h):
         img = img.resize((w2, h2), Image.BILINEAR)
-    # Flatten onto white to match a browser canvas' default behavior when an
-    # icon has transparent pixels. This keeps glyphs faithful to the live site.
-    bg = Image.new("RGBA", img.size, (255, 255, 255, 255))
+    # Stamp an iOS squircle over the icon before conversion; pixels outside the
+    # squircle become transparent and flatten to black (→ spaces in the ASCII).
+    img = apply_squircle_mask(img)
+    # Flatten onto BLACK so the squircle-masked corners render as blank space
+    # after the ASCII pass (low brightness → ' ' / '.' characters).
+    bg = Image.new("RGBA", img.size, (0, 0, 0, 255))
     img = Image.alpha_composite(bg, img).convert("RGB")
     px = img.load()
     luma = [0.0] * (w2 * h2)
