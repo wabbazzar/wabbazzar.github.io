@@ -1,18 +1,18 @@
-// Triangle-gesture easter egg: draw a closed triangle anywhere on the page
-// (hold left mouse / finger down) and the viewport shatters into the
-// puffacles game. Depends on fracture.js for the math + animation, and on
-// the puffacles deploy at https://wabbazzar.com/puffacles/?bg=wabbazzar.
+// Long-press easter egg: press and hold anywhere on the page (mouse or
+// finger). The first second is silent; after that sparks appear and build
+// at the touch point; at ~2s the viewport shatters into the puffacles game.
+// Depends on fracture.js for the math + animation, and on the puffacles
+// deploy at https://wabbazzar.com/puffacles/?bg=wabbazzar.
 (function () {
     "use strict";
 
     const PUFFACLES_URL = "https://wabbazzar.com/puffacles/?bg=wabbazzar";
 
-    // Tweak-your-heart-out thresholds for gesture recognition.
-    const MIN_PATH_POINTS = 12;
-    const RDP_EPSILON = 26;             // px — how aggressively we simplify the stroke
-    const CLOSURE_PX = 160;             // start/end must be within this to count as closed
-    const MIN_TRI_AREA = 2800;          // px² — reject dinky triangles
-    const MAX_STROKE_MS = 5000;         // ignore strokes longer than this (probably not a gesture)
+    // Timing.
+    const HOLD_SPARK_MS = 1000;   // silent charge-up before sparks appear
+    const HOLD_FIRE_MS = 2000;    // total hold time until shatter fires
+    const CANCEL_MOVE_PX = 24;    // jitter tolerance — moving farther cancels (user is scrolling)
+    const VIRTUAL_TRI_RADIUS = 70; // half-size of the synthetic triangle centered on the touch
 
     // Allow the egg to fire repeatedly by default; flip to `?egg=once` in the URL
     // to opt back into one-shot behavior for production.
@@ -99,74 +99,18 @@
         };
     }
 
-    // ---------- stroke capture + triangle detection ----------
+    // ---------- virtual triangle from a single point ----------
 
-    function perpDist(p, a, b) {
-        const dx = b.x - a.x;
-        const dy = b.y - a.y;
-        const d2 = dx * dx + dy * dy;
-        if (d2 < 1e-6) return Math.hypot(p.x - a.x, p.y - a.y);
-        const t = ((p.x - a.x) * dx + (p.y - a.y) * dy) / d2;
-        const px = a.x + t * dx, py = a.y + t * dy;
-        return Math.hypot(p.x - px, p.y - py);
-    }
-
-    function rdp(points, eps) {
-        if (points.length < 3) return points.slice();
-        let maxD = 0, idx = 0;
-        const end = points.length - 1;
-        for (let i = 1; i < end; i++) {
-            const d = perpDist(points[i], points[0], points[end]);
-            if (d > maxD) { maxD = d; idx = i; }
+    // Synthesize an equilateral triangle centered on (x, y). The fracture math
+    // takes a triangle; for a long-press we fabricate a small one so cracks
+    // radiate with 3-fold symmetry from the touch point.
+    function triangleAround(x, y, radius) {
+        const pts = [];
+        for (let i = 0; i < 3; i++) {
+            const a = -Math.PI / 2 + i * (2 * Math.PI / 3);
+            pts.push([x + Math.cos(a) * radius, y + Math.sin(a) * radius]);
         }
-        if (maxD > eps) {
-            const left = rdp(points.slice(0, idx + 1), eps);
-            const right = rdp(points.slice(idx), eps);
-            return left.slice(0, -1).concat(right);
-        }
-        return [points[0], points[end]];
-    }
-
-    function triArea(a, b, c) {
-        return Math.abs((b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y)) / 2;
-    }
-
-    function analyzeStroke(path) {
-        if (path.length < MIN_PATH_POINTS) { dbg("reject: too few points", path.length); return null; }
-        const duration = path[path.length - 1].t - path[0].t;
-        if (duration > MAX_STROKE_MS) { dbg("reject: too slow", duration); return null; }
-
-        const startEnd = Math.hypot(path[0].x - path[path.length - 1].x, path[0].y - path[path.length - 1].y);
-        if (startEnd > CLOSURE_PX) { dbg("reject: not closed", startEnd.toFixed(0)); return null; }
-
-        const simplified = rdp(path, RDP_EPSILON);
-        dbg("simplified to", simplified.length, "points");
-        // A closed triangle should simplify to ~4 vertices (first corner, two more, return-to-first).
-        if (simplified.length < 4 || simplified.length > 9) { dbg("reject: odd vertex count", simplified.length); return null; }
-
-        // Candidate vertices = all simplified points except the final (which is ~= first).
-        const candidates = simplified.slice(0, -1);
-        if (candidates.length < 3) { dbg("reject: <3 candidates"); return null; }
-
-        // Pick the 3 points that maximize enclosed area — robust against a wobbly segment
-        // that RDP kept as an extra vertex.
-        let bestArea = 0, best = null;
-        for (let i = 0; i < candidates.length; i++) {
-            for (let j = i + 1; j < candidates.length; j++) {
-                for (let k = j + 1; k < candidates.length; k++) {
-                    const a = triArea(candidates[i], candidates[j], candidates[k]);
-                    if (a > bestArea) { bestArea = a; best = [candidates[i], candidates[j], candidates[k]]; }
-                }
-            }
-        }
-        if (!best || bestArea < MIN_TRI_AREA) { dbg("reject: area too small", bestArea|0); return null; }
-        dbg("accept triangle area", bestArea|0);
-
-        // Orient consistently (counter-clockwise) so angle math downstream is stable.
-        const [A, B, C] = best;
-        const signed = (B.x - A.x) * (C.y - A.y) - (C.x - A.x) * (B.y - A.y);
-        const pts = signed > 0 ? [A, B, C] : [A, C, B];
-        return pts.map(p => [p.x, p.y]);
+        return pts;
     }
 
     // ---------- shatter playback ----------
@@ -299,8 +243,8 @@
 
         const sparks = startSparks();
 
-        let path = null;
-        let pointerId = null;
+        let hold = null;          // { x, y, pointerId, startedAt, sparkTimer, emitInterval, fireTimer }
+        let suppressScroll = false;
 
         function shouldIgnoreTarget(t) {
             // Don't hijack interactions on actual foreground controls.
@@ -308,56 +252,103 @@
             return !!t.closest('a[href], button, input, textarea, select, label, [role="button"], .poem-overlay');
         }
 
+        function cancelHold(reason) {
+            if (!hold) return;
+            clearTimeout(hold.sparkTimer);
+            clearInterval(hold.emitInterval);
+            clearTimeout(hold.fireTimer);
+            hold = null;
+            suppressScroll = false;
+            document.body.classList.remove("egg-arming");
+            document.body.classList.remove("egg-capturing");
+            dbg("hold cancelled:", reason);
+        }
+
         function onDown(ev) {
-            if (fired) return;
+            if (fired || hold) return;
             if (ev.pointerType === "mouse" && ev.button !== 0) return;
             if (shouldIgnoreTarget(ev.target)) return;
-            pointerId = ev.pointerId;
-            path = [{ x: ev.clientX, y: ev.clientY, t: performance.now() }];
-            document.body.classList.add("egg-capturing");
-            sparks.emit(ev.clientX, ev.clientY, 1.2);
+
+            const x = ev.clientX, y = ev.clientY;
+            hold = {
+                x, y,
+                pointerId: ev.pointerId,
+                startedAt: performance.now(),
+                sparkTimer: 0,
+                emitInterval: 0,
+                fireTimer: 0,
+            };
+            // Arm immediately so iOS Safari's long-press callout never appears.
+            document.body.classList.add("egg-arming");
+            dbg("hold start", { x, y });
+
+            // After HOLD_SPARK_MS, begin emitting sparks at the hold point with
+            // boost that grows as we approach fire.
+            hold.sparkTimer = setTimeout(() => {
+                if (!hold) return;
+                // iOS has committed to NOT scrolling by now (no movement for 1s),
+                // so it's safe to lock touch-action and swallow the context menu.
+                document.body.classList.add("egg-capturing");
+                suppressScroll = true;
+                hold.emitInterval = setInterval(() => {
+                    if (!hold) return;
+                    const elapsed = performance.now() - hold.startedAt;
+                    const charge = Math.min(1, (elapsed - HOLD_SPARK_MS) / (HOLD_FIRE_MS - HOLD_SPARK_MS));
+                    sparks.emit(hold.x, hold.y, 0.7 + charge * 2.0);
+                }, 40);
+            }, HOLD_SPARK_MS);
+
+            // At HOLD_FIRE_MS: fire.
+            hold.fireTimer = setTimeout(() => {
+                if (!hold) return;
+                const { x: fx, y: fy } = hold;
+                const triangle = triangleAround(fx, fy, VIRTUAL_TRI_RADIUS);
+                cancelHold("fire");
+                if (FIRE_ONCE) fired = true;
+
+                // Swallow the follow-up click so existing handlers (rain-phone poem,
+                // nav links underneath the release point) don't fire alongside us.
+                const eatClick = (c) => { c.stopPropagation(); c.preventDefault(); };
+                window.addEventListener("click", eatClick, { capture: true, once: true });
+                setTimeout(() => window.removeEventListener("click", eatClick, { capture: true }), 400);
+
+                for (const [bx, by] of triangle) sparks.burst(bx, by);
+                setTimeout(() => {
+                    playShatter(triangle);
+                    setTimeout(() => sparks.destroy(), 400);
+                }, 80);
+            }, HOLD_FIRE_MS);
         }
+
         function onMove(ev) {
-            if (!path || ev.pointerId !== pointerId) return;
-            const last = path[path.length - 1];
-            const dx = ev.clientX - last.x, dy = ev.clientY - last.y;
-            if (dx * dx + dy * dy < 9) return;  // sub-3px moves get squashed
-            path.push({ x: ev.clientX, y: ev.clientY, t: performance.now() });
-            sparks.emit(ev.clientX, ev.clientY);
+            if (!hold || ev.pointerId !== hold.pointerId) return;
+            const dx = ev.clientX - hold.x, dy = ev.clientY - hold.y;
+            if (dx * dx + dy * dy > CANCEL_MOVE_PX * CANCEL_MOVE_PX) {
+                cancelHold("moved");
+            }
         }
+
         function onUp(ev) {
-            if (!path || ev.pointerId !== pointerId) return;
-            const finished = path;
-            path = null; pointerId = null;
-            document.body.classList.remove("egg-capturing");
-            const triangle = analyzeStroke(finished);
-            if (!triangle) return;
-            if (FIRE_ONCE) fired = true;
-
-            // Swallow the follow-up click so existing handlers (rain-phone poem,
-            // nav links underneath the release point) don't fire alongside us.
-            const eatClick = (c) => { c.stopPropagation(); c.preventDefault(); };
-            window.addEventListener("click", eatClick, { capture: true, once: true });
-            setTimeout(() => window.removeEventListener("click", eatClick, { capture: true }), 400);
-
-            // Celebratory bursts at each corner before the shatter hits.
-            for (const [x, y] of triangle) sparks.burst(x, y);
-            setTimeout(() => {
-                playShatter(triangle);
-                // Kill the spark layer once the shatter takes over.
-                setTimeout(() => sparks.destroy(), 400);
-            }, 80);
+            if (!hold || ev.pointerId !== hold.pointerId) return;
+            cancelHold("released");
         }
+
         function onCancel(ev) {
-            if (!path || ev.pointerId !== pointerId) return;
-            path = null; pointerId = null;
-            document.body.classList.remove("egg-capturing");
+            if (!hold || ev.pointerId !== hold.pointerId) return;
+            cancelHold("pointercancel");
+        }
+
+        // iOS Safari shows a callout menu on long-press of text/images; kill it while
+        // we're actively charging. Needs capture + non-passive to preventDefault.
+        function onContextMenu(ev) {
+            if (suppressScroll) ev.preventDefault();
         }
 
         window.addEventListener("pointerdown", onDown);
         window.addEventListener("pointermove", onMove, { passive: true });
         window.addEventListener("pointerup", onUp);
         window.addEventListener("pointercancel", onCancel);
+        window.addEventListener("contextmenu", onContextMenu);
     }
 
     if (document.readyState === "loading") {

@@ -829,10 +829,19 @@ main { position: relative; z-index: 1; }
     html { scroll-behavior: auto; }
 }
 
-/* -------- Triangle-gesture easter egg -------- */
-/* While capturing a stroke on touch devices, suppress page scroll + selection. */
+/* -------- Long-press easter egg -------- */
+/* Armed as soon as the finger lands so iOS Safari doesn't show its long-press
+   callout menu during the charge-up. Does NOT disable scroll — that comes later. */
+body.egg-arming {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+/* Once the sparks have engaged (after the silent 1s), lock scroll entirely so
+   the viewport can't shift out from under the fire. */
 body.egg-capturing {
     touch-action: none;
+    -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
 }
