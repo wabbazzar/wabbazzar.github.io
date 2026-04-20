@@ -17,8 +17,8 @@
     ];
 
     // Long-press timing.
-    const HOLD_SPARK_MS = 1000;   // silent charge-up before sparks appear
-    const HOLD_FIRE_MS = 2000;    // total hold time until shatter fires
+    const HOLD_FIRE_MS = 900;     // total hold time until shatter fires
+    const HOLD_CAPTURE_MS = 300;  // when the scroll lock (touch-action: none) engages
     const CANCEL_MOVE_PX = 24;    // jitter tolerance — moving farther cancels (user is scrolling)
     const VIRTUAL_TRI_RADIUS = 70; // half-size of the synthetic triangle centered on the touch
 
@@ -290,7 +290,7 @@
 
         function cancelHold(reason) {
             if (!hold) return;
-            clearTimeout(hold.sparkTimer);
+            clearTimeout(hold.captureTimer);
             clearInterval(hold.emitInterval);
             clearTimeout(hold.fireTimer);
             hold = null;
@@ -345,28 +345,33 @@
                 x, y,
                 pointerId: ev.pointerId,
                 startedAt: performance.now(),
-                sparkTimer: 0,
+                captureTimer: 0,
                 emitInterval: 0,
                 fireTimer: 0,
-                sawSparks: false,
                 maxMoved: 0,
             };
             // Arm immediately so iOS Safari's long-press callout never appears.
             document.body.classList.add("egg-arming");
             dbg("hold start", { x, y });
 
-            hold.sparkTimer = setTimeout(() => {
+            // Sparks start the instant the finger lands — one immediate emit
+            // plus a recurring burst that intensifies as the hold charges.
+            sparks.emit(x, y, 1.2);
+            hold.emitInterval = setInterval(() => {
                 if (!hold) return;
-                hold.sawSparks = true;
+                const elapsed = performance.now() - hold.startedAt;
+                const charge = Math.min(1, elapsed / HOLD_FIRE_MS);
+                sparks.emit(hold.x, hold.y, 0.7 + charge * 2.0);
+            }, 40);
+
+            // Scroll lock engages after a short grace period — a user who was
+            // about to scroll will have moved >CANCEL_MOVE_PX by now and the
+            // hold will already be cancelled.
+            hold.captureTimer = setTimeout(() => {
+                if (!hold) return;
                 document.body.classList.add("egg-capturing");
                 suppressScroll = true;
-                hold.emitInterval = setInterval(() => {
-                    if (!hold) return;
-                    const elapsed = performance.now() - hold.startedAt;
-                    const charge = Math.min(1, (elapsed - HOLD_SPARK_MS) / (HOLD_FIRE_MS - HOLD_SPARK_MS));
-                    sparks.emit(hold.x, hold.y, 0.7 + charge * 2.0);
-                }, 40);
-            }, HOLD_SPARK_MS);
+            }, HOLD_CAPTURE_MS);
 
             hold.fireTimer = setTimeout(() => {
                 if (!hold) return;
@@ -388,12 +393,12 @@
 
         function onUp(ev) {
             if (!hold || ev.pointerId !== hold.pointerId) return;
-            // If the release came fast and clean (no sparks yet, minimal move),
-            // count it as a tap for triple-tap detection.
+            // A tap is now defined purely by duration + movement — sparks emit
+            // from the first frame regardless, so they can't gate tap detection.
             const duration = performance.now() - hold.startedAt;
             const moved = Math.sqrt(hold.maxMoved);
             const tapX = hold.x, tapY = hold.y;
-            const cleanTap = !hold.sawSparks && duration < TAP_MAX_DURATION_MS && moved < TAP_MAX_MOVE_PX;
+            const cleanTap = duration < TAP_MAX_DURATION_MS && moved < TAP_MAX_MOVE_PX;
             cancelHold("released");
             if (cleanTap && !shouldIgnoreTarget(ev.target)) registerTap(tapX, tapY);
         }
