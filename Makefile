@@ -1,4 +1,8 @@
-.PHONY: serve test visual-test verify-render clean-cache debug-render auto-test
+.PHONY: serve test visual-test verify-render clean-cache debug-render auto-test ascii-art
+
+# Regenerate /ascii-art.json from tile icons (consumed by puffacles easter-egg)
+ascii-art:
+	@python3 tools/build_ascii_art.py
 
 # Core development server
 serve:

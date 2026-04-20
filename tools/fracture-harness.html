@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fracture tuning harness</title>
+    <style>
+        :root {
+            --bg: #07090f;
+            --panel: #11131b;
+            --ink: #e8ecf4;
+            --muted: #8a92a6;
+            --accent: #ffd27a;
+            --warn: #ff6b6b;
+            --ok: #6fd19b;
+        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; height: 100%; background: var(--bg); color: var(--ink); font-family: ui-monospace, monospace; }
+        body { display: grid; grid-template-columns: 320px 1fr; }
+        aside { background: var(--panel); padding: 16px; overflow-y: auto; border-right: 1px solid #20232d; }
+        aside h1 { margin: 0 0 12px; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
+        aside h2 { margin: 18px 0 6px; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+        .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 6px 0; font-size: 12px; }
+        .row label { color: var(--muted); flex: 1; }
+        .row input[type=range] { flex: 2; }
+        .row .v { width: 52px; text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+        button { background: #1a1e2a; color: var(--ink); border: 1px solid #2a2f3f; padding: 8px 12px; border-radius: 4px; cursor: pointer; font: inherit; font-size: 12px; margin: 4px 4px 4px 0; }
+        button:hover { background: #232838; }
+        button.primary { background: var(--accent); color: #18140a; border-color: var(--accent); font-weight: 700; }
+        main { position: relative; overflow: hidden; background: #000; }
+        canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: crosshair; }
+        .hud { position: absolute; top: 12px; left: 12px; background: rgba(7, 9, 15, 0.85); border: 1px solid #20232d; padding: 10px 12px; border-radius: 4px; font-size: 12px; line-height: 1.6; pointer-events: none; min-width: 220px; }
+        .hud b { color: var(--accent); }
+        .stats { font-size: 11px; white-space: pre; background: #0b0d14; border: 1px solid #20232d; border-radius: 4px; padding: 8px; margin-top: 8px; max-height: 260px; overflow: auto; }
+        .tag-pass { color: var(--ok); }
+        .tag-fail { color: var(--warn); }
+    </style>
+</head>
+<body>
+    <aside>
+        <h1>Fracture harness</h1>
+
+        <h2>Crack tree</h2>
+        <div id="params-crack"></div>
+
+        <h2>Tessellation</h2>
+        <div id="params-tess"></div>
+
+        <h2>Shatter</h2>
+        <div id="params-shatter"></div>
+
+        <h2>Actions</h2>
+        <button id="btn-draw">Draw (click 3 points)</button>
+        <button id="btn-random">Random triangle</button>
+        <button id="btn-play" class="primary">▶ Play</button>
+        <button id="btn-pause">Pause</button>
+        <button id="btn-run-20" class="primary">Run 20 trials</button>
+        <button id="btn-export">Copy params</button>
+
+        <h2>Metrics (last trial)</h2>
+        <div id="metrics" class="row">—</div>
+
+        <h2>Batch results</h2>
+        <div id="batch-results" class="stats">(run 20 trials)</div>
+    </aside>
+    <main>
+        <canvas id="cv"></canvas>
+        <div class="hud" id="hud">Click <b>Random triangle</b> then <b>Play</b>, or click 3 points on the canvas.</div>
+    </main>
+
+    <script src="../fracture.js"></script>
+    <script>
+        const canvas = document.getElementById('cv');
+        const ctx = canvas.getContext('2d');
+        const hud = document.getElementById('hud');
+        let viewport = { w: 0, h: 0 };
+        function resize() {
+            const r = canvas.getBoundingClientRect();
+            canvas.width = Math.round(r.width);
+            canvas.height = Math.round(r.height);
+            viewport = { w: canvas.width, h: canvas.height };
+        }
+        window.addEventListener('resize', () => { resize(); redrawStatic(); });
+        resize();
+
+        // ---------- params UI ----------
+        const params = JSON.parse(JSON.stringify(Fracture.DEFAULT_PARAMS));
+        const PARAM_GROUPS = {
+            'params-crack': [
+                ['PRIMARY_LEN_MULT', 0.5, 6.0, 0.05],
+                ['BRANCH_LEN_RATIO', 0.2, 1.2, 0.01],
+                ['BRANCH_ANGLE_SPREAD', 0.1, 1.8, 0.01],
+                ['MAX_DEPTH', 1, 8, 1],
+                ['PROPAGATION_MS', 100, 1500, 10],
+                ['SEGMENT_MS', 10, 200, 5],
+            ],
+            'params-tess': [
+                ['EXTRA_JITTER_POINTS', 0, 80, 1],
+                ['EDGE_SAMPLE_STEP', 40, 400, 10],
+            ],
+            'params-shatter': [
+                ['SHATTER_MS', 400, 2500, 50],
+                ['SHATTER_STAGGER', 100, 1500, 50],
+            ],
+        };
+        function mountParams() {
+            for (const [groupId, entries] of Object.entries(PARAM_GROUPS)) {
+                const root = document.getElementById(groupId);
+                for (const [key, min, max, step] of entries) {
+                    const row = document.createElement('div');
+                    row.className = 'row';
+                    row.innerHTML = `<label>${key}</label><input type="range" min="${min}" max="${max}" step="${step}"><span class="v"></span>`;
+                    const input = row.querySelector('input');
+                    const v = row.querySelector('.v');
+                    input.value = params[key];
+                    v.textContent = params[key];
+                    input.addEventListener('input', () => {
+                        params[key] = Number(input.value);
+                        v.textContent = input.value;
+                        // Rebuild plan live if a triangle is loaded.
+                        if (currentTriangle) { buildPlan(); redrawStatic(); }
+                    });
+                    root.appendChild(row);
+                }
+            }
+        }
+        mountParams();
+
+        // ---------- triangle input ----------
+        let currentTriangle = null;
+        let currentPlan = null;
+        let drawingPts = [];
+        let drawMode = false;
+        document.getElementById('btn-draw').addEventListener('click', () => {
+            drawMode = true; drawingPts = []; currentTriangle = null; currentPlan = null;
+            hud.innerHTML = 'Click 3 points to define a triangle.';
+            redrawStatic();
+        });
+        canvas.addEventListener('click', (ev) => {
+            if (!drawMode) return;
+            const r = canvas.getBoundingClientRect();
+            const x = ev.clientX - r.left;
+            const y = ev.clientY - r.top;
+            drawingPts.push([x, y]);
+            if (drawingPts.length === 3) {
+                currentTriangle = drawingPts;
+                drawMode = false;
+                buildPlan();
+                hud.innerHTML = 'Triangle set. Hit <b>Play</b>.';
+            }
+            redrawStatic();
+        });
+
+        function randomTriangle() {
+            const { w, h } = viewport;
+            // Bias toward small-to-medium triangles that fit somewhere on screen.
+            const cx = 0.2 * w + 0.6 * w * Math.random();
+            const cy = 0.2 * h + 0.6 * h * Math.random();
+            const rBase = Math.min(w, h) * (0.05 + 0.25 * Math.random());
+            const rot = Math.random() * Math.PI * 2;
+            const pts = [];
+            for (let i = 0; i < 3; i++) {
+                const a = rot + (i * 2 * Math.PI / 3) + (Math.random() - 0.5) * 0.6;
+                const rr = rBase * (0.6 + 0.8 * Math.random());
+                pts.push([cx + Math.cos(a) * rr, cy + Math.sin(a) * rr]);
+            }
+            return pts;
+        }
+        document.getElementById('btn-random').addEventListener('click', () => {
+            currentTriangle = randomTriangle();
+            buildPlan();
+            hud.innerHTML = 'Random triangle ready. Hit <b>Play</b>.';
+            redrawStatic();
+        });
+
+        // ---------- plan + render ----------
+        let animStart = null;
+        let animRaf = null;
+        let paused = false;
+
+        function buildPlan() {
+            if (!currentTriangle) return;
+            currentPlan = Fracture.planFracture(currentTriangle, viewport, params);
+            updateMetrics();
+        }
+
+        function redrawStatic() {
+            ctx.clearRect(0, 0, viewport.w, viewport.h);
+            if (!currentTriangle && drawingPts.length === 0) {
+                ctx.fillStyle = '#14161e';
+                ctx.fillRect(0, 0, viewport.w, viewport.h);
+                return;
+            }
+            // render plan at t=0 so all shards are opaque occluders
+            if (currentPlan) {
+                Fracture.renderFrame(ctx, currentPlan, 0);
+            }
+            // triangle overlay
+            ctx.strokeStyle = 'rgba(255, 210, 122, 0.9)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            const pts = currentTriangle || drawingPts;
+            if (pts.length >= 1) { ctx.moveTo(pts[0][0], pts[0][1]); }
+            for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+            if (currentTriangle) ctx.closePath();
+            ctx.stroke();
+            for (const p of pts) {
+                ctx.beginPath();
+                ctx.arc(p[0], p[1], 5, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffd27a';
+                ctx.fill();
+            }
+        }
+
+        function playLoop(ts) {
+            if (paused) { animRaf = requestAnimationFrame(playLoop); return; }
+            if (animStart === null) animStart = ts;
+            const t = ts - animStart;
+            Fracture.renderFrame(ctx, currentPlan, t);
+            if (t < currentPlan.totalMs) {
+                animRaf = requestAnimationFrame(playLoop);
+            } else {
+                hud.innerHTML = `Done in <b>${(currentPlan.totalMs | 0)}ms</b>. Coverage <b>${(100 * Fracture.shardAreaCoverage(currentPlan.shards, viewport)).toFixed(1)}%</b>. Shards <b>${currentPlan.shards.length}</b>.`;
+            }
+        }
+
+        document.getElementById('btn-play').addEventListener('click', () => {
+            if (!currentTriangle) { currentTriangle = randomTriangle(); }
+            buildPlan();
+            animStart = null; paused = false;
+            cancelAnimationFrame(animRaf);
+            animRaf = requestAnimationFrame(playLoop);
+        });
+        document.getElementById('btn-pause').addEventListener('click', () => {
+            paused = !paused;
+            if (!paused) animRaf = requestAnimationFrame(playLoop);
+        });
+
+        // ---------- metrics ----------
+        function updateMetrics() {
+            if (!currentPlan) return;
+            const el = document.getElementById('metrics');
+            const coverage = Fracture.shardAreaCoverage(currentPlan.shards, viewport);
+            el.innerHTML = `coverage <b>${(coverage * 100).toFixed(1)}%</b> · duration <b>${currentPlan.totalMs | 0}ms</b> · shards <b>${currentPlan.shards.length}</b>`;
+        }
+
+        // ---------- batch ----------
+        document.getElementById('btn-run-20').addEventListener('click', () => {
+            const rows = [];
+            let passCount = 0;
+            let totalMs = 0, totalCov = 0;
+            for (let i = 0; i < 20; i++) {
+                const tri = randomTriangle();
+                const plan = Fracture.planFracture(tri, viewport, params, 1000 + i);
+                const cov = Fracture.shardAreaCoverage(plan.shards, viewport);
+                const dur = plan.totalMs;
+                const pass = cov >= 0.95 && dur <= 3000;
+                if (pass) passCount++;
+                totalMs += dur;
+                totalCov += cov;
+                const cls = pass ? 'tag-pass' : 'tag-fail';
+                rows.push(`<span class="${cls}">#${String(i + 1).padStart(2)} cov=${(cov * 100).toFixed(1)}% dur=${dur | 0}ms shards=${plan.shards.length} ${pass ? 'PASS' : 'FAIL'}</span>`);
+            }
+            const summary = `<b>${passCount}/20 PASS</b> · avg cov ${(100 * totalCov / 20).toFixed(1)}% · avg dur ${(totalMs / 20) | 0}ms`;
+            document.getElementById('batch-results').innerHTML = summary + '\n' + rows.join('\n');
+        });
+
+        document.getElementById('btn-export').addEventListener('click', () => {
+            navigator.clipboard.writeText(JSON.stringify(params, null, 2));
+            hud.innerHTML = 'Params copied to clipboard.';
+        });
+
+        // Kick off with a random triangle.
+        currentTriangle = randomTriangle();
+        buildPlan();
+        redrawStatic();
+    </script>
+</body>
+</html>

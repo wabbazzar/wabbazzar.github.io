@@ -828,3 +828,38 @@ main { position: relative; z-index: 1; }
     .card:hover .card-stage { transform: none; }
     html { scroll-behavior: auto; }
 }
+
+/* -------- Triangle-gesture easter egg -------- */
+/* While capturing a stroke on touch devices, suppress page scroll + selection. */
+body.egg-capturing {
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+/* When the shatter animation takes over, fade original page content out so
+   the puffacles iframe underneath takes the stage cleanly. */
+body.egg-shattering > *:not(.egg-stage):not(.egg-spark-layer) {
+    opacity: 0;
+    transition: opacity 500ms ease-out;
+    pointer-events: none;
+}
+body.egg-shattering { overflow: hidden; }
+.egg-stage, .egg-spark-layer { will-change: transform, opacity; }
+.egg-hint {
+    position: absolute;
+    right: 14px;
+    top: 14px;
+    padding: 6px 10px;
+    font: 12px ui-monospace, monospace;
+    color: rgba(255, 255, 255, 0.82);
+    background: rgba(10, 12, 18, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 4px;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 2;
+    opacity: 0;
+    animation: egg-hint-in 600ms ease-out 1800ms forwards;
+}
+.egg-hint:hover { background: rgba(20, 22, 28, 0.75); color: #fff; }
+@keyframes egg-hint-in { to { opacity: 1; } }
