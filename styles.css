@@ -118,7 +118,7 @@ h1 {
 /* Grid */
 .work-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--gap);
     padding-bottom: 120px;
 }
@@ -242,6 +242,7 @@ h1 {
 .tile-shredly  { --tile-bg: #0f172a; }   /* matches Shredly's app theme */
 .tile-starbird { --tile-bg: #f5f1e8; }   /* matches Starbird's light theme */
 .tile-quizly   { --tile-bg: #5b82b0; }   /* matches Quizly's blue */
+.tile-portavec { --tile-bg: #e94560; }   /* matches Portavec's coral accent */
 
 /* Caption */
 .card-meta {
@@ -403,6 +404,115 @@ h1 {
         translate3d(calc(var(--o) * var(--spread)), -20px, 120px)
         rotateY(0)
         scale(1.04);
+    z-index: 5;
+}
+
+/* -------- Desktop / browser-window stage -------- */
+.browser-stage {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 24px 0 40px;
+    perspective: 1800px;
+    perspective-origin: 50% 30%;
+    --scroll: 0;
+}
+
+.browser {
+    display: block;
+    width: min(560px, 100%);
+    border-radius: 14px;
+    overflow: hidden;
+    background: #111;
+    text-decoration: none;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.04) inset,
+        0 30px 60px -20px rgba(0, 0, 0, 0.6),
+        0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    transform-origin: 50% 60%;
+    transform-style: preserve-3d;
+    transform:
+        translate3d(0, 60px, -180px)
+        rotateX(calc(var(--scroll) * 6deg))
+        scale(0.96);
+    opacity: 0;
+    transition:
+        transform 0.7s cubic-bezier(.2, .8, .2, 1),
+        opacity 0.7s cubic-bezier(.2, .8, .2, 1),
+        filter 0.4s cubic-bezier(.2, .8, .2, 1);
+}
+
+.browser-bar {
+    height: 30px;
+    background: #1a1a1f;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.browser-bar .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+.browser-bar .dot:nth-of-type(1) { background: #ff5f57; }
+.browser-bar .dot:nth-of-type(2) { background: #febc2e; }
+.browser-bar .dot:nth-of-type(3) { background: #28c840; }
+
+.browser-bar .url {
+    flex: 1;
+    margin-left: 12px;
+    background: #0c0c10;
+    color: var(--text-faint);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 0.72rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: 0.02em;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.browser img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top center;
+}
+
+.browser::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    pointer-events: none;
+}
+.browser { position: relative; }
+
+/* Fanned-in resting state (mirrors .iphone) */
+.project.is-visible .browser {
+    opacity: 1;
+    transform:
+        translate3d(0, calc(var(--scroll) * -30px), 0)
+        rotateX(calc(var(--scroll) * 4deg))
+        scale(1);
+    transition-delay: calc(var(--i, 0) * 120ms);
+}
+
+.browser-stage:hover .browser { filter: saturate(0.85) brightness(0.78); }
+.browser-stage .browser:hover {
+    filter: none;
+    transform: translateY(-10px) scale(1.02);
     z-index: 5;
 }
 
@@ -641,9 +751,12 @@ main { position: relative; z-index: 1; }
 
 /* Tablet */
 @media (min-width: 721px) and (max-width: 1024px) {
+    .work-grid { grid-template-columns: repeat(3, 1fr); }
     .iphone { width: 260px; margin-left: -130px; margin-top: -282px; }
     .iphone { --spread: 170px; }
     .iphone-stage { height: 640px; }
+    .browser { width: min(460px, 100%); }
+    .browser-stage { gap: 24px; }
 }
 
 /* Mobile */
@@ -653,8 +766,8 @@ main { position: relative; z-index: 1; }
     .hero { padding-bottom: 72px; }
     .top-nav { gap: 20px; }
     .work-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
         padding-bottom: 80px;
     }
     .card-stage { aspect-ratio: 1 / 1; }
@@ -694,6 +807,11 @@ main { position: relative; z-index: 1; }
         --spread: 90px;
         --rot: 6deg;
     }
+    .browser { width: 100%; border-radius: 10px; }
+    .browser-bar { height: 24px; padding: 0 10px; }
+    .browser-bar .dot { width: 8px; height: 8px; }
+    .browser-bar .url { font-size: 0.62rem; padding: 3px 8px; }
+    .browser-stage { gap: 20px; padding: 12px 0 24px; }
     .back-to-top { right: 16px; bottom: 16px; }
 
     .poem-mobile-break { display: inline; }

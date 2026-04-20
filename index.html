@@ -86,6 +86,16 @@
                         <span class="card-tag">Values</span>
                     </div>
                 </a>
+
+                <a class="card" href="#detail-portavec" data-app="portavec">
+                    <div class="card-stage tile-portavec">
+                        <img class="app-icon" src="assets/icons/portavec.png" alt="portavec app icon" loading="eager">
+                    </div>
+                    <div class="card-meta">
+                        <span class="card-name">portavec</span>
+                        <span class="card-tag">Tools</span>
+                    </div>
+                </a>
             </div>
         </section>
 
@@ -128,6 +138,24 @@
                 <a class="iphone" style="--i:0" href="https://wabbazzar.github.io/starbird/" target="_blank" rel="noopener" aria-label="Open starbird"><img src="assets/screenshots/starbird/iphone/01-brands.png" alt="Brands" loading="lazy"></a>
                 <a class="iphone" style="--i:1" href="https://wabbazzar.github.io/starbird/" target="_blank" rel="noopener" aria-label="Open starbird"><img src="assets/screenshots/starbird/iphone/02-about.png" alt="About" loading="lazy"></a>
                 <a class="iphone" style="--i:2" href="https://wabbazzar.github.io/starbird/" target="_blank" rel="noopener" aria-label="Open starbird"><img src="assets/screenshots/starbird/iphone/03-charts.png" alt="Charts" loading="lazy"></a>
+            </div>
+        </section>
+
+        <section class="project" id="detail-portavec" data-count="2">
+            <div class="project-head">
+                <span class="project-kicker">Portavec</span>
+                <p class="project-tagline">Raster to vector in the browser. Drop an image, get an SVG &mdash; no upload, no server.</p>
+                <a class="project-link" href="https://wabbazzar.com/portavec/" target="_blank" rel="noopener">portavec&nbsp;&rarr;</a>
+            </div>
+            <div class="browser-stage" data-href="https://wabbazzar.com/portavec/">
+                <a class="browser" style="--i:0" href="https://wabbazzar.com/portavec/" target="_blank" rel="noopener" aria-label="Open portavec">
+                    <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">wabbazzar.com/portavec</span></div>
+                    <img src="assets/screenshots/portavec/desktop/01-hero.png" alt="Portavec landing" loading="lazy">
+                </a>
+                <a class="browser" style="--i:1" href="https://wabbazzar.com/portavec/" target="_blank" rel="noopener" aria-label="Open portavec">
+                    <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">wabbazzar.com/portavec</span></div>
+                    <img src="assets/screenshots/portavec/desktop/02-editor.png" alt="Portavec editor" loading="lazy">
+                </a>
             </div>
         </section>
 
@@ -214,7 +242,7 @@
             document.querySelectorAll('.project').forEach(el => io.observe(el));
 
             // Parallax tilt follows scroll for each stage.
-            const stages = document.querySelectorAll('.iphone-stage');
+            const stages = document.querySelectorAll('.iphone-stage, .browser-stage');
             const onScroll = () => {
                 const vh = window.innerHeight;
                 stages.forEach(s => {
