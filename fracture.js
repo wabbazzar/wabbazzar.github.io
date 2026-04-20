@@ -198,22 +198,24 @@
         return { triangles: out, points: pts.slice(0, points.length) };
     }
 
-    // ---------- shard generation ----------
+    // ---------- shard + edge generation ----------
 
-    function generateShards(network, viewport, params, rand) {
+    // Build the Delaunay tessellation and extract its interior edges. The edges
+    // ARE the crack lines we render — this guarantees every gold line lies on
+    // an actual shard boundary, so shards peel apart along the cracks exactly.
+    // Each edge also gets a BFS-depth from the original triangle vertices, so
+    // timing can propagate outward like a real crack front.
+    function generateShards(network, triangle, viewport, params, rand) {
         const { EXTRA_JITTER_POINTS, EDGE_SAMPLE_STEP } = params;
         const { w, h } = viewport;
 
         // Seed points: viewport corners + border samples + crack network nodes + jitter.
         const seeds = [];
         seeds.push([0, 0], [w, 0], [w, h], [0, h]);
-        // Border samples so no gigantic triangles span the edges.
         const step = Math.max(80, EDGE_SAMPLE_STEP);
         for (let x = step; x < w; x += step) { seeds.push([x, 0]); seeds.push([x, h]); }
         for (let y = step; y < h; y += step) { seeds.push([0, y]); seeds.push([w, y]); }
-        // Network nodes.
         for (const n of network.nodes) seeds.push([n[0], n[1]]);
-        // Jitter for variety (biased toward viewport center + original triangle).
         for (let i = 0; i < EXTRA_JITTER_POINTS; i++) {
             seeds.push([rand() * w, rand() * h]);
         }
@@ -229,27 +231,99 @@
             if (!dup) dedup.push(p);
         }
 
+        // Locate the 3 triangle vertices in the dedup set (nearest-by-distance match).
+        const triIdx = [];
+        for (let i = 0; i < 3; i++) {
+            const [tx, ty] = triangle[i];
+            let best = -1, bestD = Infinity;
+            for (let k = 0; k < dedup.length; k++) {
+                const dx = dedup[k][0] - tx, dy = dedup[k][1] - ty;
+                const d2 = dx * dx + dy * dy;
+                if (d2 < bestD) { bestD = d2; best = k; }
+            }
+            if (best >= 0) triIdx.push(best);
+        }
+
         const { triangles, points } = delaunay(dedup);
 
-        // Build shard objects; attach delay based on distance from network centroid so
-        // shards near the drawn triangle fly first.
+        // Build the edge multimap: each edge records the triangles it bounds.
+        const edgeMap = new Map();
+        for (let ti = 0; ti < triangles.length; ti++) {
+            const [a, b, c] = triangles[ti];
+            const pairs = [[a, b], [b, c], [c, a]];
+            for (const [u, v] of pairs) {
+                const key = u < v ? u + "," + v : v + "," + u;
+                let e = edgeMap.get(key);
+                if (!e) { e = { a: u, b: v, tris: [] }; edgeMap.set(key, e); }
+                e.tris.push(ti);
+            }
+        }
+
+        // Vertex adjacency for BFS.
+        const adj = new Array(points.length);
+        for (let i = 0; i < points.length; i++) adj[i] = [];
+        for (const e of edgeMap.values()) {
+            adj[e.a].push(e.b);
+            adj[e.b].push(e.a);
+        }
+
+        // BFS from the 3 triangle-vertex indices so every vertex has a depth
+        // equal to the number of Delaunay edges between it and the gesture.
+        const vertDepth = new Array(points.length).fill(Infinity);
+        const queue = [];
+        for (const i of triIdx) { if (i >= 0 && vertDepth[i] === Infinity) { vertDepth[i] = 0; queue.push(i); } }
+        let head = 0;
+        while (head < queue.length) {
+            const u = queue[head++];
+            for (const v of adj[u]) {
+                if (vertDepth[v] === Infinity) { vertDepth[v] = vertDepth[u] + 1; queue.push(v); }
+            }
+        }
+        let maxVertDepth = 1;
+        for (let i = 0; i < vertDepth.length; i++) {
+            if (vertDepth[i] !== Infinity && vertDepth[i] > maxVertDepth) maxVertDepth = vertDepth[i];
+        }
+
+        // Build shards (non-degenerate triangles) and index them by triangle id
+        // so edges can point at the exact shard objects they bound.
+        const shardByTri = new Array(triangles.length);
         const shards = [];
-        for (const [ia, ib, ic] of triangles) {
+        for (let ti = 0; ti < triangles.length; ti++) {
+            const [ia, ib, ic] = triangles[ti];
             const pa = points[ia], pb = points[ib], pc = points[ic];
-            const cx = (pa[0] + pb[0] + pc[0]) / 3;
-            const cy = (pa[1] + pb[1] + pc[1]) / 3;
-            // signed area -> skip degenerates
             const area = Math.abs(
                 (pb[0] - pa[0]) * (pc[1] - pa[1]) - (pc[0] - pa[0]) * (pb[1] - pa[1])
             ) / 2;
             if (area < 4) continue;
-            shards.push({
-                a: pa, b: pb, c: pc,
-                centroid: [cx, cy],
-                area,
+            const cx = (pa[0] + pb[0] + pc[0]) / 3;
+            const cy = (pa[1] + pb[1] + pc[1]) / 3;
+            const sd = Math.min(
+                vertDepth[ia] === Infinity ? maxVertDepth : vertDepth[ia],
+                vertDepth[ib] === Infinity ? maxVertDepth : vertDepth[ib],
+                vertDepth[ic] === Infinity ? maxVertDepth : vertDepth[ic]
+            );
+            const s = { a: pa, b: pb, c: pc, centroid: [cx, cy], area, bfsDepth: sd };
+            shardByTri[ti] = s;
+            shards.push(s);
+        }
+
+        // Interior edges (shared by 2 valid shards) are the visible cracks.
+        const edges = [];
+        for (const e of edgeMap.values()) {
+            if (e.tris.length !== 2) continue;
+            const sA = shardByTri[e.tris[0]];
+            const sB = shardByTri[e.tris[1]];
+            if (!sA || !sB) continue;
+            const da = vertDepth[e.a] === Infinity ? maxVertDepth : vertDepth[e.a];
+            const db = vertDepth[e.b] === Infinity ? maxVertDepth : vertDepth[e.b];
+            edges.push({
+                a: points[e.a], b: points[e.b],
+                bfsDepth: Math.min(da, db),
+                shardA: sA, shardB: sB,
             });
         }
-        return shards;
+
+        return { shards, edges, maxVertDepth };
     }
 
     // ---------- full plan ----------
@@ -257,26 +331,40 @@
     function planFracture(triangle, viewport, params, seed) {
         const rand = mulberry32(seed || ((Math.random() * 1e9) | 0));
         const network = buildCrackNetwork(triangle, viewport, params, rand);
-        const shards = generateShards(network, viewport, params, rand);
-        // Stagger shard delay: start after crack propagation; closer-to-origin shards leave earlier.
         const origin = network.centroid;
-        let dMax = 0;
+
+        const { shards, edges, maxVertDepth } = generateShards(network, triangle, viewport, params, rand);
+
+        // Edge wave: each BFS-depth level gets a time slot, so cracks propagate
+        // outward from the triangle corners along real shard boundaries.
+        let edgeEnd = 0;
+        for (const e of edges) {
+            e.delay = e.bfsDepth * params.EDGE_STEP_MS + rand() * 40;
+            e.duration = params.EDGE_DRAW_MS;
+            const finish = e.delay + e.duration;
+            if (finish > edgeEnd) edgeEnd = finish;
+        }
+
+        // Shatter begins once the crack wave has fully laid out, with a brief
+        // settled moment where the whole cracked viewport is visible.
+        const shatterStart = edgeEnd + params.PRE_SHATTER_PAUSE_MS;
         for (const s of shards) {
+            const sd = (maxVertDepth > 0) ? s.bfsDepth / maxVertDepth : 0;
+            s.delay = shatterStart + sd * params.SHATTER_STAGGER;
+            s.duration = params.SHATTER_MS;
+            // Outward push direction from origin (used by renderFrame).
             s._d = hypot(s.centroid[0] - origin[0], s.centroid[1] - origin[1]);
-            if (s._d > dMax) dMax = s._d;
         }
-        const shatterStart = network.totalMs * 0.6; // overlap with crack tail
-        const shardSpan = params.SHATTER_MS;
-        for (const s of shards) {
-            const t = dMax > 0 ? s._d / dMax : 0;
-            s.delay = shatterStart + t * params.SHATTER_STAGGER;
-            s.duration = shardSpan;
+
+        // Each edge fades out once the earlier of its two adjacent shards begins
+        // flying — so the crack "opens up" in time with the break.
+        for (const e of edges) {
+            e.fadeStart = Math.min(e.shardA.delay, e.shardB.delay);
+            e.fadeDuration = params.EDGE_FADE_MS;
         }
-        const totalMs = Math.max(
-            network.totalMs,
-            shatterStart + params.SHATTER_STAGGER + shardSpan
-        );
-        return { network, shards, totalMs, viewport, origin };
+
+        const totalMs = shatterStart + params.SHATTER_STAGGER + params.SHATTER_MS;
+        return { network, shards, edges, totalMs, viewport, origin, params };
     }
 
     // ---------- metrics ----------
@@ -332,25 +420,33 @@
             ctx.restore();
         }
 
-        // Crack lines: drawn on top, fade out as they age.
+        // Crack lines = actual Delaunay edges between adjacent shards. They
+        // stroke in from the midpoint outward (edge splitting open), stay lit,
+        // then fade as their bounding shards fly off.
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
-        for (const seg of plan.network.segments) {
-            const local = t - seg.delay;
+        for (const e of plan.edges) {
+            const local = t - e.delay;
             if (local <= 0) continue;
-            const u = Math.min(1, local / seg.duration);
-            const ex = seg.start[0] + (seg.end[0] - seg.start[0]) * u;
-            const ey = seg.start[1] + (seg.end[1] - seg.start[1]) * u;
-            // Fade the crack after it has fully propagated.
-            const age = local - seg.duration;
-            const ageFade = age > 0 ? Math.max(0, 1 - age / 500) : 1;
-            if (ageFade <= 0) continue;
-            ctx.globalAlpha = 0.85 * ageFade;
+            const drawU = Math.min(1, local / e.duration);
+            const mx = (e.a[0] + e.b[0]) / 2;
+            const my = (e.a[1] + e.b[1]) / 2;
+            const ax = mx + (e.a[0] - mx) * drawU;
+            const ay = my + (e.a[1] - my) * drawU;
+            const bx = mx + (e.b[0] - mx) * drawU;
+            const by = my + (e.b[1] - my) * drawU;
+
+            let alpha = 1;
+            const fadeT = t - e.fadeStart;
+            if (fadeT > 0) alpha = Math.max(0, 1 - fadeT / e.fadeDuration);
+            if (alpha <= 0) continue;
+
+            ctx.globalAlpha = 0.85 * alpha;
             ctx.strokeStyle = crackGlow;
             ctx.lineWidth = 6;
             ctx.beginPath();
-            ctx.moveTo(seg.start[0], seg.start[1]);
-            ctx.lineTo(ex, ey);
+            ctx.moveTo(ax, ay);
+            ctx.lineTo(bx, by);
             ctx.stroke();
             ctx.strokeStyle = crackColor;
             ctx.lineWidth = 2;
@@ -372,19 +468,25 @@
 
     // ---------- default params ----------
 
-    // Tuned values: 60/60 random-triangle trials across 1440×900, 1280×720, and
-    // 390×844 viewports pass coverage≥95% in ≤3000ms. See tools/fracture-tune.js.
+    // Tuned with tools/fracture-tune.js. Crack-tree params still used to seed
+    // Delaunay points biased toward the gesture; cracks themselves are now
+    // drawn along Delaunay edges, BFS-timed outward from the triangle.
     const DEFAULT_PARAMS = {
-        // crack tree
+        // crack tree (point-set seeding only — no longer rendered)
         PRIMARY_LEN_MULT: 2.8,
         BRANCH_LEN_RATIO: 0.72,
         BRANCH_ANGLE_SPREAD: 0.95,  // radians
         MAX_DEPTH: 4,
         PROPAGATION_MS: 550,
-        SEGMENT_MS: 60,             // per ~120px of length
+        SEGMENT_MS: 60,
         // tessellation
         EXTRA_JITTER_POINTS: 12,
         EDGE_SAMPLE_STEP: 220,
+        // edge wave (visible crack propagation along shard boundaries)
+        EDGE_STEP_MS: 55,           // ms per BFS depth level
+        EDGE_DRAW_MS: 130,          // per-edge stroke-in duration
+        EDGE_FADE_MS: 320,          // edge fade-out when adjacent shard flies
+        PRE_SHATTER_PAUSE_MS: 90,   // beat of "fully cracked" before shards move
         // shatter
         SHATTER_MS: 1500,
         SHATTER_STAGGER: 650,
