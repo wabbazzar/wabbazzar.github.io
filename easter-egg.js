@@ -168,20 +168,13 @@
         hint.textContent = "✕ exit";
         stage.appendChild(hint);
 
-        // Target iframe in the back. Only the top edge is inset past the iOS
-        // safe area so the game's top HUD (score, timer) clears the status-bar
-        // strip. Left/right/bottom stay flush so the playfield keeps the full
-        // width and height below the notch — insetting all four sides visibly
-        // shrinks the game, especially in landscape. env() returns 0 on
-        // platforms without safe-area support, so this is a no-op off iOS.
+        // Target iframe in the back.
         const iframe = document.createElement("iframe");
         iframe.src = url;
         iframe.title = title;
         iframe.allow = "fullscreen; gamepad; autoplay; accelerometer; gyroscope";
         Object.assign(iframe.style, {
-            position: "absolute",
-            top: "env(safe-area-inset-top, 0px)",
-            right: "0", bottom: "0", left: "0",
+            position: "absolute", inset: "0", width: "100%", height: "100%",
             border: "0", background: "#000", opacity: "0",
             transition: "opacity 900ms ease-out",
         });
