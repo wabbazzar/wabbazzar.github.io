@@ -6,7 +6,7 @@
     const SHOTS = [
         { src: 'assets/icons/shredly.png',  href: 'https://shredly.me/' },
         { src: 'assets/icons/quizly.png',   href: 'https://quizly.me/' },
-        { src: 'assets/icons/starbird.png', href: 'https://wabbazzar.github.io/starbird/' },
+        { src: 'assets/icons/starbird.png', href: 'https://starbird42.com/' },
         { src: 'assets/icons/portavec.png', href: 'https://wabbazzar.com/portavec/' },
     ];
 
