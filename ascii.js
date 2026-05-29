@@ -4,8 +4,8 @@
 
 (() => {
     const SHOTS = [
-        { src: 'assets/icons/shredly.png',  href: 'https://shredly.me/' },
-        { src: 'assets/icons/quizly.png',   href: 'https://quizly.me/' },
+        { src: 'assets/icons/shredly.png',  href: 'https://shredly.me/about' },
+        { src: 'assets/icons/quizly.png',   href: 'https://quizly.me/about' },
         { src: 'assets/icons/starbird.png', href: 'https://starbird42.com/' },
         { src: 'assets/icons/portavec.png', href: 'https://wabbazzar.com/portavec/' },
     ];
