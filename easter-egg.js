@@ -13,7 +13,6 @@
     // overlay (rather than navigating away). Each entry: [href regex, iframe title].
     const IFRAME_LINKS = [
         [/^https?:\/\/(?:www\.)?wabbazzar\.com\/portavec\/?(?:[?#]|$)/, "portavec"],
-        [/^https?:\/\/(?:www\.)?starbird42\.com\/?(?:[?#]|$)/, "starbird"],
     ];
 
     // Long-press timing.
