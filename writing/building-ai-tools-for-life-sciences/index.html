@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building AI Tools for Life Sciences</title>
+  <meta name="description" content="Two projects in AI-assisted life sciences tooling: automated PII adjudication and autonomous documentation auditing.">
+  <meta property="og:title" content="Building AI Tools for Life Sciences">
+  <meta property="og:description" content="Automated PII adjudication pipelines and autonomous documentation agents.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://wabbazzar.com/writing/building-ai-tools-for-life-sciences/">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <link rel="stylesheet" href="styles.css?v=2">
+  <style>
+    /* Back link to the writing series — matches the mode-toggle pill. */
+    .back-to-writing {
+      position: fixed;
+      top: 1.5rem;
+      left: 1.5rem;
+      z-index: 100;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 999px;
+      padding: 0.45rem 1rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+    }
+    .back-to-writing:hover { color: var(--text); opacity: 1; }
+    body.present-mode .back-to-writing { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+
+  <a class="back-to-writing" href="/writing/">&larr; Writing</a>
+
+  <!-- Mode Toggle -->
+  <div class="mode-toggle" role="tablist" aria-label="View mode">
+    <button id="btn-read" class="active" role="tab" aria-selected="true">Read</button>
+    <button id="btn-present" role="tab" aria-selected="false">Present</button>
+  </div>
+
+  <!-- Progress Dots -->
+  <nav class="progress-dots" aria-label="Slide navigation"></nav>
+
+  <main id="deck">
+
+    <!-- ===================== SLIDE 0: TITLE ===================== -->
+    <section id="title">
+      <div class="slide-inner">
+        <h1>Building AI Tools<br>for Life Sciences</h1>
+        <p class="subtitle">Automated PII adjudication &amp; autonomous documentation agents</p>
+        <p class="author">Wesley Beckner &mdash; 2026</p>
+      </div>
+    </section>
+
+    <div class="section-divider"><hr></div>
+
+    <!-- ===================== SLIDE 1: JUDGIFY — WHAT & WHY ===================== -->
+    <section id="judgify-intro">
+      <div class="slide-inner">
+        <h2>Judgify &mdash; What &amp; Why</h2>
+        <p>Clinical NLP pipelines use named-entity recognition to find sensitive data&mdash;patient names, IDs, locations, demographics. But NER models <strong>over-tag</strong>. A mention of "Dr. Smith" as an attending physician isn't the same as "John Smith" the patient.</p>
+        <p>Judgify is an automated PII adjudication pipeline: it takes NER-tagged clinical text, decides which entities are <em>actually</em> patient-identifying, and trains specialized binary classifiers to make that decision at scale.</p>
+
+        <div class="mermaid" data-click-details="intro">
+graph LR
+    A["Raw Clinical Text"] --> B["NER Tagging"]
+    B --> C["16K entities found"]
+    C --> D["Judgify Adjudication"]
+    D --> E["2.1K confirmed PII"]
+    style A fill:#111,stroke:#333,color:#fff
+    style B fill:#111,stroke:#333,color:#fff
+    style C fill:#111,stroke:#FF6B6B,color:#FF6B6B
+    style D fill:#111,stroke:#00D4FF,color:#00D4FF
+    style E fill:#111,stroke:#00FF88,color:#00FF88
+        </div>
+
+        <p>The gap between "entity found" and "entity is patient PII" is where Judgify operates.</p>
+      </div>
+    </section>
+
+    <div class="section-divider"><hr></div>
+
+    <!-- ===================== SLIDE 2: JUDGIFY — PIPELINE ===================== -->
+    <section id="judgify-pipeline">
+      <div class="slide-inner">
+        <h2>Judgify &mdash; The Pipeline</h2>
+        <p>Six phases take raw text through to scored, production-ready output:</p>
+
+        <div class="mermaid" data-click-details="pipeline">
+graph LR
+    P0["Phase 0<br><strong>Entity Recognition</strong><br>NER on raw text"] --> P1["Phase 1<br><strong>Prompt Refinement</strong><br>3-model delta analysis"]
+    P1 --> P2["Phase 2<br><strong>LLM Annotation</strong><br>Ground-truth labeling"]
+    P2 --> P3["Phase 3<br><strong>Encoder Training</strong><br>ModernBERT classifiers"]
+    P3 --> P4["Phase 4<br><strong>Production Inference</strong><br>Multi-GPU scoring"]
+    P4 --> P5["Phase 5<br><strong>Evaluation</strong><br>Benchmarks &amp; reports"]
+    style P0 fill:#111,stroke:#00D4FF,color:#fff
+    style P1 fill:#111,stroke:#00D4FF,color:#fff
+    style P2 fill:#111,stroke:#00D4FF,color:#fff
+    style P3 fill:#111,stroke:#00D4FF,color:#fff
+    style P4 fill:#111,stroke:#00D4FF,color:#fff
+    style P5 fill:#111,stroke:#00D4FF,color:#fff
+        </div>
+
+        <div class="two-col">
+          <div>
+            <h3>LLM Phases (0&ndash;2)</h3>
+            <ul>
+              <li><strong>Phase 0</strong> &mdash; NER extraction (CPU or GPU fleet)</li>
+              <li><strong>Phase 1</strong> &mdash; Run 3 models on samples; iterate prompts until &ge;95% agreement</li>
+              <li><strong>Phase 2</strong> &mdash; Full-scale annotation with converged prompts</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Encoder Phases (3&ndash;5)</h3>
+            <ul>
+              <li><strong>Phase 3</strong> &mdash; Train 3 binary classifiers (name/ID, location, demographic)</li>
+              <li><strong>Phase 4</strong> &mdash; Score the full dataset at ~30 min wall time via GPU dispatch</li>
+              <li><strong>Phase 5</strong> &mdash; Precision/recall benchmarks, stratified sampling for review</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"><hr></div>
+
+    <!-- ===================== SLIDE 3: JUDGIFY — MCP ARCHITECTURE ===================== -->
+    <section id="judgify-mcp">
+      <div class="slide-inner">
+        <h2>Judgify &mdash; MCP Architecture</h2>
+        <p><strong>MCP</strong> exposes the pipeline as 15+ typed tools instead of one monolithic prompt. The operator's machine never touches EC2 directly&mdash;it sends control signals via SSM to the compute instance, which orchestrates GPU provisioning.</p>
+
+        <div class="mermaid" data-click-details="mcp">
+graph LR
+    OP["Operator"] -->|"MCP<br>(stdio)"| MCP["MCP Server"]
+    MCP -->|"SSM only"| T3["Compute Instance<br>Orchestrator"]
+    T3 -->|"EC2 API<br>(instance profile)"| GPU["GPU Fleet"]
+    T3 <--> S3["Object Storage"]
+    T3 <--> LLM["LLM API"]
+    GPU --> S3
+    style OP fill:#111,stroke:#00D4FF,color:#fff
+    style MCP fill:#0a1a2a,stroke:#00D4FF,color:#00D4FF
+    style T3 fill:#0a1a2a,stroke:#00FF88,color:#00FF88
+    style GPU fill:#111,stroke:#333,color:#fff
+    style S3 fill:#111,stroke:#333,color:#fff
+    style LLM fill:#111,stroke:#333,color:#fff
+        </div>
+
+        <div class="two-col">
+          <div>
+            <h3>Permission Boundaries</h3>
+            <ul>
+              <li><strong>Operator (Mac)</strong> &mdash; SSM-only. Cannot launch EC2 instances directly.</li>
+              <li><strong>Compute instance</strong> &mdash; full EC2/S3 via instance profile. Launches, monitors, and terminates GPU workers.</li>
+              <li><strong>GPU workers</strong> &mdash; ephemeral. Auto-terminate on completion, tagged for safe cleanup.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Control Flow</h3>
+            <ul>
+              <li><strong>Approval gate</strong> &mdash; MCP returns a checkpoint; user confirms before any GPU provisioning.</li>
+              <li><strong>Phase gating</strong> &mdash; prerequisites enforced in code. Phase 3 refuses to run if Phase 2 hasn't completed.</li>
+              <li><strong>Fire-and-poll</strong> &mdash; long-running jobs return a handle; poll for progress.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"><hr></div>
+
+    <!-- ===================== SLIDE 4: JUDGIFY — HARDENING ===================== -->
+    <section id="judgify-hardening">
+      <div class="slide-inner">
+        <h2>Judgify &mdash; Hardening the MCP</h2>
+        <p>Structured tools are only useful if they're <em>reliable</em>. The hardening process uses automated cold-start regression: each run creates fresh infrastructure, runs all 5 phases on real data, then tears everything down.</p>
+
+        <div class="mermaid" data-click-details="hardening">
+graph LR
+    A["Create fresh<br>instance"] --> B["Bootstrap<br>code + deps"]
+    B --> C["Run Phases<br>0 → 5"]
+    C --> D{"Clean<br>run?"}
+    D -->|Yes| E["Log + pick<br>next dataset"]
+    D -->|No| F["Fix bug<br>in-loop"]
+    F --> A
+    E --> A
+    style A fill:#111,stroke:#00D4FF,color:#fff
+    style B fill:#111,stroke:#00D4FF,color:#fff
+    style C fill:#111,stroke:#00D4FF,color:#fff
+    style D fill:#111,stroke:#FFD700,color:#FFD700
+    style E fill:#111,stroke:#00FF88,color:#00FF88
+    style F fill:#111,stroke:#FF6B6B,color:#FF6B6B
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span class="number">31</span>
+            <span class="label">Consecutive clean runs</span>
+          </div>
+          <div class="stat-card">
+            <span class="number">6</span>
+            <span class="label">Distinct data sources</span>
+          </div>
+          <div class="stat-card">
+            <span class="number">3</span>
+            <span class="label">Input format variants</span>
+          </div>
+          <div class="stat-card">
+            <span class="number">~16 min</span>
+            <span class="label">Cold-start end-to-end</span>
+          </div>
+        </div>
+
+        <div class="callout">
+          <p><strong>Philosophy:</strong> Each run varies data shape (raw text vs. pre-tagged), source domain (clinical notes, lab reports, fragments), and scale. Bugs found during the loop are fixed <em>in-loop</em>&mdash;they're features of the testing process, not failures.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"><hr></div>
+
+    <!-- ===================== SLIDE 5: DOCHOUND — WHAT & WHY ===================== -->
+    <section id="dochound-intro">
+      <div class="slide-inner">
+        <h2>DocHound &mdash; What &amp; Why</h2>
+        <p>Documentation drifts from code. Links break, version strings go stale, CLI examples reference flags that were renamed three PRs ago. Nobody notices until a new engineer hits a dead end.</p>
+        <p><strong>DocHound</strong> is an autonomous documentation auditing agent. It watches repositories, detects stale or incorrect documentation, and submits fix PRs&mdash;automatically.</p>
+
+        <div class="mermaid" data-click-details="dochound">
+graph LR
+    A["main branch<br>changes"] --> B["DocHound<br>audits docs"]
+    B --> C{"Issues<br>found?"}
+    C -->|Yes| D["Opens fix PR<br>with edits"]
+    D --> E["Human reviews"]
+    E -->|Comments| F["LLM revises<br>force-pushes"]
+    F --> D
+    C -->|No| G["No action"]
+    style A fill:#111,stroke:#333,color:#fff
+    style B fill:#0a1a2a,stroke:#00D4FF,color:#00D4FF
+    style C fill:#111,stroke:#FFD700,color:#FFD700
+    style D fill:#111,stroke:#00FF88,color:#00FF88
+    style E fill:#111,stroke:#333,color:#fff
+    style F fill:#0a1a2a,stroke:#00D4FF,color:#00D4FF
+    style G fill:#111,stroke:#333,color:#666
+        </div>
+
+        <p>Not a linter. It reads your codebase structure, manifests, and source&mdash;then verifies that what your docs <em>claim</em> matches what the code <em>does</em>.</p>
+      </div>
+    </section>
+
+    <div class="section-divider"><hr></div>
+
+    <!-- ===================== SLIDE 6: DOCHOUND — DEPLOYMENT ===================== -->
+    <section id="dochound-deploy">
+      <div class="slide-inner">
+        <h2>DocHound &mdash; Deployment Architecture</h2>
+        <p>Production deployment on EKS via Flux GitOps. LLM calls route through a cluster AI Gateway&mdash;the pod never holds API keys directly.</p>
+
+        <div class="mermaid" data-click-details="deploy">
+graph LR
+    FLUX["Flux<br>GitOps"] --> ECR["Container<br>Registry"]
+    ECR --> POD["DocHound<br>Pod"]
+    POD --> GW["AI Gateway"]
+    GW --> LLM["LLM API"]
+    POD --> GH["GitHub API"]
+    POD --> PROM["Prometheus"]
+    style FLUX fill:#111,stroke:#333,color:#fff
+    style ECR fill:#111,stroke:#333,color:#fff
+    style POD fill:#0a1a2a,stroke:#00D4FF,color:#00D4FF
+    style GW fill:#0a1a2a,stroke:#00FF88,color:#00FF88
+    style LLM fill:#111,stroke:#333,color:#fff
+    style GH fill:#111,stroke:#333,color:#fff
+    style PROM fill:#111,stroke:#333,color:#fff
+        </div>
+
+        <!-- Read mode: inline explanations -->
+        <div class="detail-blocks" data-group="deploy">
+          <div class="two-col">
+            <div>
+              <ul>
+                <li><strong>Flux</strong> &mdash; reconciles desired state from git; pulls OCI images on commit.</li>
+                <li><strong>Container Registry</strong> &mdash; stores multi-stage Docker images (Chainguard base, non-root).</li>
+                <li><strong>DocHound Pod</strong> &mdash; async poller with FastAPI service layer (<code>/healthz</code>, <code>/readyz</code>).</li>
+              </ul>
+            </div>
+            <div>
+              <ul>
+                <li><strong>AI Gateway</strong> &mdash; cluster-internal proxy that handles LLM auth. Pod sends OpenAI-compatible requests with a dummy key.</li>
+                <li><strong>GitHub API</strong> &mdash; GitHub App auth mints short-lived JWT tokens. No long-lived PATs.</li>
+                <li><strong>Prometheus</strong> &mdash; polls created, errors, audit duration metrics.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"><hr></div>
+
+    <!-- ===================== SLIDE 7: DOCHOUND — TIERED CHECKS ===================== -->
+    <section id="dochound-tiers">
+      <div class="slide-inner">
+        <h2>DocHound &mdash; Tiered Check System</h2>
+        <p>Checks are layered by cost and confidence. Deterministic checks run first; LLM augments where needed.</p>
+
+        <div class="tier-stack">
+          <div class="tier tier-3">
+            <div class="tier-label">Tier 3 &mdash; Broad LLM</div>
+            <div class="tier-desc">Full-document audit. Architecture accuracy, prose quality, structural claims.</div>
+            <div class="tier-examples">Expensive. Only runs on full audits, not diff-driven.</div>
+          </div>
+          <div class="tier tier-2">
+            <div class="tier-label">Tier 2 &mdash; Targeted LLM</div>
+            <div class="tier-desc">LLM validates specific claims. CLI examples, install instructions, API usage.</div>
+            <div class="tier-examples">Narrow scope, moderate cost.</div>
+          </div>
+          <div class="tier tier-1">
+            <div class="tier-label">Tier 1 &mdash; Deterministic</div>
+            <div class="tier-desc">Dead links, code element refs, version mismatches, hardcoded paths, CLI surface gaps.</div>
+            <div class="tier-examples">Free, fast, always auto-fixable. No LLM required.</div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <p><strong>Key design:</strong> Tier 1 findings are passed as structured JSON context to the LLM in Tiers 2&ndash;3. The LLM confirms, rejects, or extends them. If the LLM call fails, Tier 1 findings pass through unmodified&mdash;the pipeline degrades gracefully, never silently.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"><hr></div>
+
+    <!-- ===================== SLIDE 8: DOCHOUND — PR PHILOSOPHY ===================== -->
+    <section id="dochound-prs">
+      <div class="slide-inner">
+        <h2>DocHound &mdash; PR Philosophy</h2>
+        <p><strong>One PR per repo. Always update, never create multiples.</strong></p>
+
+        <div class="mermaid" data-click-details="prs">
+sequenceDiagram
+    participant Main as main
+    participant DH as DocHound
+    participant PR as dochound/fix
+
+    Main->>DH: New commits
+    DH->>DH: Audit (Tier 1 → LLM)
+    DH->>PR: Create or force-push fixes
+    Note over PR: Human comments
+    PR-->>DH: Feedback
+    DH->>PR: LLM reverts/edits, force-push
+        </div>
+
+        <div class="two-col">
+          <div>
+            <ul>
+              <li><strong>One PR per repo</strong> &mdash; never spam; always update the existing branch.</li>
+              <li><strong>Living document</strong> &mdash; PR evolves as main advances.</li>
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li><strong>Feedback loop</strong> &mdash; human comments trigger LLM-driven reverts or edits.</li>
+              <li><strong>Idempotent</strong> &mdash; SHA-tracked state prevents duplicate work.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"><hr></div>
+
+    <!-- ===================== SLIDE 9: CLOSING ===================== -->
+    <section id="closing">
+      <div class="slide-inner">
+
+        <div class="closing-visual">
+          <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" aria-label="Generative visual: converging structured and neural systems">
+            <defs>
+              <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#00D4FF" stop-opacity="0.15"/>
+                <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="blur1"><feGaussianBlur stdDeviation="2"/></filter>
+              <filter id="blur2"><feGaussianBlur stdDeviation="4"/></filter>
+            </defs>
+            <rect width="600" height="300" fill="#000"/>
+            <ellipse cx="300" cy="150" rx="280" ry="140" fill="url(#glow)"/>
+
+            <!-- Grid lines (structured/deterministic side) -->
+            <g opacity="0.12" stroke="#00D4FF" stroke-width="0.5">
+              <line x1="60" y1="40" x2="60" y2="260"/><line x1="120" y1="40" x2="120" y2="260"/>
+              <line x1="180" y1="40" x2="180" y2="260"/><line x1="240" y1="40" x2="240" y2="260"/>
+              <line x1="60" y1="70" x2="240" y2="70"/><line x1="60" y1="120" x2="240" y2="120"/>
+              <line x1="60" y1="170" x2="240" y2="170"/><line x1="60" y1="220" x2="240" y2="220"/>
+            </g>
+
+            <!-- Neural paths (organic/LLM side) -->
+            <g fill="none" stroke="#00D4FF" stroke-width="0.8" filter="url(#blur1)">
+              <path d="M360,60 Q400,100 380,150 T420,240" opacity="0.25">
+                <animate attributeName="d" dur="8s" repeatCount="indefinite"
+                  values="M360,60 Q400,100 380,150 T420,240;
+                          M365,55 Q395,110 385,145 T415,245;
+                          M360,60 Q400,100 380,150 T420,240"/>
+              </path>
+              <path d="M400,50 Q440,90 420,140 T460,230" opacity="0.2">
+                <animate attributeName="d" dur="10s" repeatCount="indefinite"
+                  values="M400,50 Q440,90 420,140 T460,230;
+                          M405,55 Q435,95 425,135 T455,235;
+                          M400,50 Q440,90 420,140 T460,230"/>
+              </path>
+              <path d="M440,70 Q480,110 460,160 T500,250" opacity="0.15">
+                <animate attributeName="d" dur="12s" repeatCount="indefinite"
+                  values="M440,70 Q480,110 460,160 T500,250;
+                          M445,65 Q475,115 465,155 T495,245;
+                          M440,70 Q480,110 460,160 T500,250"/>
+              </path>
+              <path d="M380,80 Q420,120 400,170 T440,260" opacity="0.2">
+                <animate attributeName="d" dur="9s" repeatCount="indefinite"
+                  values="M380,80 Q420,120 400,170 T440,260;
+                          M385,75 Q415,125 405,165 T435,255;
+                          M380,80 Q420,120 400,170 T440,260"/>
+              </path>
+              <path d="M460,40 Q500,80 480,130 T520,220" opacity="0.12">
+                <animate attributeName="d" dur="11s" repeatCount="indefinite"
+                  values="M460,40 Q500,80 480,130 T520,220;
+                          M455,45 Q495,85 485,125 T515,225;
+                          M460,40 Q500,80 480,130 T520,220"/>
+              </path>
+            </g>
+
+            <!-- Convergence nodes at center -->
+            <g filter="url(#blur1)">
+              <circle cx="280" cy="120" r="3" fill="#00D4FF" opacity="0.6">
+                <animate attributeName="opacity" dur="3s" repeatCount="indefinite" values="0.6;0.2;0.6"/>
+              </circle>
+              <circle cx="310" cy="150" r="4" fill="#00D4FF" opacity="0.8">
+                <animate attributeName="opacity" dur="4s" repeatCount="indefinite" values="0.8;0.3;0.8"/>
+              </circle>
+              <circle cx="290" cy="180" r="3" fill="#00D4FF" opacity="0.5">
+                <animate attributeName="opacity" dur="3.5s" repeatCount="indefinite" values="0.5;0.15;0.5"/>
+              </circle>
+              <circle cx="320" cy="130" r="2.5" fill="#00D4FF" opacity="0.4">
+                <animate attributeName="opacity" dur="5s" repeatCount="indefinite" values="0.4;0.1;0.4"/>
+              </circle>
+              <circle cx="300" cy="165" r="3.5" fill="#00D4FF" opacity="0.7">
+                <animate attributeName="opacity" dur="3.7s" repeatCount="indefinite" values="0.7;0.25;0.7"/>
+              </circle>
+            </g>
+
+            <!-- Grid-side nodes (structured) -->
+            <g>
+              <rect x="118" y="118" width="4" height="4" rx="1" fill="#00D4FF" opacity="0.5"/>
+              <rect x="178" y="68" width="4" height="4" rx="1" fill="#00D4FF" opacity="0.4"/>
+              <rect x="58" y="168" width="4" height="4" rx="1" fill="#00D4FF" opacity="0.35"/>
+              <rect x="178" y="168" width="4" height="4" rx="1" fill="#00D4FF" opacity="0.5"/>
+              <rect x="118" y="218" width="4" height="4" rx="1" fill="#00D4FF" opacity="0.3"/>
+              <rect x="238" y="118" width="4" height="4" rx="1" fill="#00D4FF" opacity="0.45"/>
+              <rect x="58" y="68" width="4" height="4" rx="1" fill="#00D4FF" opacity="0.25"/>
+              <rect x="238" y="218" width="4" height="4" rx="1" fill="#00D4FF" opacity="0.35"/>
+            </g>
+
+            <!-- Connecting lines: grid nodes to convergence center -->
+            <g stroke="#00D4FF" stroke-width="0.5" opacity="0.1">
+              <line x1="120" y1="120" x2="280" y2="120"/>
+              <line x1="180" y1="70" x2="310" y2="150"/>
+              <line x1="60" y1="170" x2="290" y2="180"/>
+              <line x1="180" y1="170" x2="300" y2="165"/>
+              <line x1="240" y1="120" x2="310" y2="150"/>
+              <line x1="120" y1="220" x2="290" y2="180"/>
+            </g>
+
+            <!-- Connecting lines: neural paths to convergence center -->
+            <g stroke="#00D4FF" stroke-width="0.5" opacity="0.08">
+              <line x1="380" y1="150" x2="320" y2="130"/>
+              <line x1="420" y1="140" x2="310" y2="150"/>
+              <line x1="400" y1="170" x2="300" y2="165"/>
+              <line x1="460" y1="160" x2="320" y2="130"/>
+              <line x1="370" y1="120" x2="280" y2="120"/>
+            </g>
+
+            <!-- Central bright node -->
+            <circle cx="300" cy="150" r="6" fill="#00D4FF" opacity="0.15" filter="url(#blur2)">
+              <animate attributeName="r" dur="4s" repeatCount="indefinite" values="6;10;6"/>
+              <animate attributeName="opacity" dur="4s" repeatCount="indefinite" values="0.15;0.3;0.15"/>
+            </circle>
+            <circle cx="300" cy="150" r="2" fill="#00D4FF" opacity="0.9"/>
+          </svg>
+        </div>
+
+        <ul class="takeaway-list">
+          <li>
+            <span class="takeaway-num">1</span>
+            <span><strong>Deterministic first, LLM where it adds value.</strong> Regex catches dead links for free. LLMs confirm architectural claims. Layer them.</span>
+          </li>
+          <li>
+            <span class="takeaway-num">2</span>
+            <span><strong>Test the tooling, not just the product.</strong> 31 cold-start runs proved the MCP reliable. The testing loop found bugs the tools never would have.</span>
+          </li>
+          <li>
+            <span class="takeaway-num">3</span>
+            <span><strong>MCP as the interface layer.</strong> Structured tools with typed inputs and enforced prerequisites let AI assistants operate complex infrastructure safely.</span>
+          </li>
+        </ul>
+
+        <p class="author" style="text-align: center; margin-top: 3rem;">Wesley Beckner &mdash; <a href="https://wabbazzar.com">wabbazzar.com</a></p>
+      </div>
+    </section>
+
+    <!-- Spacer to allow last section to fully snap to start -->
+    <div class="snap-spacer" aria-hidden="true"></div>
+
+  </main>
+
+  <!-- Notes Panel (right sidebar — slide notes / blog commentary) -->
+  <div class="notes-panel" id="notes-panel">
+    <div class="notes-panel-header">
+      <span class="notes-panel-label">Notes</span>
+      <div class="notes-mode-toggle" id="notes-mode-toggle">
+        <button id="btn-published" class="active">Published</button>
+        <button id="btn-edit">Edit</button>
+      </div>
+    </div>
+    <div class="notes-panel-body" id="notes-panel-body"></div>
+  </div>
+  <button class="notes-panel-tab" id="notes-tab" aria-label="Toggle notes panel"><span class="chevron">&#x2039;</span></button>
+
+  <!-- Notes data store (one entry per section, committed to repo) -->
+  <script type="application/json" id="notes-data">
+  {
+  "title": "<p>Test note that should survive a page refresh.</p>",
+  "judgify-intro": "",
+  "judgify-pipeline": "",
+  "judgify-mcp": "",
+  "judgify-hardening": "",
+  "dochound-intro": "",
+  "dochound-deploy": "",
+  "dochound-tiers": "",
+  "dochound-prs": "",
+  "closing": ""
+}
+  </script>
+
+  <!-- Detail Panel (present mode sidebar) -->
+  <div class="detail-overlay" id="detail-overlay"></div>
+  <div class="detail-panel" id="detail-panel">
+    <button class="detail-panel-close" id="detail-close" aria-label="Close detail panel">&times;</button>
+    <h3 id="detail-title"></h3>
+    <div id="detail-body"></div>
+  </div>
+
+  <!-- Detail data store (hidden, read by JS) -->
+  <script type="application/json" id="detail-data">
+  {
+    "intro": {
+      "A": {
+        "title": "Raw Clinical Text",
+        "body": "<p>Input arrives as JSONL — one row per clinical note with a patient identifier and free-text body:</p><pre><code>{\n  \"note_skey\": \"4827193...\",\n  \"patient_identifier\": \"A3F0...\",\n  \"text\": \"Pt is a 62 yo M presenting\n    to ED from Lakeshore Manor NH\n    with weakness and fatigue.\n    Dr. Rebecca Torres attending.\n    MRN 8840217.\",\n  \"entities\": []\n}</code></pre><p>The <code>entities</code> array is empty at this stage — no tagging has happened yet. Notes range from one-line lab comments to multi-page discharge summaries.</p>"
+      },
+      "B": {
+        "title": "NER Tagging",
+        "body": "<p>Redactify NER scans the text and tags every span it suspects is an entity. Output adds positional annotations:</p><pre><code>{\n  \"word\": \"Rebecca Torres\",\n  \"entity\": \"PERSON\",\n  \"start\": 142, \"end\": 156,\n  \"excerpt\": \"...fatigue. Dr. Rebecca Torres attending. MRN...\"\n}\n{\n  \"word\": \"Lakeshore\",\n  \"entity\": \"CITY\",\n  \"start\": 48, \"end\": 57,\n  \"excerpt\": \"...ED from Lakeshore Manor NH with...\"\n}\n{\n  \"word\": \"8840217\",\n  \"entity\": \"IDENTIFIER_RISKY\",\n  \"start\": 167, \"end\": 174,\n  \"excerpt\": \"...attending. MRN 8840217.\"\n}</code></pre><p>Each entity gets a type from Redactify's taxonomy (PERSON, CITY, IDENTIFIER_RISKY, etc.) which Judgify consolidates into streams: <strong>name_id</strong>, <strong>location</strong>, <strong>demographic</strong>.</p>"
+      },
+      "C": {
+        "title": "16K Entities Found",
+        "body": "<p>NER models are tuned for <strong>high recall</strong> — they'd rather flag too much than miss real PII. This creates a flood of false positives:</p><pre><code>\"Norco\"      → LOCATION  (it's a medication)\n\"Ace\"        → PERSON   (it's \"Ace wrap\")\n\"RN\"         → PERSON   (nursing credential)\n\"burns\"      → PERSON   (a symptom)\n\"cherry\"     → PERSON   (allergy context)\n\"palm\"       → PERSON   (anatomical term)\n\"KOH\"        → PERSON   (lab reagent)\n\"pool\"       → LOCATION (\"nursing pool\")\n\"tan\"        → PERSON   (\"doesn't have any tan\")</code></pre><p>In a typical dataset, <strong>~85% of tagged entities are false positives</strong>. Drug names, medical abbreviations, credentials (RN, APRN, CNP), and common English words dominate the noise.</p>"
+      },
+      "D": {
+        "title": "Judgify Adjudication",
+        "body": "<p>An LLM examines each entity in context and makes a binary call — real PII or false alarm:</p><pre><code>ENTITY: \"Rebecca Torres\"\nTYPE:   PERSON\nEXCERPT: \"...fatigue. Dr. Rebecca Torres\n          attending. MRN...\"\n\nVERDICT: True\nREASON:  Doctor name, identifiable\n         individual</code></pre><pre><code>ENTITY: \"Norco\"\nTYPE:   LOCATION\nEXCERPT: \"...prescribed Norco 5/325\n          for pain management...\"\n\nVERDICT: False\nREASON:  Medication brand name,\n         not a geographic location</code></pre><p>The LLM responds with a single word: <strong>True</strong>, <strong>False</strong>, or <strong>NA</strong>. Three models (Opus, Sonnet, Haiku) run in parallel during prompt refinement until they agree on &ge;95% of cases.</p>"
+      },
+      "E": {
+        "title": "2.1K Confirmed PII",
+        "body": "<p>After adjudication, only confirmed entities survive. Each gets a confidence score from a trained binary encoder:</p><pre><code>{\n  \"word\": \"Rebecca Torres\",\n  \"entity_type\": \"PERSON\",\n  \"is_pii\": true,\n  \"modbert_score\": 0.94,\n  \"modbert_stream\": \"name_id\",\n  \"excerpt\": \"...Dr. Rebecca Torres attending...\"\n}\n{\n  \"word\": \"8840217\",\n  \"entity_type\": \"IDENTIFIER_RISKY\",\n  \"is_pii\": true,\n  \"modbert_score\": 0.87,\n  \"modbert_stream\": \"name_id\",\n  \"excerpt\": \"...MRN 8840217.\"\n}\n{\n  \"word\": \"Lakeshore\",\n  \"entity_type\": \"LOCATION\",\n  \"is_pii\": true,\n  \"modbert_score\": 0.72,\n  \"modbert_stream\": \"location\",\n  \"excerpt\": \"...from Lakeshore Manor NH...\"\n}</code></pre><p>From 16K candidates, ~2.1K survive — a <strong>~87% reduction</strong> in entities while retaining genuine patient PII for redaction.</p>"
+      }
+    },
+    "mcp": {
+      "OP": {
+        "title": "Operator",
+        "body": "<p>The human operator runs <strong>Claude Code</strong> on their local Mac. MCP tools are invoked via natural language — Claude translates intent into structured tool calls.</p><p>The operator's machine connects over <strong>stdio</strong> (JSON-RPC 2.0) — no HTTP server, no open ports. AWS access uses named profiles with STS, SSM, and S3 permissions.</p><p>Key constraint: the operator <strong>cannot launch EC2 instances directly</strong>. All compute provisioning is delegated to the orchestrator via SSM.</p><pre><code>Transport: stdio (JSON-RPC 2.0)\nFramework: FastMCP\nAWS access: named profiles\nDirect EC2: blocked</code></pre>"
+      },
+      "MCP": {
+        "title": "MCP Server",
+        "body": "<p>A <strong>FastMCP</strong> Python server exposing <strong>19 typed tools</strong> via the Model Context Protocol. Each tool has validated inputs, structured outputs, and enforced prerequisites.</p><p><strong>Pipeline orchestrators (7 tools):</strong></p><ul><li><code>run_redactify_ner</code> — Phase 0: NER on raw text via GPU or Docker</li><li><code>run_fragmentation</code> — Phase 0b: distributed parquet → deduplicated candidate JSONL (auto-computes worker count from part count, ~8 parts/worker, max 20 workers)</li><li><code>run_prompt_refinement(sample_size=500)</code> — Phase 1: stratified 3-model delta run</li><li><code>run_llm_annotation(model=\"sonnet\", workers=12)</code> — Phase 2: GT labeling at ~400–500 annotations/min</li><li><code>run_encoder_training(epochs=3, batch_size=64)</code> — Phase 3: ModernBERT on g5.xlarge</li><li><code>run_production_inference(ec2_mode=\"approval\")</code> — Phase 4: multi-GPU scoring</li><li><code>run_evaluation(sample_size=10000)</code> — Phase 5: benchmarks + stratified GUI sample</li></ul><p><strong>Infrastructure (5 tools):</strong></p><ul><li><code>manage_t3_box</code> — start/stop/create/bootstrap/tunnel/terminate</li><li><code>manage_gpu_instance(ec2_mode=\"approval\")</code> — GPU lifecycle with human checkpoint</li><li><code>browse_s3(action, max_keys=50)</code> — guardrailed exploration</li><li><code>sync_prompts_to_t3_box</code> — deploy prompts + restart GUI</li><li><code>mark_phase_complete</code> — manual phase override</li></ul><p><strong>Observability (5 tools):</strong></p><ul><li><code>get_pipeline_status</code> — phase states for a client</li><li><code>get_pipeline_context</code> — T3 config, encoder routing, prompt routing</li><li><code>get_client_config(sample_rows=20)</code> — profile new datasets</li><li><code>get_agreement_report</code> — inter-model agreement metrics</li><li><code>get_threshold_table</code> — recall/precision sweep per stream</li></ul><p><strong>Polling (2 tools):</strong></p><ul><li><code>get_job_status</code> — poll long-running SSM jobs</li><li><code>setup_config</code> — bootstrap <code>~/.judgify-mcp.json</code></li></ul><p>Phase gating is enforced in code: Phase 3 refuses to run if Phase 2 hasn't completed. No prompt engineering required — prerequisites are structural.</p>"
+      },
+      "T3": {
+        "title": "Compute Instance (Orchestrator)",
+        "body": "<p>A persistent EC2 instance running three services:</p><ul><li><strong>Flask GUI</strong> (port 8000) — dashboard for Phase 1 delta runs and Phase 2 GT annotation. Manages Bedrock API calls internally.</li><li><strong>Redactify Docker</strong> — Spark-based NER container for Phase 0 entity recognition on raw text.</li><li><strong>SSM Agent</strong> — receives commands from the operator's MCP server. No SSH keys needed.</li></ul><p>The operator connects via <strong>SSM port forwarding</strong> — the GUI port is tunneled to localhost. All commands execute via <code>ssm:SendCommand</code> with <code>AWS-RunShellScript</code>.</p><pre><code>IAM: EC2 instance role (no profiles)\nServices: Flask GUI, Docker, SSM\nStorage: /mnt/docker-data/judgify-runs/\nDispatch: launch_instances() for GPU</code></pre><p>This box orchestrates GPU provisioning — it calls the EC2 API directly via its instance profile to launch, monitor, and terminate GPU workers.</p>"
+      },
+      "GPU": {
+        "title": "GPU Fleet",
+        "body": "<p>Ephemeral <strong>g5.xlarge</strong> instances — NVIDIA L4 GPU, 16GB VRAM, <strong>$1.006/hr</strong>. Launched on demand, auto-terminate on completion.</p><p><strong>Phase 0 (NER):</strong> g5.xlarge for Redactify Spark NER on raw text. <strong>Phase 0b (Fragmentation)</strong> uses c7i.2xlarge CPU instances ($0.34/hr) for parquet → JSONL conversion on 350GB+ datasets.</p><p><strong>Phase 3 (Training):</strong> Single GPU per run. Trains 2–3 binary ModernBERT classifiers — one per encoder stream. 3 epochs, batch_size=64, max_length=128 tokens. <strong>Critical constraint:</strong> 8GB root volume means artifacts must be cleaned between streams (bug #3 from hardening).</p><p><strong>Phase 4 (Inference):</strong> Multi-GPU dispatch using an empirical scaling model benchmarked on 57.6M rows:</p><pre><code>Bootstrap:  8 min (mount EBS, download models)\n1st batch: 12 min (model loading)\nN+1 batch: 10 min (models cached)\nBatch size: 1.25M rows\n\nGPU count = ceil(total_batches / batches_per_gpu)\nTarget: ≤30 min wall time per instance</code></pre><p>Each worker gets a contiguous offset/limit partition. Workers self-destruct on completion, tagged <code>AutoTerminate=true</code> + <code>LaunchedBy=judgify-ec2</code>. The MCP server returns a full launch plan (GPU count, cost estimate, partition layout) and <strong>waits for human approval</strong> before provisioning.</p>"
+      },
+      "S3": {
+        "title": "Object Storage",
+        "body": "<p>S3 is the data backbone. Every phase reads from and writes to S3 — no data passes through the operator's machine.</p><p><strong>Data flow by phase:</strong></p><ul><li><strong>Phase 0:</strong> Raw parquet in → candidate JSONL out. Each candidate includes: entity span, type, start/end offsets, and a <strong>40-char excerpt</strong> (padded 20 chars to word boundaries)</li><li><strong>Phase 1:</strong> 500-row stratified sample → 3-model agreement decisions</li><li><strong>Phase 2:</strong> Candidates → GT labels with <code>is_pii</code>, <code>label</code> (TP/FP), <code>opus_reasoning</code> (capped at 500 chars)</li><li><strong>Phase 3:</strong> GT labels (20K/stream cap) → model weights + threshold sweep JSON</li><li><strong>Phase 4:</strong> Full parquet → scored parquet with <code>modbert_score</code>, <code>modbert_stream</code>, <code>is_pii</code> columns. Output parts: 1M rows each</li></ul><p><strong>Formats:</strong></p><ul><li><strong>JSONL</strong> — candidates, fragments, annotations (streamable, human-readable)</li><li><strong>Parquet</strong> — source data and production output (columnar, compressed, multi-part Spark format). Large datasets can be 350GB+ across hundreds of parts</li></ul><p>Access control: orchestrator uses EC2 instance role (no named profiles). GPU workers receive temporary credentials via config JSON. The <code>browse_s3</code> MCP tool provides guardrailed exploration (max 50 keys, optional row sampling).</p>"
+      },
+      "LLM": {
+        "title": "LLM API (Bedrock)",
+        "body": "<p>AWS Bedrock provides managed access to Claude models. The orchestrator's GUI calls Bedrock directly — the operator never holds Bedrock credentials.</p><p><strong>Models by phase:</strong></p><ul><li><strong>Phase 1 (Prompt Refinement):</strong> Opus, Sonnet, and Haiku run in parallel on the same 500-row sample. Disagreements reveal prompt weaknesses. Iterate until &ge;95% agreement.</li><li><strong>Phase 2 (GT Annotation):</strong> Sonnet (default) — best cost/quality tradeoff for large-scale labeling at ~400–500 annotations/min.</li></ul><p><strong>Prompt routing</strong> (2-template system):</p><pre><code>gt_name_id_v1:\n  PERSON, IDENTIFIER_RISKY, PHONE, EMAIL\n  → name disambiguation, boundary check\n\ngt_context_v1:\n  DATE_TIME, LOCATION, ORGANIZATION,\n  JOB_TITLE, AGE\n  → \"does this identify an individual?\"</code></pre><p><strong>Per-call config:</strong></p><pre><code>max_tokens:      32 (single-word verdict)\nworkers:         12 (throttle-safe max, configurable to 24)\nconnect_timeout: 10s\nread_timeout:    70s\nreasoning_cap:   500 chars (truncated in metadata)</code></pre><p>Optional <strong>bypass lists</strong> auto-label safe entities as FP before reaching the LLM — e.g., BIRTH entities matching pregnancy/medical terms are skipped entirely, saving API cost.</p>"
+      }
+    },
+    "pipeline": {
+      "P0": {
+        "title": "Phase 0 — Entity Recognition",
+        "body": "<p>Redactify NER scans raw clinical text and tags every span it suspects is an entity. For pre-tagged sources (human-annotated), Phase 0 skips Docker and normalizes entities to 10 canonical types.</p><p><strong>Entity consolidation map:</strong></p><pre><code>PERSON, RARE_NAME  → PERSON\nCITY, STATE, ZIP   → LOCATION\nDATE, DOB          → DATE_TIME\nSSN, MRN, PHONE    → IDENTIFIER_RISKY\nAGE                → AGE\nJOB_TITLE          → JOB_TITLE</code></pre><p><strong>Fragmentation:</strong> Each entity gets a context window for downstream LLM and encoder use. The <code>FragmentWindowConfig</code> controls how much surrounding text is captured:</p><pre><code>mode:               char_token_rounded\nexcerpt_total_chars: 40\nexcerpt_pad_chars:   20\ntoken_window:        10 tokens each side</code></pre><p>The <code>char_token_rounded</code> mode extracts 40 characters of context, then pads 20 chars beyond to snap to word boundaries — so fragments never break mid-word. Large parquet datasets (350GB+) use distributed fragmentation on c7i.2xlarge CPU instances, auto-computing worker count from part count (~8 parts/worker, max 20).</p><p><strong>Scaling:</strong> Linear with text length, not row count. 5K OMNY clinical notes → 47K candidates in ~9 min. Long notes (Q1 2026) → 83K candidates from 5K rows.</p><p>Output: <code>candidates.jsonl</code> with entity spans, types, and context excerpts.</p>"
+      },
+      "P1": {
+        "title": "Phase 1 — Prompt Refinement",
+        "body": "<p>Three models (Opus, Sonnet, Haiku) run in parallel on a stratified 500-row sample. Where they disagree, the prompt needs work.</p><p><strong>Process:</strong></p><ol><li>Prepare stratified sample (balanced across entity types)</li><li>Submit 3-model tandem run to the GUI API</li><li>Analyze agreement rates — target &ge;99%</li><li>Human reviews delta report, edits prompts</li><li>Resubmit until convergence</li></ol><p><strong>Key insight:</strong> This phase <strong>cannot be fully automated</strong>. The operator reviews inter-model disagreements and decides whether the prompt is ambiguous or the entity is genuinely borderline.</p><p>Typical iteration: 1–4 minutes (mostly LLM latency). Usually converges in 2–3 rounds.</p>"
+      },
+      "P2": {
+        "title": "Phase 2 — Ground-Truth Annotation",
+        "body": "<p>Full-scale LLM annotation with the converged prompts from Phase 1. Entities are routed to type-specific prompt templates:</p><ul><li><strong>gt_name_id_v1</strong> — PERSON, IDENTIFIER_RISKY, PHONE, EMAIL. Handles name disambiguation, boundary verification, and re-labeling to canonical type.</li><li><strong>gt_context_v1</strong> — DATE_TIME, LOCATION, ORGANIZATION, AGE. Determines if contextual info could identify an individual.</li></ul><p><strong>Optional bypass lists:</strong> Auto-label safe entities as FP before reaching the LLM — pregnancy terms, medical abbreviations, credentials (RN, APRN, CNP). Saves API cost on obvious false positives.</p><p><strong>Output fields per entity:</strong></p><pre><code>is_pii:    true | false | null (null = flagged for human review)\nlabel:     \"TP\" | \"FP\" | \"UNLABELED\"\nopus_canonical_label\nopus_boundary_start / end\nopus_reasoning          (capped at 500 chars)\ngt_bypass:  true if auto-FP'd by bypass list</code></pre><p><strong>Throughput:</strong> ~400–500 annotations/min with 12 parallel Bedrock workers (max_tokens=32 per call — single-word verdict). Training data is capped at <strong>20K rows per encoder stream</strong> to keep Phase 3 GPU memory manageable.</p><p>Example: 6,333 candidates → ~6,105 LLM completions (~96% success rate). Duration: 1–25 min depending on sample size.</p>"
+      },
+      "P3": {
+        "title": "Phase 3 — Encoder Training",
+        "body": "<p><strong>Dual-encoder design:</strong> Two specialized binary ModernBERT classifiers, each handling different entity streams.</p><ul><li><strong>name_id encoder</strong> — PERSON, IDENTIFIER_RISKY, PHONE, EMAIL</li><li><strong>context encoder</strong> — DATE_TIME, LOCATION, ORGANIZATION, JOB_TITLE, AGE</li></ul><p>Input format: <code>ENTITY_TYPE: raw_text</code> — the model sees both the type tag and the surface text. Max sequence length: <strong>128 tokens</strong>.</p><p><strong>Pipeline:</strong></p><ol><li>Prepare binary training data from Phase 2 GT labels (capped at <strong>20K rows per stream</strong> to avoid OOM)</li><li>Launch 1× g5.xlarge GPU (NVIDIA L4, 16GB VRAM, $1.006/hr)</li><li>Train per stream (3 epochs, batch_size=64)</li><li>Run threshold sweep at recall targets: <strong>R@99.0%, R@99.5%, R@99.9%</strong></li><li>Upload weights + thresholds to S3, <strong>clean artifacts between streams</strong> (8GB root volume constraint — early bug: disk filled on 3rd stream)</li><li>Auto-terminate GPU instance</li></ol><p><strong>Production thresholds</strong> (recall-optimized):</p><pre><code>name_id:     0.0221  (P=99.6%, R=99.0%)\nlocation:    0.0058  (P=73%,   R=99.0%)\ndemographic: 0.0006  (P=88%,   R=99.0%)</code></pre><p><strong>Typical results:</strong> name_id F1 = 95–99%+, context F1 = 76–99% (varies by entity type). Duration: 8–17 min (GPU boot ~5m + training 2–10m).</p>"
+      },
+      "P4": {
+        "title": "Phase 4 — Production Inference",
+        "body": "<p>Score all candidates using trained encoders at optimized thresholds from Phase 3.</p><p><strong>Routing:</strong> Each candidate goes to the appropriate encoder based on consolidated entity type. Inference batch size: <strong>16 per forward pass</strong>, max sequence length: <strong>128 tokens</strong>.</p><p><strong>GPU scaling formula</strong> (empirical, benchmarked on 57.6M rows):</p><pre><code>BOOTSTRAP   = 8 min  (mount EBS, download models)\nFIRST_BATCH = 12 min (includes model loading)\nNEXT_BATCH  = 10 min (models cached in memory)\nBATCH_SIZE  = 1.25M rows\nTARGET_WALL = 30 min\n\ngpus = ceil(batches / batches_per_gpu)\ncost = gpus × (eta_min / 60) × $1.006/hr</code></pre><p><strong>OOM protection:</strong> Datasets &gt;1M rows automatically trigger multi-GPU dispatch. Each worker gets a contiguous offset/limit partition. If a single GPU OOMs, training data can be split into 4 batches (0–500K, 500K–1M, 1M–1.5M, 1.5M+) for sequential processing.</p><p><strong>Example output:</strong> 83K candidates scored across 3 streams → 28K unique kept (33.7% flag rate). Workers auto-terminate via self-destruct script, tagged <code>AutoTerminate=true</code> for safe cleanup.</p><p>The MCP server returns the full launch plan (instance count, cost estimate, partition layout) and <strong>waits for human confirmation</strong> before provisioning.</p>"
+      },
+      "P5": {
+        "title": "Phase 5 — Evaluation & Reporting",
+        "body": "<p>Benchmarks results and generates operational reports for delivery review.</p><p><strong>Components:</strong></p><ul><li>Benchmark on random 200K-row test sample</li><li>Stratified GUI sample for interactive human review (~10K rows)</li><li>Per-stream metrics: total rows, scored, kept, keep rate by entity type</li><li>Threshold analysis: rows near decision boundaries, F1 curves</li><li>Markdown report generation with cost breakdown and S3 artifact inventory</li></ul><p><strong>Safety:</strong> Sensitive text columns (source_target_text, original_prompt_fragment_text) are truncated/redacted before report generation.</p><p>Output: <code>docs/report_{set_id}_{date}.md</code>. Duration: &lt;1 minute.</p>"
+      }
+    },
+    "hardening": {
+      "A": {
+        "title": "Create Fresh Instance",
+        "body": "<p>Each regression run starts from a <strong>cold boot</strong> — a brand new t3.medium EC2 instance in us-west-2. No reuse of prior instances, no warm caches, no leftover state.</p><p><strong>Cold-start overhead: 3–5 minutes</strong></p><ol><li>Launch t3.medium via EC2 API</li><li>Wait for \"running\" state</li><li>Cloud-init bootstraps: Python, Docker, Git, AWS CLI</li><li>Download code tarball from S3 and extract</li><li>Deploy SSH key for GPU worker access</li><li>Create symlinks for data directories</li></ol><p>This overhead is small relative to typical 20–50 min pipeline runs, but it's where many early bugs hid — missing SSH keys, stale code archives, path resolution failures.</p>"
+      },
+      "B": {
+        "title": "Bootstrap Code + Dependencies",
+        "body": "<p>The bootstrap phase installs everything needed to run the full pipeline on a bare EC2 instance:</p><ul><li><strong>Flask GUI</strong> on port 8013 — manages Bedrock API calls, delta runs, GT annotation</li><li><strong>Redactify Docker</strong> — Spark-based NER container for Phase 0</li><li><strong>SSM Agent</strong> — receives commands from operator's MCP server</li><li><strong>SSH key deployment</strong> — base64-encoded key from local config, placed at <code>~/.ssh/modernbert-training-key.pem</code> for GPU worker access</li></ul><p><strong>Critical bug found:</strong> Early runs used <code>git archive HEAD</code> to stage code for GPU workers, but fresh T3 boxes have no <code>.git</code> directory. The command failed silently, sending stale code to GPU instances. Fix: reuse the S3 bootstrap tarball instead.</p>"
+      },
+      "C": {
+        "title": "Run Phases 0 → 5",
+        "body": "<p>The full 6-phase pipeline executes end-to-end on real data. Each run varies:</p><ul><li><strong>Data shape:</strong> raw text, pre-tagged, human-annotated, fragmented</li><li><strong>Source domain:</strong> OMNY, Sidus, HCA, Novartis clinical notes</li><li><strong>Scale:</strong> 19 candidates (tiny) to 83K candidates (large)</li></ul><p><strong>Performance by scale:</strong></p><pre><code>19–36 candidates   → 12–15 min total\n1K–2K candidates   → 16–28 min\n8–11K candidates   → 26–44 min\n47K candidates     → 108 min\n83K candidates     → 281 min</code></pre><p>Phase gating is enforced: Phase 3 refuses to run if Phase 2 hasn't completed. Pipeline state persists across failures — phases can resume without restarting.</p>"
+      },
+      "D": {
+        "title": "Clean Run?",
+        "body": "<p>A run is <strong>clean</strong> if all 6 phases complete without code bugs. Infrastructure issues (Bedrock throttling, temporary network failures) that auto-recover don't count against the run.</p><p><strong>Criteria for a clean run:</strong></p><ul><li>All 6 phases complete to success</li><li>No manual SSH or ad-hoc commands required</li><li>GPU instances launch, train, upload, and self-terminate</li><li>Model artifacts are correct and loadable on T3</li><li>Report generates with valid metrics</li></ul><p><strong>Campaign 3 result:</strong> 6 consecutive clean runs achieved by Run 34. Total: 10/10 runs completed (all 6 phases), 4 critical bugs found and fixed during the campaign.</p>"
+      },
+      "E": {
+        "title": "Log + Pick Next Dataset",
+        "body": "<p>After a clean run, results are logged and the next dataset is selected to maximize coverage across data shapes and scales.</p><p><strong>Dataset rotation targets:</strong></p><ul><li><strong>Format variants:</strong> raw_text, pre_tagged, human_annotated, redactify_fragmented, redactify_non_fragmented</li><li><strong>Source domains:</strong> OMNY, Sidus, HCA, Novartis (different schemas, entity distributions)</li><li><strong>Scale tiers:</strong> tiny (&lt;100), small (1K–2K), medium (8K–11K), large (47K+)</li></ul><p>The goal isn't just \"does it work\" but \"does it work on every shape of data we'll encounter in production.\" Each successful run extends confidence across the matrix.</p>"
+      },
+      "F": {
+        "title": "Fix Bug In-Loop",
+        "body": "<p>Bugs found during regression are fixed <em>immediately</em> — they're features of the testing process, not failures. The fix is committed, the T3 box is torn down, and the loop restarts from cold boot.</p><p><strong>Critical bugs found during Campaign 3:</strong></p><ol><li><strong>Missing SSH key for GPU access</strong> — fresh T3 boxes didn't have <code>modernbert-training-key.pem</code>. Fix: bootstrap deploys key from local config.</li><li><strong>Stale git archive on T3</strong> — <code>git archive HEAD</code> failed silently without <code>.git</code> dir. Fix: reuse S3 tarball.</li><li><strong>GPU disk full on multi-stream training</strong> — model artifacts accumulated across streams on 8GB root volume. Fix: clean artifacts after each S3 upload.</li><li><strong>f-string template escaping</strong> — <code>{split}</code> in comments evaluated as Python variables. Fix: escape as <code>{{split}}</code>.</li></ol><p><strong>Non-blocking issues:</strong> TokenizersBackend incompatibility (recurring, workaround: patch config.json on S3), Phase 5 SSM report generation (low priority).</p>"
+      }
+    },
+    "dochound": {
+      "A": {
+        "title": "Main Branch Changes",
+        "body": "<p>DocHound polls GitHub on a configurable interval (default: 300 seconds). It tracks the HEAD SHA of the default branch and compares against its last-processed state.</p><p><strong>Detection logic:</strong></p><pre><code>if HEAD_SHA != last_processed_SHA:\n  clone repo\n  run full audit on all markdown in scope\n  update last_processed_SHA</code></pre><p><strong>Scope levels:</strong></p><ul><li><code>main-readme</code> — only root README.md</li><li><code>all-readmes</code> — all **/README.md files</li><li><code>all-markdown</code> — all **/*.md files (with denylist: CHANGELOG, LICENSE, etc.)</li></ul><p>State is persisted as JSON — the poller resumes correctly after restarts without re-processing old commits.</p>"
+      },
+      "B": {
+        "title": "DocHound Audits Docs",
+        "body": "<p>The audit engine runs <strong>three tiers of checks</strong>, layered by cost and confidence:</p><p><strong>Tier 1 (Deterministic, free):</strong></p><ul><li>Dead internal links — broken <code>[text](path)</code>, missing anchors</li><li>Stale code references — backtick tokens not found in source files</li><li>Version string mismatches — doc says v2.1.0 but pyproject.toml says v2.2.0</li><li>Hardcoded user paths — <code>/Users/alice/...</code> in code blocks</li><li>CLI surface gaps — missing commands vs. source code</li></ul><p><strong>Tier 2 (Targeted LLM):</strong> Validates CLI examples use real flags, checks install instructions match build system.</p><p><strong>Tier 3 (Broad LLM):</strong> Architecture accuracy, prose quality. Only on full audits, not diff-driven.</p><p>Tier 1 findings are passed as structured JSON context to the LLM — it confirms, rejects, or extends them. If the LLM call fails, Tier 1 findings pass through unmodified.</p>"
+      },
+      "C": {
+        "title": "Issues Found?",
+        "body": "<p>The audit returns a structured <code>AuditReport</code> containing typed findings:</p><pre><code>Finding {\n  file: \"README.md\",\n  line: 42,\n  check: \"dead_link\",\n  tier: 1,\n  severity: \"error\",\n  message: \"Link target docs/setup.md not found\",\n  old_text: \"[Setup Guide](docs/setup.md)\",\n  new_text: \"[Setup Guide](docs/getting-started.md)\",\n  confidence: 0.95\n}</code></pre><p>Findings are filtered by confidence threshold (configurable). Each auto-fixable finding includes <code>old_text</code>/<code>new_text</code> pairs for precise edits.</p><p>If no findings pass the threshold, DocHound takes no action — no empty PRs, no noise.</p>"
+      },
+      "D": {
+        "title": "Opens Fix PR with Edits",
+        "body": "<p><strong>One PR per repo. Always update, never create multiples.</strong></p><p>DocHound creates a branch <code>dochound/fix</code> and applies <code>old_text</code>/<code>new_text</code> edits to each affected file. The PR body contains a formatted findings table with check type, severity, and before/after diffs.</p><p><strong>Edit styles:</strong></p><ul><li><code>factual</code> — fix dead links, version mismatches, wrong names only</li><li><code>tasteful</code> — everything in factual + clarity improvements, formatting fixes</li></ul><p>If a PR already exists on <code>dochound/fix</code>, the branch is force-pushed with updated fixes. The PR evolves as main advances — it's a living document, not a static snapshot.</p>"
+      },
+      "E": {
+        "title": "Human Reviews",
+        "body": "<p>A human engineer reviews the PR like any other code review. They can:</p><ul><li><strong>Approve and merge</strong> — standard flow</li><li><strong>Comment with feedback</strong> — DocHound monitors and responds</li><li><strong>Request changes</strong> — triggers the feedback loop</li></ul><p>DocHound tracks comments by ISO timestamp to avoid re-processing old feedback. Only non-bot authors trigger the feedback loop (it ignores its own comments).</p><p>The goal is to feel like a competent junior developer submitting PRs — helpful, responsive, and never argues with the reviewer.</p>"
+      },
+      "F": {
+        "title": "LLM Revises & Force-Pushes",
+        "body": "<p>When a human comments on the PR, DocHound parses the comment intent via LLM (<code>process_pr_feedback</code>) and takes action:</p><ul><li><strong>Revert action:</strong> Checks out the file from the base branch, undoing the proposed change</li><li><strong>Edit action:</strong> Applies the human's suggested <code>new_text</code> replacement</li></ul><p>After processing feedback, DocHound posts a response explaining what it did, then force-pushes the updated branch.</p><p>The feedback loop continues until the human approves — each round of comments triggers a new LLM analysis and branch update. All operations use short-lived GitHub App JWT tokens (no long-lived PATs).</p>"
+      },
+      "G": {
+        "title": "No Action",
+        "body": "<p>If the audit finds no issues above the confidence threshold, DocHound does nothing — no empty PRs, no \"all clear\" comments, no noise.</p><p>The SHA is still recorded as processed, so the next poll cycle will only trigger on genuinely new commits.</p><p>This is a deliberate design choice: the agent should be invisible when everything is correct. You only hear from DocHound when it has something concrete to fix.</p>"
+      }
+    },
+    "prs": {
+      "Main": {
+        "title": "main branch",
+        "body": "<p>The default branch of the monitored repository. DocHound polls for new commits every 300 seconds (configurable).</p><p>Each commit to main triggers a full audit of all markdown files in scope. The diff between the last-processed SHA and the current HEAD determines which files to examine.</p><p>For diff-driven audits (PR mode), only changed markdown files are checked — avoiding unnecessary LLM costs on unchanged content.</p>"
+      },
+      "DH": {
+        "title": "DocHound Agent",
+        "body": "<p>The core auditing engine. Orchestrates the three-tier check system:</p><ol><li><strong>Clone</strong> the repo to memory-backed tmpfs</li><li><strong>Discover</strong> markdown files based on scope config</li><li><strong>Run Tier 1</strong> deterministic checks (free, fast)</li><li><strong>Build LLM context</strong> from repo tree, manifests, and Tier 1 signals</li><li><strong>Run Tier 2–3</strong> LLM checks if enabled</li><li><strong>Merge findings</strong> and generate <code>old_text</code>/<code>new_text</code> edits</li></ol><p>The agent runs as a background poller in both <code>main</code> mode (watch default branch) and <code>prs</code> mode (watch open PRs). Both can run simultaneously in <code>both</code> mode.</p><p>Identity: <code>dochound[bot]</code>. All git operations delegate to the <code>gh</code> CLI subprocess.</p>"
+      },
+      "PR": {
+        "title": "dochound/fix branch",
+        "body": "<p>A single long-lived branch per repository. DocHound always pushes fixes here — never creates multiple branches or PRs.</p><p><strong>Lifecycle:</strong></p><ol><li>First audit with findings → create branch + open PR</li><li>Subsequent audits → force-push updated fixes to same branch</li><li>Human feedback → LLM processes comments, applies reverts/edits, force-pushes</li><li>Human merges → branch deleted, next audit creates fresh if needed</li></ol><p><strong>State tracking:</strong> JSON file records processed PRs by number + SHA. Prevents duplicate work across restarts and avoids re-processing unchanged PRs.</p><p><strong>Idempotency:</strong> Running the same audit twice on the same SHA produces the same branch state. Force-push ensures the branch always reflects the latest analysis.</p>"
+      }
+    },
+    "deploy": {
+      "FLUX": {
+        "title": "Flux GitOps",
+        "body": "<p>Flux watches a git repository for changes and reconciles the cluster state to match. When a new Docker image is pushed, Flux detects the update and rolls out the new pod automatically.</p><p>This means deployments are <strong>git-driven</strong> — no manual <code>kubectl apply</code>. The git repo is the source of truth.</p>"
+      },
+      "ECR": {
+        "title": "Container Registry",
+        "body": "<p>Docker images are built with a multi-stage pipeline on a <strong>Chainguard</strong> minimal base (not Alpine or Ubuntu). The final image runs as non-root (uid 65532) with strict security context.</p><p>Includes <code>gh</code> CLI (for GitHub ops), <code>uv</code> (fast Python installer), and the DocHound package with all extras.</p>"
+      },
+      "POD": {
+        "title": "DocHound Pod",
+        "body": "<p>The core workload. Runs a <strong>FastAPI</strong> service with an async background poller. Endpoints:</p><ul><li><code>/healthz</code> — liveness probe</li><li><code>/readyz</code> — readiness probe</li><li><code>/metrics</code> — Prometheus scrape target</li></ul><p>The poller runs on a configurable interval, cloning repos to memory-backed <strong>tmpfs</strong> storage (no disk writes).</p>"
+      },
+      "GW": {
+        "title": "AI Gateway",
+        "body": "<p>A cluster-internal Envoy-based proxy that handles LLM authentication. DocHound sends <strong>OpenAI-compatible</strong> requests with a dummy API key — the gateway injects real credentials before forwarding to the LLM provider.</p><p>This means the pod <strong>never holds LLM API keys</strong>. Credential rotation happens at the gateway level without redeploying DocHound.</p>"
+      },
+      "LLM": {
+        "title": "LLM API",
+        "body": "<p>The upstream language model (Claude via Bedrock, or any OpenAI-compatible endpoint). Used for Tier 2/3 checks — validating CLI examples, install instructions, and architectural accuracy.</p><p>Cost is ~$0.03–0.05 per file audited. A typical 5-README daily audit runs about $20/month.</p>"
+      },
+      "GH": {
+        "title": "GitHub API",
+        "body": "<p>Authenticated via <strong>GitHub App</strong> (not PATs). The app mints short-lived <strong>JWT installation tokens</strong> — each token expires after ~1 hour and is cached with a 60-second buffer.</p><p>No long-lived credentials stored anywhere. The private key is mounted as a Kubernetes secret.</p>"
+      },
+      "PROM": {
+        "title": "Prometheus",
+        "body": "<p>Exports three key metrics:</p><ul><li><code>dochound_polls_total</code> — number of audit cycles completed</li><li><code>dochound_prs_created_total</code> — fix PRs opened</li><li><code>dochound_errors_total</code> — failures by category</li></ul><p>Scraped by the cluster Prometheus instance. Enables alerting on audit failures.</p>"
+      }
+    }
+  }
+  </script>
+
+  <!-- Mermaid.js -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      securityLevel: 'loose',
+      theme: 'dark',
+      themeVariables: {
+        primaryColor: '#0a1a2a',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#00D4FF',
+        lineColor: '#00D4FF',
+        secondaryColor: '#111',
+        tertiaryColor: '#0a0a0a',
+        fontFamily: 'Inter, system-ui, sans-serif',
+        fontSize: '14px',
+        noteBkgColor: '#111',
+        noteTextColor: '#fff',
+        noteBorderColor: '#333',
+        actorBkg: '#111',
+        actorBorder: '#00D4FF',
+        actorTextColor: '#fff',
+        signalColor: '#00D4FF',
+        signalTextColor: '#fff',
+        sequenceNumberColor: '#000'
+      }
+    });
+  </script>
+
+  <!-- Presentation Logic -->
+  <script>
+    (() => {
+      const body = document.body;
+      const deck = document.getElementById('deck');
+      const dotsContainer = document.querySelector('.progress-dots');
+      const btnRead = document.getElementById('btn-read');
+      const btnPresent = document.getElementById('btn-present');
+      const sections = Array.from(deck.querySelectorAll('section'));
+
+      // Build dots
+      sections.forEach((sec, i) => {
+        const dot = document.createElement('button');
+        dot.classList.add('dot');
+        dot.setAttribute('aria-label', `Go to slide ${i + 1}: ${sec.id}`);
+        dot.dataset.index = i;
+        dotsContainer.appendChild(dot);
+      });
+
+      const dots = Array.from(dotsContainer.querySelectorAll('.dot'));
+
+      // --- Mode Management ---
+      function setMode(mode) {
+        const isPresent = mode === 'present';
+        body.classList.toggle('present-mode', isPresent);
+        btnRead.classList.toggle('active', !isPresent);
+        btnPresent.classList.toggle('active', isPresent);
+        btnRead.setAttribute('aria-selected', !isPresent);
+        btnPresent.setAttribute('aria-selected', isPresent);
+        localStorage.setItem('deck-mode', mode);
+
+        if (isPresent) {
+          // Re-render mermaid after layout change
+          requestAnimationFrame(() => updateActiveDot());
+        }
+      }
+
+      btnRead.addEventListener('click', () => setMode('read'));
+      btnPresent.addEventListener('click', () => setMode('present'));
+
+      // Restore saved mode
+      const saved = localStorage.getItem('deck-mode');
+      if (saved === 'present') setMode('present');
+
+      // --- Dot Navigation ---
+      dotsContainer.addEventListener('click', (e) => {
+        const dot = e.target.closest('.dot');
+        if (!dot) return;
+        const idx = parseInt(dot.dataset.index, 10);
+        sections[idx].scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // --- Active Dot Tracking ---
+      function updateActiveDot() {
+        if (!body.classList.contains('present-mode')) return;
+
+        let closest = 0;
+        let closestDist = Infinity;
+
+        sections.forEach((sec, i) => {
+          const rect = sec.getBoundingClientRect();
+          const dist = Math.abs(rect.top);
+          if (dist < closestDist) {
+            closestDist = dist;
+            closest = i;
+          }
+        });
+
+        dots.forEach((d, i) => d.classList.toggle('active', i === closest));
+      }
+
+      deck.addEventListener('scroll', updateActiveDot, { passive: true });
+      window.addEventListener('scroll', updateActiveDot, { passive: true });
+
+      // --- Keyboard Navigation (Present Mode) ---
+      document.addEventListener('keydown', (e) => {
+        if (!body.classList.contains('present-mode')) return;
+
+        // Don't capture if user is in an input
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        const currentIdx = dots.findIndex(d => d.classList.contains('active'));
+        let targetIdx = currentIdx;
+
+        switch (e.key) {
+          case 'ArrowDown':
+          case ' ':
+          case 'PageDown':
+            e.preventDefault();
+            targetIdx = Math.min(currentIdx + 1, sections.length - 1);
+            break;
+          case 'ArrowUp':
+          case 'PageUp':
+            e.preventDefault();
+            targetIdx = Math.max(currentIdx - 1, 0);
+            break;
+          case 'Home':
+            e.preventDefault();
+            targetIdx = 0;
+            break;
+          case 'End':
+            e.preventDefault();
+            targetIdx = sections.length - 1;
+            break;
+          case 'Escape':
+            setMode('read');
+            return;
+        }
+
+        if (targetIdx !== currentIdx) {
+          sections[targetIdx].scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+
+      // --- Hash Navigation ---
+      function scrollToHash() {
+        const hash = window.location.hash.slice(1);
+        if (!hash) return;
+        const target = document.getElementById(hash);
+        if (target && target.tagName === 'SECTION') {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+      window.addEventListener('hashchange', scrollToHash);
+      window.addEventListener('load', () => {
+        scrollToHash();
+        updateActiveDot();
+      });
+
+      // --- Detail Panel Logic ---
+      const detailPanel = document.getElementById('detail-panel');
+      const detailOverlay = document.getElementById('detail-overlay');
+      const detailTitle = document.getElementById('detail-title');
+      const detailBody = document.getElementById('detail-body');
+      const detailClose = document.getElementById('detail-close');
+      const detailData = JSON.parse(document.getElementById('detail-data').textContent);
+
+      function openDetail(group, nodeId) {
+        if (!body.classList.contains('present-mode')) return;
+        const groupData = detailData[group];
+        if (!groupData || !groupData[nodeId]) return;
+
+        detailTitle.textContent = groupData[nodeId].title;
+        detailBody.innerHTML = groupData[nodeId].body;
+        detailPanel.classList.add('open');
+        detailOverlay.classList.add('open');
+      }
+
+      function closeDetail() {
+        detailPanel.classList.remove('open');
+        detailOverlay.classList.remove('open');
+      }
+
+      detailClose.addEventListener('click', closeDetail);
+      detailOverlay.addEventListener('click', closeDetail);
+
+      // Wire up mermaid node clicks after render
+      function wireClickDetails() {
+        document.querySelectorAll('.mermaid[data-click-details]').forEach(container => {
+          const group = container.dataset.clickDetails;
+          const svg = container.querySelector('svg');
+          if (!svg) return;
+
+          // Flowchart nodes: IDs like mermaid-{hash}-flowchart-{NODEID}-{index}
+          svg.querySelectorAll('.node').forEach(node => {
+            const match = node.id?.match(/flowchart-(\w+)-\d+$/);
+            const nodeId = match ? match[1] : '';
+            if (!nodeId) return;
+
+            const groupData = detailData[group];
+            if (!groupData || !groupData[nodeId]) return;
+
+            node.style.cursor = 'pointer';
+            node.addEventListener('click', (e) => {
+              e.stopPropagation();
+              openDetail(group, nodeId);
+            });
+          });
+
+          // Sequence diagram actors: match by text content
+          svg.querySelectorAll('.actor').forEach(actor => {
+            const groupData = detailData[group];
+            if (!groupData) return;
+
+            // Find the associated text label
+            const bbox = actor.getBBox ? actor.getBBox() : null;
+            if (!bbox) return;
+
+            // Look for text elements near this actor box
+            const texts = svg.querySelectorAll('.actor text, text.actor');
+            let matchedId = null;
+
+            // Also check for actorBox + nearby text pairs
+            const allText = svg.querySelectorAll('text');
+            allText.forEach(t => {
+              const label = t.textContent.trim();
+              // Match against detail data keys
+              Object.keys(groupData).forEach(key => {
+                if (label === key || label === groupData[key].title) {
+                  matchedId = key;
+                }
+              });
+            });
+          });
+
+          // Sequence diagram: wire clickable actors by scanning text labels
+          if (svg.querySelector('.actor')) {
+            const groupData = detailData[group];
+            if (!groupData) return;
+
+            // Build a map of label text → detail key
+            const labelMap = {};
+            Object.entries(groupData).forEach(([key, val]) => {
+              labelMap[key] = key;
+              labelMap[val.title] = key;
+              // Also match lowercase
+              labelMap[key.toLowerCase()] = key;
+              labelMap[val.title.toLowerCase()] = key;
+            });
+
+            // Find all actor boxes and make them clickable
+            svg.querySelectorAll('g').forEach(g => {
+              const rect = g.querySelector('rect.actor, .actor');
+              const text = g.querySelector('text');
+              if (!rect || !text) return;
+
+              const label = text.textContent.trim();
+              const detailKey = labelMap[label] || labelMap[label.toLowerCase()];
+              if (!detailKey) return;
+
+              g.style.cursor = 'pointer';
+              g.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openDetail(group, detailKey);
+              });
+            });
+          }
+        });
+      }
+
+      // Mermaid renders async, wait for it
+      const mermaidObserver = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+          if (m.addedNodes.length) {
+            wireClickDetails();
+          }
+        }
+      });
+
+      document.querySelectorAll('.mermaid[data-click-details]').forEach(el => {
+        mermaidObserver.observe(el, { childList: true });
+      });
+
+      // Also try on load in case mermaid already rendered
+      window.addEventListener('load', () => {
+        setTimeout(wireClickDetails, 500);
+      });
+
+      // Update Escape to close panel first
+      const origKeydown = document.onkeydown;
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && detailPanel.classList.contains('open')) {
+          e.stopImmediatePropagation();
+          closeDetail();
+        }
+      }, true);
+    })();
+  </script>
+
+  <!-- Notes Panel Logic -->
+  <script>
+    (() => {
+      const notesPanel = document.getElementById('notes-panel');
+      const notesBody = document.getElementById('notes-panel-body');
+      const notesTab = document.getElementById('notes-tab');
+      const notesModeToggle = document.getElementById('notes-mode-toggle');
+      const btnPublished = document.getElementById('btn-published');
+      const btnEdit = document.getElementById('btn-edit');
+      const body = document.body;
+      const sections = Array.from(document.querySelectorAll('#deck section'));
+
+      // Load notes from the in-page JSON store
+      const notesStore = JSON.parse(document.getElementById('notes-data').textContent);
+      let currentSectionId = sections[0]?.id || '';
+      let editMode = false;
+
+      // Detect localhost for edit capability
+      const isLocal = ['localhost', '127.0.0.1', ''].includes(location.hostname);
+      if (isLocal) {
+        notesModeToggle.classList.add('visible');
+      }
+
+      // --- Auto-size notes based on word count ---
+      function applyAutoSize(el, text) {
+        el.classList.remove('size-xl', 'size-lg', 'size-md', 'size-sm');
+        const words = text.trim().split(/\s+/).filter(Boolean).length;
+        if (words <= 15) el.classList.add('size-xl');
+        else if (words <= 40) el.classList.add('size-lg');
+        else if (words <= 80) el.classList.add('size-md');
+        else el.classList.add('size-sm');
+      }
+
+      // --- Render notes for a section ---
+      function renderNotes(sectionId) {
+        currentSectionId = sectionId;
+        const content = notesStore[sectionId] || '';
+
+        if (editMode) {
+          notesBody.classList.add('editing');
+          notesBody.contentEditable = 'true';
+          notesBody.classList.remove('size-xl', 'size-lg', 'size-md', 'size-sm');
+          // In edit mode show raw HTML for editing
+          notesBody.innerText = content;
+        } else {
+          notesBody.classList.remove('editing');
+          notesBody.contentEditable = 'false';
+          if (content.trim()) {
+            notesBody.innerHTML = content;
+            // Strip tags for word count
+            const plain = content.replace(/<[^>]*>/g, ' ');
+            applyAutoSize(notesBody, plain);
+          } else {
+            notesBody.innerHTML = '<p class="notes-empty">No notes for this slide yet.</p>';
+            notesBody.classList.remove('size-xl', 'size-lg', 'size-md', 'size-sm');
+          }
+        }
+      }
+
+      // --- Save edits back to the store and persist to file ---
+      function saveCurrentEdit() {
+        if (!editMode) return;
+        const raw = notesBody.innerText.trim();
+        notesStore[currentSectionId] = raw;
+        // Update the in-page JSON
+        document.getElementById('notes-data').textContent = JSON.stringify(notesStore, null, 2);
+      }
+
+      function persistToFile() {
+        if (!isLocal) return Promise.resolve();
+        return fetch('/save-notes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(notesStore),
+        }).then(r => {
+          if (!r.ok) throw new Error('Save failed');
+          return r.json();
+        });
+      }
+
+      // --- Mode toggle (edit / published) ---
+      btnEdit.addEventListener('click', () => {
+        saveCurrentEdit();
+        editMode = true;
+        btnEdit.classList.add('active');
+        btnPublished.classList.remove('active');
+        renderNotes(currentSectionId);
+      });
+
+      btnPublished.addEventListener('click', () => {
+        const wasSaved = editMode;
+        saveCurrentEdit();
+        editMode = false;
+        btnPublished.classList.add('active');
+        btnEdit.classList.remove('active');
+        renderNotes(currentSectionId);
+
+        if (wasSaved) {
+          persistToFile().then(() => {
+            // Flash green to confirm save to disk
+            btnPublished.classList.add('flash-saved');
+            setTimeout(() => btnPublished.classList.remove('flash-saved'), 800);
+          }).catch(() => {
+            // Flash red on failure
+            btnPublished.style.background = '#FF6B6B';
+            btnPublished.style.color = '#000';
+            setTimeout(() => { btnPublished.style.background = ''; btnPublished.style.color = ''; }, 1200);
+          });
+        }
+      });
+
+      // --- Track visible section ---
+      function getVisibleSection() {
+        let closest = sections[0]?.id || '';
+        let closestDist = Infinity;
+
+        sections.forEach(sec => {
+          const rect = sec.getBoundingClientRect();
+          const dist = Math.abs(rect.top);
+          if (dist < closestDist) {
+            closestDist = dist;
+            closest = sec.id;
+          }
+        });
+
+        return closest;
+      }
+
+      function onScroll() {
+        const vis = getVisibleSection();
+        if (vis !== currentSectionId) {
+          saveCurrentEdit();
+          renderNotes(vis);
+        }
+      }
+
+      document.getElementById('deck').addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      // --- Present mode: toggle panel with tab ---
+      notesTab.addEventListener('click', () => {
+        const isOpen = notesPanel.classList.contains('visible');
+        notesPanel.classList.toggle('visible', !isOpen);
+        notesTab.classList.toggle('open', !isOpen);
+      });
+
+      // When switching to present mode, hide the notes panel
+      const modeObserver = new MutationObserver(() => {
+        if (body.classList.contains('present-mode')) {
+          notesPanel.classList.remove('visible');
+          notesTab.classList.remove('open');
+        }
+      });
+      modeObserver.observe(body, { attributes: true, attributeFilter: ['class'] });
+
+      // --- Save to clipboard for committing (Ctrl+Shift+S on localhost) ---
+      if (isLocal) {
+        document.addEventListener('keydown', (e) => {
+          if (e.ctrlKey && e.shiftKey && e.key === 'S') {
+            e.preventDefault();
+            saveCurrentEdit();
+            const json = JSON.stringify(notesStore, null, 2);
+            navigator.clipboard.writeText(json).then(() => {
+              // Flash the label to confirm
+              const label = document.querySelector('.notes-panel-label');
+              const orig = label.textContent;
+              label.textContent = 'Copied!';
+              label.style.color = '#00FF88';
+              setTimeout(() => { label.textContent = orig; label.style.color = ''; }, 1500);
+            });
+          }
+        });
+      }
+
+      // Initial render
+      renderNotes(currentSectionId);
+    })();
+  </script>
+
+</body>
+</html>
