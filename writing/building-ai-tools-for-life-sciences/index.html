@@ -10,7 +10,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://wabbazzar.com/writing/building-ai-tools-for-life-sciences/">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
   <style>
     /* Back link to the writing series — matches the mode-toggle pill. */
     .back-to-writing {
@@ -41,6 +41,9 @@
   <a class="back-to-writing" href="/writing/">&larr; Writing</a>
 
   <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light or dark theme">&#9728;&#65039; Light</button>
+
+  <!-- Full-viewport flash: one blink per modeled death (crisis simulator) -->
+  <div class="death-blink" id="death-blink" aria-hidden="true"></div>
 
   <!-- Mode Toggle -->
   <div class="mode-toggle" role="tablist" aria-label="View mode">
@@ -512,6 +515,59 @@ sequenceDiagram
         </ul>
 
         <p class="author" style="text-align: center; margin-top: 3rem;">Wesley Beckner &mdash; <a href="https://wabbazzar.com">wabbazzar.com</a></p>
+      </div>
+    </section>
+
+    <!-- ===================== SLIDE 10: SIMULATE A CRISIS ===================== -->
+    <section id="crisis-sim">
+      <div class="slide-inner">
+        <h2>Simulate a crisis</h2>
+        <p>The same instinct that hardens a pipeline &mdash; <em>count what is actually happening</em> &mdash; turned on two 2025 humanitarian catastrophes. Each counter models a death rate from cited figures; press <strong>Simulate</strong> and this page blinks once for every modeled death, in real time. Conservative <strong>floor estimates</strong> are used throughout. Tap a counter for the modeling and sources.</p>
+
+        <div class="crisis-controls">
+          <button id="sim-toggle" class="sim-btn" type="button">&#9658; Simulate crisis</button>
+          <label class="sim-speed">speed
+            <select id="sim-speed">
+              <option value="1">real time</option>
+              <option value="60">&times;60 &nbsp;(1 s = 1 min)</option>
+              <option value="600">&times;600</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="crisis-grid">
+          <article class="crisis-counter" data-crisis="gaza" data-deaths-per-year="52000" tabindex="0" role="button" aria-expanded="false" aria-label="Gaza death counter — tap for modeling">
+            <div class="crisis-head">
+              <span class="crisis-name">Gaza</span>
+              <span class="crisis-tag">conflict</span>
+            </div>
+            <div class="crisis-rate">1 death every <strong class="crisis-interval">&mdash;</strong></div>
+            <div class="crisis-live"><span class="crisis-since">0</span> modeled deaths since you opened this page<span class="crisis-next"> &middot; next in <span class="crisis-countdown">&mdash;</span></span></div>
+            <span class="crisis-more">tap for the modeling &darr;</span>
+            <div class="crisis-detail" hidden>
+              <p><strong>Floor figure:</strong> &ge;52,000 deaths confirmed by Gaza&rsquo;s Ministry of Health and corroborated by UN OCHA &amp; WHO by May 2025. The Lancet estimates the verified count undercounts true mortality by ~41% (~64,000 through June 2024 alone); the Max Planck Institute for Demographic Research estimates &gt;100,000 conflict-related deaths by October 2025. The IPC declared famine in parts of Gaza in 2025.</p>
+              <p><strong>Model:</strong> 52,000 &divide; 525,600 minutes per year = <strong>one death every 10 min 06 s</strong> (0.099/min). At the Max Planck figure it is one every ~5 min.</p>
+              <p class="crisis-src"><a href="https://www.ochaopt.org/data/casualties" target="_blank" rel="noopener">UN OCHA &mdash; casualties</a> &middot; <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(24)01169-3/fulltext" target="_blank" rel="noopener">The Lancet &mdash; undercount</a> &middot; <a href="https://www.ipcinfo.org/ipc-country-analysis/details-map/en/c/1156749/" target="_blank" rel="noopener">IPC &mdash; Gaza famine</a></p>
+            </div>
+          </article>
+
+          <article class="crisis-counter" data-crisis="afghanistan" data-deaths-per-year="74095" tabindex="0" role="button" aria-expanded="false" aria-label="Afghanistan starvation counter — tap for modeling">
+            <div class="crisis-head">
+              <span class="crisis-name">Afghanistan</span>
+              <span class="crisis-tag">US sanctions</span>
+            </div>
+            <div class="crisis-rate">1 death every <strong class="crisis-interval">&mdash;</strong></div>
+            <div class="crisis-live"><span class="crisis-since">0</span> modeled deaths since you opened this page<span class="crisis-next"> &middot; next in <span class="crisis-countdown">&mdash;</span></span></div>
+            <span class="crisis-more">tap for the modeling &darr;</span>
+            <div class="crisis-detail" hidden>
+              <p><strong>Context:</strong> Afghanistan is under US/UN sanctions plus a US freeze of ~$7B of its central bank&rsquo;s own foreign reserves (held at the New York Fed) since 2021 &mdash; strangling the economy into famine-level hunger.</p>
+              <p><strong>Floor figure &amp; model:</strong> 2.9M people in <abbr title="Integrated Food Security Phase Classification">IPC</abbr> Phase&nbsp;4 (Emergency), Sep&ndash;Oct 2025. IPC&rsquo;s Phase-4 crude-death-rate threshold is 1.0 death&thinsp;/&thinsp;10,000&thinsp;/&thinsp;day, counted as deaths attributable to starvation and the food-deficit&ndash;disease interaction. Net of a ~0.3/10,000/day baseline &rArr; 74,095 deaths/yr &rArr; <strong>one death every 7 min 06 s</strong>. Cross-check: 867,300 children with severe acute malnutrition &times; WHO&rsquo;s 10% untreated case-fatality &asymp; 86,730/yr.</p>
+              <p class="crisis-src"><a href="https://www.ipcinfo.org/ipcinfo-website/countries-in-focus-archive/issue-141/en" target="_blank" rel="noopener">IPC &mdash; Afghanistan 2025</a> &middot; <a href="https://www.ipcinfo.org/fileadmin/user_upload/ipcinfo/docs/IPC-Guidance-Note-on-Famine.pdf" target="_blank" rel="noopener">IPC &mdash; famine/CDR thresholds</a> &middot; <a href="https://www.unicef.org/media/96981/file/Statement-WHO-WFP-SCN-and-UNICEF-on-Community-Based-Management-of-SAM.pdf" target="_blank" rel="noopener">WHO/UNICEF &mdash; SAM fatality</a> &middot; <a href="https://en.wikipedia.org/wiki/2025%E2%80%932026_hunger_crisis_in_Afghanistan" target="_blank" rel="noopener">Asset freeze &amp; hunger</a></p>
+            </div>
+          </article>
+        </div>
+
+        <p class="crisis-foot">Modeled excess deaths, not a body count. These tolls accrue over more than a year; dividing by one year&rsquo;s minutes is the standard &ldquo;every X minutes&rdquo; framing. Sanctions are a primary contributor to Afghanistan&rsquo;s collapse, not the sole cause.</p>
       </div>
     </section>
 
@@ -1234,6 +1290,101 @@ sequenceDiagram
         render();
         // Mermaid sizes itself once; nudge a resize so diagrams re-fit cleanly.
         window.dispatchEvent(new Event('resize'));
+      });
+    })();
+  </script>
+
+  <!-- Crisis simulator: blink the page once per modeled death -->
+  <script>
+    (function () {
+      const blink = document.getElementById('death-blink');
+      const toggle = document.getElementById('sim-toggle');
+      const speedSel = document.getElementById('sim-speed');
+      const cards = Array.from(document.querySelectorAll('.crisis-counter'));
+      if (!blink || !toggle || !cards.length) return;
+
+      const SECONDS_PER_YEAR = 525600 * 60; // 31,536,000
+      const COLORS = { gaza: 'rgba(230,57,70,0.55)', afghanistan: 'rgba(245,176,65,0.5)' };
+      let running = false, speed = 1, raf = 0;
+
+      const fmt = (s) => {
+        s = Math.max(0, Math.round(s));
+        const m = Math.floor(s / 60), r = s % 60;
+        return m ? (m + ' min ' + String(r).padStart(2, '0') + ' s') : (r + ' s');
+      };
+
+      const state = cards.map((card) => {
+        const dpy = +card.dataset.deathsPerYear;
+        const sec = SECONDS_PER_YEAR / dpy; // real seconds between deaths
+        const st = {
+          card, sec,
+          color: COLORS[card.dataset.crisis] || 'rgba(230,57,70,0.55)',
+          since: 0, nextAt: 0,
+          elSince: card.querySelector('.crisis-since'),
+          elCountdown: card.querySelector('.crisis-countdown'),
+        };
+        card.querySelector('.crisis-interval').textContent = fmt(sec);
+        return st;
+      });
+
+      function flash(color) {
+        blink.style.setProperty('--flash', color);
+        blink.classList.remove('flash');
+        void blink.offsetWidth; // restart the animation
+        blink.classList.add('flash');
+      }
+
+      function tick(now) {
+        for (const st of state) {
+          if (now >= st.nextAt) {
+            st.since++;
+            st.elSince.textContent = st.since.toLocaleString();
+            flash(st.color);
+            st.nextAt = now + st.sec * 1000 / speed;
+          }
+          st.elCountdown.textContent = fmt((st.nextAt - now) / 1000 * speed);
+        }
+        if (running) raf = requestAnimationFrame(tick);
+      }
+
+      function start() {
+        running = true;
+        const now = performance.now();
+        for (const st of state) st.nextAt = now + st.sec * 1000 / speed;
+        toggle.innerHTML = '&#9632; Stop';
+        toggle.classList.add('running');
+        raf = requestAnimationFrame(tick);
+      }
+      function stop() {
+        running = false;
+        cancelAnimationFrame(raf);
+        toggle.innerHTML = '&#9658; Simulate crisis';
+        toggle.classList.remove('running');
+        blink.classList.remove('flash');
+        for (const st of state) st.elCountdown.textContent = '—';
+      }
+      toggle.addEventListener('click', () => running ? stop() : start());
+
+      speedSel.addEventListener('change', () => {
+        const old = speed; speed = +speedSel.value;
+        if (running) {
+          const now = performance.now();
+          for (const st of state) st.nextAt = now + (st.nextAt - now) * (old / speed);
+        }
+      });
+
+      // Tap a counter to reveal its modeling + sources
+      cards.forEach((card) => {
+        const detail = card.querySelector('.crisis-detail');
+        const toggleDetail = () => {
+          const open = card.getAttribute('aria-expanded') === 'true';
+          card.setAttribute('aria-expanded', String(!open));
+          detail.hidden = open;
+        };
+        card.addEventListener('click', (e) => { if (!e.target.closest('a')) toggleDetail(); });
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleDetail(); }
+        });
       });
     })();
   </script>
