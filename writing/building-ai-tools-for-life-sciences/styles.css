@@ -3,6 +3,8 @@
    ============================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+/* Light-mode "lab notebook" vibe (borrowed from 2pizzaclub) */
+@import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Quicksand:wght@400;500;600;700&display=swap');
 
 /* --- Reset & Base --- */
 *, *::before, *::after {
@@ -837,3 +839,126 @@ body:not(.present-mode) .mode-toggle {
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================================
+   THEME TOGGLE  +  LIGHT MODE
+   Light mode reskins the deck as a lab notebook on engineering
+   graph paper, using the 2pizzaclub palette (royal-blue ink on
+   cream, bus-yellow + planet-red accents, hand-drawn headings).
+   Everything is scoped under html.light so dark mode is untouched.
+   ============================================================ */
+
+/* --- Theme toggle button (visible in both modes) --- */
+.theme-toggle {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 999px;
+  color: var(--muted);
+  padding: 0.45rem 0.95rem;
+  font-family: var(--font);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color var(--transition), background var(--transition), border-color var(--transition);
+}
+.theme-toggle:hover { color: var(--text); }
+
+/* --- Light-mode palette + engineering graph paper --- */
+html.light body {
+  --bg: #FBF6E9;            /* cream paper */
+  --text: #16213E;          /* dark ink */
+  --accent: #1B3FB5;        /* royal blue */
+  --muted: #6F6650;         /* sepia graphite */
+  --code-bg: #FDF3D8;       /* warm code tint */
+  --diagram-bg: #FBF6E9;
+  --dot-inactive: rgba(27, 63, 181, 0.28);
+  /* light-mode-only helpers */
+  --ink-soft: #3A3A52;
+  --rule: rgba(27, 63, 181, 0.22);
+  --card: #FFFDF5;
+  --planet-red: #E63946;
+
+  color: var(--text);
+  font-family: 'Quicksand', var(--font);
+  background-color: var(--bg);
+  /* fine 22px quad-rule grid + heavier 110px major grid */
+  background-image:
+    linear-gradient(rgba(27, 63, 181, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27, 63, 181, 0.07) 1px, transparent 1px),
+    linear-gradient(rgba(27, 63, 181, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27, 63, 181, 0.16) 1px, transparent 1px);
+  background-size: 22px 22px, 22px 22px, 110px 110px, 110px 110px;
+}
+
+/* Hand-drawn headings */
+html.light h1,
+html.light h2 { font-family: 'Caveat Brush', 'Quicksand', cursive; letter-spacing: 0; }
+html.light h2::after { background: var(--planet-red); opacity: 0.85; }
+
+/* Body copy → ink */
+html.light p,
+html.light li,
+html.light .tier-desc { color: var(--ink-soft); }
+html.light li strong,
+html.light h3 { color: var(--text); }
+
+/* Code / cards / panels → paper surfaces with blueprint hairlines */
+html.light code { border: 1px solid var(--rule); }
+html.light .stat-card { background: var(--code-bg); border-color: var(--rule); box-shadow: 0 1px 0 rgba(27, 63, 181, 0.08); }
+html.light .section-divider hr { background: var(--rule); }
+html.light .takeaway-list li { border-bottom-color: var(--rule); }
+
+/* Chrome: mode toggle, theme toggle, back link */
+html.light .mode-toggle { background: var(--card); border-color: var(--rule); }
+html.light .mode-toggle button.active,
+html.light .notes-mode-toggle button.active { color: #FFF8E7; }
+html.light .theme-toggle { background: var(--card); border-color: var(--rule); color: var(--accent); font-family: 'Quicksand', sans-serif; }
+html.light .theme-toggle:hover { background: #FFF; }
+html.light .back-to-writing { background: var(--card); border-color: var(--rule); color: var(--muted); }
+html.light .back-to-writing:hover { color: var(--accent); }
+
+/* Progress dots: blue instead of cyan glow */
+html.light .progress-dots .dot:hover { background: rgba(27, 63, 181, 0.5); }
+html.light .progress-dots .dot.active { box-shadow: 0 0 8px rgba(27, 63, 181, 0.4); }
+
+/* Detail panel (present-mode sidebar) */
+html.light .detail-panel { background: var(--card); border-right-color: var(--rule); }
+html.light .detail-panel p,
+html.light .detail-panel li,
+html.light .detail-panel pre code { color: var(--ink-soft); }
+html.light .detail-panel pre { background: var(--code-bg); border-color: var(--rule); }
+html.light .detail-panel-close { border-color: var(--rule); }
+html.light .detail-overlay { background: rgba(27, 63, 181, 0.12); }
+
+/* Notes panel */
+html.light .notes-panel { background: var(--card); border-left-color: var(--rule); }
+html.light .notes-panel-header { border-bottom-color: var(--rule); }
+html.light .notes-panel-body { color: var(--ink-soft); }
+html.light .notes-mode-toggle { background: var(--code-bg); border-color: var(--rule); }
+html.light .notes-panel-tab { background: var(--card); box-shadow: 0 0 8px rgba(27, 63, 181, 0.15); }
+html.light .notes-panel-tab:hover { background: #FFF; box-shadow: 0 0 14px rgba(27, 63, 181, 0.3); }
+html.light .notes-panel-body.editing { background: #FFFDF5; border-color: var(--rule); }
+
+/* Result callout + tier colors → darker, readable-on-cream variants.
+   Keep the left-border bars bright/decorative; darken only the label text. */
+html.light .callout.result { border-left-color: #06A57E; }
+html.light .callout.result .callout-label { color: #0A6E54; }
+html.light .tier-1 { border-left-color: #06A57E; }
+html.light .tier-2 { border-left-color: #B8860B; }
+html.light .tier-3 { border-left-color: var(--planet-red); }
+html.light .tier-1 .tier-label { color: #0A6E54; }
+html.light .tier-2 .tier-label { color: #8A6200; }
+html.light .tier-3 .tier-label { color: #C32430; }
+
+/* Mermaid figures keep their own dark-node styling — don't let the light-mode
+   <p>/<li> ink overrides bleed into diagram labels (they'd go dark-on-dark).
+   The node's <span class="nodeLabel"> carries the real color; let <p> inherit it. */
+html.light .mermaid p,
+html.light .mermaid li { color: inherit; }

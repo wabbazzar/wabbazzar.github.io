@@ -10,7 +10,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://wabbazzar.com/writing/building-ai-tools-for-life-sciences/">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="styles.css?v=3">
   <style>
     /* Back link to the writing series — matches the mode-toggle pill. */
     .back-to-writing {
@@ -33,10 +33,14 @@
     .back-to-writing:hover { color: var(--text); opacity: 1; }
     body.present-mode .back-to-writing { opacity: 0; pointer-events: none; }
   </style>
+  <!-- Apply saved theme before paint to avoid a flash. -->
+  <script>try{if(localStorage.getItem('blog-theme')==='light')document.documentElement.classList.add('light');}catch(e){}</script>
 </head>
 <body>
 
   <a class="back-to-writing" href="/writing/">&larr; Writing</a>
+
+  <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light or dark theme">&#9728;&#65039; Light</button>
 
   <!-- Mode Toggle -->
   <div class="mode-toggle" role="tablist" aria-label="View mode">
@@ -1049,8 +1053,10 @@ sequenceDiagram
       let currentSectionId = sections[0]?.id || '';
       let editMode = false;
 
-      // Detect localhost for edit capability
-      const isLocal = ['localhost', '127.0.0.1', ''].includes(location.hostname);
+      // Detect localhost / tailnet for edit capability (read-only on the public site)
+      const isLocal = ['localhost', '127.0.0.1', ''].includes(location.hostname)
+        || location.hostname === 'wabbazzar-ice'
+        || location.hostname.endsWith('.ts.net');
       if (isLocal) {
         notesModeToggle.classList.add('visible');
       }
@@ -1208,6 +1214,27 @@ sequenceDiagram
 
       // Initial render
       renderNotes(currentSectionId);
+    })();
+  </script>
+
+  <!-- Light / dark theme toggle -->
+  <script>
+    (function () {
+      const root = document.documentElement;
+      const btn = document.getElementById('theme-toggle');
+      const render = () => {
+        const light = root.classList.contains('light');
+        btn.innerHTML = light ? '☾ Dark' : '☀️ Light';
+        btn.setAttribute('aria-pressed', String(light));
+      };
+      render();
+      btn.addEventListener('click', () => {
+        const light = root.classList.toggle('light');
+        try { localStorage.setItem('blog-theme', light ? 'light' : 'dark'); } catch (e) {}
+        render();
+        // Mermaid sizes itself once; nudge a resize so diagrams re-fit cleanly.
+        window.dispatchEvent(new Event('resize'));
+      });
     })();
   </script>
 
