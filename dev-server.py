@@ -72,8 +72,14 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
 
 
+class Server(http.server.ThreadingHTTPServer):
+    # Threaded so concurrent requests (browser keep-alive connections + the
+    # service worker precaching ~30 URLs at once) don't serialize and stall.
+    daemon_threads = True
+
+
 if __name__ == "__main__":
     print(f"Dev server at http://localhost:{PORT}/  (serving {ROOT})")
     print(f"POST /save-notes writes to {INDEX}")
-    with http.server.HTTPServer(("", PORT), Handler) as s:
+    with Server(("", PORT), Handler) as s:
         s.serve_forever()
