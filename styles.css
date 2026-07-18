@@ -239,6 +239,7 @@ h1 {
 }
 
 /* Per-app tile bg — only shown where the icon is transparent */
+.tile-bopthere { --tile-bg: #f0e6d2; }   /* matches BopThere's warm cream theme */
 .tile-shredly  { --tile-bg: #0f172a; }   /* matches Shredly's app theme */
 .tile-starbird { --tile-bg: #f5f1e8; }   /* matches Starbird's light theme */
 .tile-quizly   { --tile-bg: #5b82b0; }   /* matches Quizly's blue */
