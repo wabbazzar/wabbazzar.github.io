@@ -244,6 +244,9 @@ h1 {
 .tile-starbird { --tile-bg: #f5f1e8; }   /* matches Starbird's light theme */
 .tile-quizly   { --tile-bg: #5b82b0; }   /* matches Quizly's blue */
 .tile-portavec { --tile-bg: #e94560; }   /* matches Portavec's coral accent */
+.tile-aurora   { --tile-bg: #ff5e14; }   /* matches Aurora's Caravel orange */
+.tile-lantern  { --tile-bg: #101827; }   /* matches Lantern's night theme */
+.tile-2pizzaclub { --tile-bg: #2136c6; } /* matches the timeline's royal blue */
 
 /* Caption */
 .card-meta {
