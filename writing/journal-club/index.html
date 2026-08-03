@@ -96,45 +96,45 @@
     }
     .doors img { width: 100%; height: auto; display: block; }
 
-    /* Each door is an absolutely-placed link. Its box comes from the four
-       custom properties set inline, measured off the image. */
-    .door {
-      position: absolute;
-      left: var(--x); top: var(--y); width: var(--w); height: var(--h);
-      display: block; text-decoration: none; border-radius: 3px;
-      /* Faint at rest so they read as interactable without shouting. */
-      outline: 2px solid rgba(255, 214, 64, 0.22);
-      outline-offset: -2px;
-      transition: outline-color 0.12s steps(2), background-color 0.12s steps(2),
-                  box-shadow 0.12s steps(2);
+    /* The doors are photographed in perspective, so each one is a traced
+       quadrilateral in the image's own pixel space — not a bounding box.
+       The SVG shares the image's coordinate system, so the outlines stay
+       locked to the doors at every width. */
+    .door-map {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      overflow: visible;
     }
-    .door:hover, .door:focus-visible {
-      outline: 3px solid #ffd640;
-      outline-offset: -3px;
-      background-color: rgba(255, 214, 64, 0.16);
-      box-shadow: inset 0 0 34px rgba(255, 214, 64, 0.30),
-                  0 0 18px rgba(255, 214, 64, 0.45);
-      opacity: 1;
+    /* The UA focus ring is a bounding box, which is the thing this whole
+       overlay exists to avoid. Suppressed only because the lit-door state
+       below is itself a strong, visible focus indicator. */
+    .door { cursor: pointer; }
+    .door:focus { outline: none; }
+    .door-shape {
+      fill: rgba(255, 214, 64, 0);       /* transparent, but still hit-tested */
+      stroke: rgba(255, 214, 64, 0.32);
+      stroke-width: 2;
+      stroke-linejoin: round;
+      vector-effect: non-scaling-stroke; /* even outline at any render size */
+      pointer-events: all;
+      transition: stroke 0.1s steps(2), stroke-width 0.1s steps(2),
+                  fill 0.1s steps(2);
     }
-    /* Brass nameplate that appears on the door when you point at it. */
-    .door-plate {
-      position: absolute; left: 50%; bottom: 6%;
-      transform: translateX(-50%);
-      display: none; width: max-content; max-width: 94%;
-      background: rgba(10, 9, 6, 0.92);
-      border: 2px solid #ffd640; border-radius: 4px;
-      padding: 0.5rem 0.8rem; text-align: center; line-height: 1.35;
-      box-shadow: 0 0 14px rgba(255, 214, 64, 0.4);
+    .door:hover .door-shape, .door:focus-visible .door-shape {
+      fill: rgba(255, 214, 64, 0.15);
+      stroke: #ffd640;
+      stroke-width: 4;
+      filter: drop-shadow(0 0 5px rgba(255, 214, 64, 0.95));
     }
-    .door:hover .door-plate, .door:focus-visible .door-plate { display: block; }
-    .door-plate b {
-      display: block; color: #ffd640; font-size: 0.9rem;
-      letter-spacing: 0.1em; text-transform: uppercase;
+    /* Brass nameplate, painted on the door itself. */
+    .door-plate { opacity: 0; pointer-events: none; transition: opacity 0.1s steps(2); }
+    .door:hover .door-plate, .door:focus-visible .door-plate { opacity: 1; }
+    .door-plate rect {
+      fill: rgba(10, 9, 6, 0.93); stroke: #ffd640;
+      stroke-width: 2; vector-effect: non-scaling-stroke;
     }
-    .door-plate em {
-      display: block; color: var(--text); font-style: normal;
-      font-size: 0.78rem; opacity: 0.85; margin-top: 0.15rem;
-    }
+    .door-plate text { text-anchor: middle; font-family: var(--font); }
+    .pl-title { fill: #ffd640; font-size: 25px; font-weight: 700; letter-spacing: 2.2px; }
+    .pl-sub   { fill: #e9e7e0; font-size: 19px; }
     .doors-caption {
       text-align: center; color: var(--muted); margin-top: 1rem;
       font-size: 0.8rem; letter-spacing: 0.18em; text-transform: uppercase;
@@ -154,10 +154,10 @@
     @media (hover: none) {
       .doors-list { display: block; }
       .doors-caption { display: none; }
-      .door { outline-color: rgba(255, 214, 64, 0.4); }
+      .door-shape { stroke: rgba(255, 214, 64, 0.5); }
     }
     @media (prefers-reduced-motion: reduce) {
-      .door { transition: none; }
+      .door-shape, .door-plate { transition: none; }
     }
 
     /* The back-link and mode pills are fixed; on narrow screens they sit on
@@ -202,23 +202,39 @@
                  alt="Three doors in a dark hallway, each painted with red lettering: NOT AI AT ALL, SOME AI, and VERY AI.">
           </picture>
 
-          <a class="door" href="#energy"
-             style="--x:8.51%; --y:6.77%; --w:24.06%; --h:93.23%"
-             aria-label="Not AI at all — energy medicine and the device it sells">
-            <span class="door-plate"><b>Not AI at all</b><em>Energy medicine</em></span>
-          </a>
+          <svg class="door-map" viewBox="0 0 1363 768" preserveAspectRatio="none"
+               role="navigation" aria-label="Choose a topic">
 
-          <a class="door" href="#covid"
-             style="--x:40.50%; --y:1.82%; --w:18.93%; --h:98.18%"
-             aria-label="Some AI — COVID origins and vaccine efficacy">
-            <span class="door-plate"><b>Some AI</b><em>COVID origins &amp; efficacy</em></span>
-          </a>
+            <a class="door" tabindex="0" href="#energy"
+               aria-label="Not AI at all — energy medicine and the device it sells">
+              <polygon class="door-shape" points="110,76 378,100 346,768 62,768"/>
+              <g class="door-plate" transform="translate(208,676)">
+                <rect x="-128" y="-44" width="256" height="76" rx="5"/>
+                <text class="pl-title" y="-14">NOT AI AT ALL</text>
+                <text class="pl-sub" y="14">Energy medicine</text>
+              </g>
+            </a>
 
-          <a class="door" href="#bias"
-             style="--x:71.46%; --y:11.98%; --w:19.96%; --h:88.02%"
-             aria-label="Very AI — measuring political slant across three models">
-            <span class="door-plate"><b>Very AI</b><em>Measuring model slant</em></span>
-          </a>
+            <a class="door" tabindex="0" href="#covid"
+               aria-label="Some AI — COVID origins and vaccine efficacy">
+              <polygon class="door-shape" points="563,29 828,45 825,768 559,768"/>
+              <g class="door-plate" transform="translate(693,676)">
+                <rect x="-128" y="-44" width="256" height="76" rx="5"/>
+                <text class="pl-title" y="-14">SOME AI</text>
+                <text class="pl-sub" y="14">COVID origins &amp; efficacy</text>
+              </g>
+            </a>
+
+            <a class="door" tabindex="0" href="#bias"
+               aria-label="Very AI — measuring political slant across three models">
+              <polygon class="door-shape" points="980,100 1246,127 1262,768 1008,768"/>
+              <g class="door-plate" transform="translate(1132,676)">
+                <rect x="-124" y="-44" width="248" height="76" rx="5"/>
+                <text class="pl-title" y="-14">VERY AI</text>
+                <text class="pl-sub" y="14">Measuring model slant</text>
+              </g>
+            </a>
+          </svg>
         </div>
 
         <p class="doors-caption">Pick a door.</p>
