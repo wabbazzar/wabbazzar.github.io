@@ -3,210 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Journal Club</title>
-  <meta name="description" content="Three possible topics: energy medicine and the device it sells, COVID origins and vaccine efficacy, and political slant across three language models.">
-  <meta property="og:title" content="Journal Club">
-  <meta property="og:description" content="Three possible topics covering energy medicine, COVID origins and vaccine efficacy, and political slant across language models.">
+  <title>Journal Club: three research proposals</title>
+  <meta name="description" content="Three research proposals covering energy medicine, COVID origins and vaccine evidence, and political asymmetry in language models.">
+  <meta property="og:title" content="Journal Club: three research proposals">
+  <meta property="og:description" content="Primary-source evidence and study designs for three possible journal club topics.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://wabbazzar.com/writing/journal-club/">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="stylesheet" href="styles.css?v=2">
-  <style>
-    .back-to-writing {
-      position: fixed; top: calc(1.5rem + env(safe-area-inset-top, 0px)); left: calc(1.5rem + env(safe-area-inset-left, 0px)); z-index: 100;
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      background: #111; border: 1px solid #222; border-radius: 999px;
-      padding: 0.45rem 1rem; color: var(--muted); font-size: 0.8rem;
-      letter-spacing: 0.04em; transition: color var(--transition);
-    }
-    .back-to-writing:hover { color: var(--text); opacity: 1; }
-    body.present-mode .back-to-writing { opacity: 0; pointer-events: none; }
-    html.light .back-to-writing { background: var(--code-bg); border-color: var(--rule); }
-
-    /* A quoted passage from a source, with its citation. */
-    .pull {
-      border-left: 3px solid var(--accent);
-      padding: 0.9rem 1.2rem;
-      background: var(--code-bg);
-      border-radius: 0 6px 6px 0;
-      margin: 1.4rem 0;
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-    .pull cite {
-      display: block; margin-top: 0.6rem; font-style: normal;
-      font-size: 0.78rem; color: var(--muted); letter-spacing: 0.03em;
-    }
-
-    /* An inline definition of a term. */
-    .define {
-      border: 1px dashed var(--dot-inactive);
-      border-radius: 8px;
-      padding: 0.8rem 1rem;
-      margin: 1.2rem 0;
-      font-size: 0.88rem;
-      line-height: 1.6;
-      color: var(--text);
-      opacity: 0.82;
-    }
-    .define b { color: var(--text); font-weight: 600; opacity: 1; }
-
-    table.claims {
-      width: 100%; border-collapse: collapse; margin: 1.4rem 0;
-      font-size: 0.85rem; display: block; overflow-x: auto;
-    }
-    table.claims th, table.claims td {
-      text-align: left; padding: 0.65rem 0.8rem;
-      border-bottom: 1px solid var(--dot-inactive); vertical-align: top;
-    }
-    table.claims th {
-      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em;
-      color: var(--muted); font-weight: 600;
-    }
-    table.claims td:first-child { min-width: 190px; }
-
-    .sources { font-size: 0.85rem; line-height: 1.75; }
-    .sources li { margin-bottom: 0.5rem; }
-    .sources ul { padding-left: 1.1rem; }
-    .hosted {
-      display: inline-block; font-size: 0.63rem; text-transform: uppercase;
-      letter-spacing: 0.09em; color: var(--muted); border: 1px solid var(--dot-inactive);
-      border-radius: 999px; padding: 1px 7px; margin-left: 6px; vertical-align: 1px;
-    }
-    .topic-num {
-      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em;
-      color: var(--accent); display: block; margin-bottom: 0.4rem;
-    }
-    ol.steps { padding-left: 1.3rem; font-size: 0.93rem; line-height: 1.7; }
-    ol.steps li { margin-bottom: 0.7rem; }
-    ul.plain { padding-left: 1.2rem; font-size: 0.93rem; line-height: 1.7; }
-    ul.plain li { margin-bottom: 0.5rem; }
-
-    /* ---------- Door picker (first slide) ---------- */
-    .sr-only {
-      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
-    }
-    .doors-slide { padding-top: 0; }
-    .doors {
-      position: relative; line-height: 0;
-      border-radius: 10px; overflow: hidden;
-      border: 1px solid var(--dot-inactive);
-    }
-    .doors img { width: 100%; height: auto; display: block; }
-
-    /* The doors are photographed in perspective, so each one is a traced
-       quadrilateral in the image's own pixel space — not a bounding box.
-       The SVG shares the image's coordinate system, so the outlines stay
-       locked to the doors at every width. */
-    .door-map {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      overflow: visible;
-    }
-    /* The UA focus ring is a bounding box, which is the thing this whole
-       overlay exists to avoid. Suppressed only because the lit-door state
-       below is itself a strong, visible focus indicator. */
-    .door { cursor: pointer; }
-    .door:focus { outline: none; }
-    .door-shape {
-      fill: rgba(255, 214, 64, 0);       /* transparent, but still hit-tested */
-      stroke: rgba(255, 214, 64, 0.32);
-      stroke-width: 2;
-      stroke-linejoin: round;
-      vector-effect: non-scaling-stroke; /* even outline at any render size */
-      pointer-events: all;
-      transition: stroke 0.1s steps(2), stroke-width 0.1s steps(2),
-                  fill 0.1s steps(2);
-    }
-    .door:hover .door-shape, .door:focus-visible .door-shape {
-      fill: rgba(255, 214, 64, 0.15);
-      stroke: #ffd640;
-      stroke-width: 4;
-      filter: drop-shadow(0 0 5px rgba(255, 214, 64, 0.95));
-    }
-    /* Brass nameplate, painted on the door itself. */
-    .door-plate { opacity: 0; pointer-events: none; transition: opacity 0.1s steps(2); }
-    .door:hover .door-plate, .door:focus-visible .door-plate { opacity: 1; }
-    .door-plate rect {
-      fill: rgba(10, 9, 6, 0.93); stroke: #ffd640;
-      stroke-width: 2; vector-effect: non-scaling-stroke;
-    }
-    .door-plate text { text-anchor: middle; font-family: var(--font); }
-    .pl-title { fill: #ffd640; font-size: 25px; font-weight: 700; letter-spacing: 2.2px; }
-    .pl-sub   { fill: #e9e7e0; font-size: 19px; }
-    .doors-caption {
-      text-align: center; color: var(--muted); margin-top: 1rem;
-      font-size: 0.8rem; letter-spacing: 0.18em; text-transform: uppercase;
-    }
-    /* Hover cannot be relied on for touch — same routes, plainly. */
-    .doors-list { display: none; list-style: none; padding: 0; margin: 1.2rem 0 0; }
-    .doors-list li { border-top: 1px solid var(--dot-inactive); }
-    .doors-list li:last-child { border-bottom: 1px solid var(--dot-inactive); }
-    .doors-list a {
-      display: block; padding: 0.85rem 0.2rem;
-      color: var(--text); font-size: 0.9rem; line-height: 1.45;
-    }
-    .doors-list b {
-      color: #ffd640; text-transform: uppercase; letter-spacing: 0.08em;
-      font-size: 0.78rem; display: block; margin-bottom: 0.15rem;
-    }
-    @media (hover: none) {
-      .doors-list { display: block; }
-      .doors-caption { display: none; }
-      .door-shape { stroke: rgba(255, 214, 64, 0.5); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .door-shape, .door-plate { transition: none; }
-    }
-
-    /* The back-link and mode pills are fixed; on narrow screens they sit on
-       top of the title. Drop the first slide's content clear of them. */
-    @media (max-width: 700px) {
-      /* Take the back-link out of the fixed layer entirely so it stacks above
-         the title instead of landing on top of it. */
-      .back-to-writing {
-        position: static; display: inline-flex;
-        margin: 1.25rem 0 0 1.25rem;
-      }
-      #title .slide-inner { padding-top: 1.5rem; }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css?v=3">
   <script>try{if(localStorage.getItem('blog-theme')==='light')document.documentElement.classList.add('light');}catch(e){}</script>
 </head>
 
 <body>
-
   <a class="back-to-writing" href="/writing/">&larr; Writing</a>
 
-  <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light or dark theme">&#9728;&#65039; Light</button>
-
-  <div class="mode-toggle" role="tablist" aria-label="View mode">
-    <button id="btn-read" class="active" role="tab" aria-selected="true">Read</button>
-    <button id="btn-present" role="tab" aria-selected="false">Present</button>
+  <div class="utility-bar">
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light or dark theme">Light</button>
+    <div class="mode-toggle" role="tablist" aria-label="View mode">
+      <button id="btn-read" class="active" role="tab" aria-selected="true">Read</button>
+      <button id="btn-present" role="tab" aria-selected="false">Present</button>
+    </div>
   </div>
+
+  <button class="notes-toggle" id="notes-toggle" type="button" aria-controls="speaker-notes" aria-expanded="false">
+    Notes
+  </button>
+  <aside class="speaker-notes" id="speaker-notes" aria-label="Speaker notes" aria-hidden="true">
+    <div class="speaker-notes-head">
+      <span id="notes-slide-label">Speaker notes</span>
+      <button id="notes-close" type="button" aria-label="Close speaker notes">&times;</button>
+    </div>
+    <div class="speaker-notes-body" id="speaker-notes-body"></div>
+  </aside>
 
   <nav class="progress-dots" aria-label="Slide navigation"></nav>
 
   <main id="deck">
-
-    <!-- ========== 1 · Doors ========== -->
-    <section id="title">
+    <section id="title" class="doors-section">
       <div class="slide-inner doors-slide">
-        <h1 class="sr-only">Journal Club &mdash; three possible topics</h1>
-
+        <h1 class="sr-only">Journal Club: three research proposals</h1>
         <div class="doors">
           <picture>
             <source srcset="doors.webp" type="image/webp">
             <img src="doors.jpg" width="1363" height="768" decoding="async"
-                 alt="Three doors in a dark hallway, each painted with red lettering: NOT AI AT ALL, SOME AI, and VERY AI.">
+                 alt="Three doors in a dark hallway, marked Not AI at all, Some AI, and Very AI.">
           </picture>
-
           <svg class="door-map" viewBox="0 0 1363 768" preserveAspectRatio="none"
                role="navigation" aria-label="Choose a topic">
-
-            <a class="door" tabindex="0" href="#energy"
-               aria-label="Not AI at all — energy medicine and the device it sells">
+            <a class="door" tabindex="0" href="#energy-claims"
+               aria-label="Energy medicine and the device it sells">
               <polygon class="door-shape" points="110,76 378,100 346,768 62,768"/>
               <g class="door-plate" transform="translate(208,676)">
                 <rect x="-128" y="-44" width="256" height="76" rx="5"/>
@@ -214,19 +60,17 @@
                 <text class="pl-sub" y="14">Energy medicine</text>
               </g>
             </a>
-
-            <a class="door" tabindex="0" href="#covid"
-               aria-label="Some AI — COVID origins and vaccine efficacy">
+            <a class="door" tabindex="0" href="#covid-separate"
+               aria-label="COVID origins and vaccine evidence">
               <polygon class="door-shape" points="563,29 828,45 825,768 559,768"/>
               <g class="door-plate" transform="translate(693,676)">
                 <rect x="-128" y="-44" width="256" height="76" rx="5"/>
                 <text class="pl-title" y="-14">SOME AI</text>
-                <text class="pl-sub" y="14">COVID origins &amp; efficacy</text>
+                <text class="pl-sub" y="14">COVID evidence</text>
               </g>
             </a>
-
-            <a class="door" tabindex="0" href="#bias"
-               aria-label="Very AI — measuring political slant across three models">
+            <a class="door" tabindex="0" href="#bias-evidence"
+               aria-label="Political asymmetry across language models">
               <polygon class="door-shape" points="980,100 1246,127 1262,768 1008,768"/>
               <g class="door-plate" transform="translate(1132,676)">
                 <rect x="-124" y="-44" width="248" height="76" rx="5"/>
@@ -236,585 +80,720 @@
             </a>
           </svg>
         </div>
-
-        <p class="doors-caption">Pick a door.</p>
-
-        <!-- Touch screens have no hover, so the same three routes get a plain list. -->
+        <p class="doors-caption">Choose a topic</p>
         <ul class="doors-list">
-          <li><a href="#energy"><b>Not AI at all</b> &mdash; energy medicine and the device it sells</a></li>
-          <li><a href="#covid"><b>Some AI</b> &mdash; COVID origins and vaccine efficacy</a></li>
-          <li><a href="#bias"><b>Very AI</b> &mdash; measuring political slant across three models</a></li>
+          <li><a href="#energy-claims"><b>Topic 1</b> Energy medicine and product evidence</a></li>
+          <li><a href="#covid-separate"><b>Topic 2</b> COVID origins and vaccine evidence</a></li>
+          <li><a href="#bias-evidence"><b>Topic 3</b> Political asymmetry across language models</a></li>
         </ul>
       </div>
     </section>
 
-    <!-- ========== 2 · Energy medicine ========== -->
-    <section id="energy">
+    <section id="energy-claims" data-short-title="Product claims">
       <div class="slide-inner">
-        <span class="topic-num">Topic one</span>
-        <h2>A book from 2000 and a product from 1980</h2>
+        <header class="slide-header">
+          <span class="topic-num">Topic 1 · Energy medicine</span>
+          <h2>What the product claims, and what the cited book supports</h2>
+        </header>
 
-        <p>The book is <em>Energy Medicine: The Scientific Basis</em>, by James
-        L. Oschman, published by Churchill Livingstone in 2000. Oschman is a
-        cell biologist. The book is his attempt to take the claims made by
-        hands-on healers &mdash; therapeutic touch, acupuncture, various kinds
-        of bodywork &mdash; and identify a physical mechanism that could account
-        for them. Although he is sympathetic to the practitioners, he usually
-        distinguishes between what has been measured and what has not.</p>
-
-        <p>The company is Quantum Sound Therapy. They sell devices called
-        iQubes. The marketing says the devices combine &ldquo;scalar vortex
-        Miracoil Technology invented by Robert Lloy in 1980&rdquo; with sound
-        frequencies, noble gases, LED light, 24 karat gold, pure silver, and
-        flower essences. You send them a ten-second voice sample and their
-        software generates a personalized set of frequencies for you.</p>
-
-        <div class="define">
-          <b>Scalar wave.</b> In ordinary physics, a wave in the electromagnetic
-          field is <em>transverse</em>: the field wiggles side to side relative
-          to the direction the wave travels, like a wave on a rope you shake.
-          A <em>scalar</em> wave would be a wave with no direction to its wiggle
-          &mdash; a pressure wave in something, more like sound in air than
-          light in space. Mainstream electromagnetism has no such thing. The
-          term survives in a Tesla-adjacent literature where it means, roughly,
-          a carrier of energy and information that ordinary instruments cannot
-          detect. That makes the claim impossible to measure or test.
+        <div class="narration">
+          <p>James L. Oschman’s <em>Energy Medicine: The Scientific Basis</em>
+          was published in 2000. Oschman surveys measurements of electrical and
+          magnetic activity in living tissue and considers possible mechanisms
+          for hands-on healing. He marks many of the proposed mechanisms as
+          speculative.</p>
+          <p>Quantum Sound Therapy sells iQube devices built around a coil
+          design attributed to Robert Lloy in 1980. Its marketing also refers to
+          sound frequencies, noble gases, LED light, gold, silver, flower
+          essences, structured water, and a frequency program derived from a
+          voice sample. The company cites Oschman’s book in support of the
+          general theory.</p>
+          <p>The comparison below separates a measured observation in the book
+          from the mechanisms and product additions for which the book provides
+          no direct test.</p>
         </div>
 
-        <p>Oschman also uses the word &ldquo;scalar,&rdquo; but in a narrower
-        sense based on a real piece of quantum mechanics called the
-        Aharonov&ndash;Bohm effect. He presents the connection as speculation,
-        not as an established result.</p>
+        <figure class="evidence-figure claim-map" aria-labelledby="claim-map-caption">
+          <div class="claim-map-head">
+            <span>Claim used in marketing</span>
+            <span>Support in the cited record</span>
+          </div>
+          <div class="claim-row">
+            <div><b>Human magnetic signal</b><small>4–10 Hz near practitioners’ hands</small></div>
+            <div class="status status-measured"><span></span>Measured in Seto et al., 1992</div>
+          </div>
+          <div class="claim-row">
+            <div><b>Möbius coil health effects</b><small>Scalar-wave shielding and stabilization</small></div>
+            <div class="status status-limited"><span></span>Benefits “difficult to document” in Oschman</div>
+          </div>
+          <div class="claim-row">
+            <div><b>Voice-derived program</b><small>Ten-second sample used to select frequencies</small></div>
+            <div class="status status-absent"><span></span>No analogous evidence in the book</div>
+          </div>
+          <div class="claim-row">
+            <div><b>Added materials</b><small>Noble gases, gold, silver, LEDs, flower essences</small></div>
+            <div class="status status-absent"><span></span>No tests in the cited book</div>
+          </div>
+          <figcaption id="claim-map-caption">
+            The citation supports a discussion of weak biological fields. It
+            does not test the complete commercial device.
+          </figcaption>
+        </figure>
 
-        <p>On page 205, he describes the product category Quantum
-        Sound Therapy is selling:</p>
-
-        <div class="pull">
-          &ldquo;In the 1980s, several personal electromagnetic shielding
-          devices were developed &mdash; based on the use of coils of the
-          M&ouml;bius design that emit scalar waves &mdash; which were said to
-          be safe for living systems. One of these devices was a watch
-          containing a microchip that produced a Schumann-type signal at about
-          8.0 Hz. This device purportedly stabilized a person's brain waves at a
-          frequency that was considered safe and beneficial. Many of these
-          devices were sold, and there were reports of benefits from wearing
-          them, including reduction of jet lag, more energy, lower blood
-          pressure, feelings of well-being, etc. <b>These qualitative effects
-          have been difficult to document.</b>&rdquo;
-          <cite>Oschman, <em>Energy Medicine</em>, p. 205</cite>
+        <div class="evidence-ruler" aria-label="Evidence status">
+          <span><i class="measured"></i> Measured</span>
+          <span><i class="limited"></i> Limited or indirect</span>
+          <span><i class="absent"></i> No cited test</span>
         </div>
-
-        <p>These devices use the same coil geometry and claimed mechanism as the
-        products Oschman discussed. In 2000, he wrote that their benefits had
-        been difficult to document. Twenty-six years later the products are
-        still for sale, and I could not find evidence that their benefits have
-        since been documented.</p>
-
-        <h3>Comparison with the product claims</h3>
-
-        <p>I compared the company's claims with the book. The product relies on
-        the ideas that Oschman treated cautiously and mostly ignores the parts
-        supported by measurements.</p>
-
-        <table class="claims">
-          <thead>
-            <tr><th>Company claim</th><th>What Oschman says</th><th>Where that leaves it</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Scalar vortex Miracoil, zero-point energy</td>
-              <td>Discusses scalar and vector potentials seriously, then calls the 1980s coil products &ldquo;difficult to document&rdquo; (p. 205)</td>
-              <td>The cited book says the benefits were difficult to document</td>
-            </tr>
-            <tr>
-              <td>Structured or hexagonal water holds frequency information</td>
-              <td>Endorses &ldquo;water memory&rdquo; via Benveniste and a helical-coil model from Smith, 1985 (p. 142)</td>
-              <td>Benveniste's water-memory result failed to replicate under controlled conditions</td>
-            </tr>
-            <tr>
-              <td>Sound frequencies entrain the body</td>
-              <td>Reports Seto et al., 1992: a pulsing magnetic field around 8&ndash;10 Hz measured coming off a practitioner's hands (p. 80)</td>
-              <td>The only overlap supported by a measurement</td>
-            </tr>
-            <tr>
-              <td>Programs run in deep delta, below 3 Hz, and cannot be heard</td>
-              <td>The measured activity sits at 7&ndash;10 Hz</td>
-              <td>Does not match the measured frequency range</td>
-            </tr>
-            <tr>
-              <td>Voice analysis captures &ldquo;1.5 billion bits of information in 10 seconds&rdquo;</td>
-              <td>The book contains no analogous claim</td>
-              <td>Not supported by the book</td>
-            </tr>
-            <tr>
-              <td>Noble gases, 24k gold, silver, LED, flower essences</td>
-              <td>The book does not discuss these materials</td>
-              <td>Not supported by the book</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p>The company's own disclaimer says &ldquo;no medical claims are
-        expressed or implied&rdquo; and that the technologies are &ldquo;for
-        experimental and research purposes only.&rdquo; This disclaimer appears
-        below pages that make physiological claims.</p>
-
-        <p>The experiment described on page 79 provides a more useful topic than
-        the product claims.</p>
+        <p class="source-line">Sources: Oschman, <em>Energy Medicine</em>, pp. 78–80, 142, 205; <a href="https://quantumsoundtherapy.com/" target="_blank" rel="noopener">Quantum Sound Therapy product site</a>.</p>
       </div>
     </section>
 
-    <!-- ========== 3 · Zimmerman ========== -->
-    <section id="zimmerman">
+    <section id="energy-seto" data-short-title="Biomagnetism">
       <div class="slide-inner">
-        <span class="topic-num">Topic one, continued</span>
-        <h2>An inconclusive experiment and a missing follow-up</h2>
+        <header class="slide-header">
+          <span class="topic-num">Topic 1 · Primary experiment</span>
+          <h2>A strong signal appeared in 3 of 37 subjects</h2>
+        </header>
 
-        <p>In 1990, a researcher named John Zimmerman ran an experiment at the
-        University of Colorado School of Medicine in Denver. The result was
-        inconclusive, but the reason it was inconclusive suggests a
-        straightforward follow-up.</p>
-
-        <div class="define">
-          <b>SQUID.</b> Superconducting Quantum Interference Device. It is a
-          magnetometer &mdash; an instrument that measures magnetic fields
-          &mdash; and it is the most sensitive one we have. It works by
-          exploiting a quantum effect that only appears in superconductors, so
-          the sensor has to be bathed in liquid helium at around four degrees
-          above absolute zero. Hospitals use SQUIDs to map the very faint
-          magnetic fields produced by the heart and brain.
+        <div class="narration">
+          <p>Seto and colleagues tested 37 people in a magnetically shielded
+          room with a pair of 80,000-turn coils. Three subjects produced a
+          strong magnetic field from the palms during practices described as
+          qi emission, yoga, meditation, or similar activity. The reported
+          field varied from 2 to 4 milligauss and oscillated from 4 to 10 hertz.</p>
+          <p>The paper establishes that the apparatus recorded an unusual signal
+          in a small subset of the sample. It does not identify the source of
+          the field, reproduce a healing effect, or test an iQube. The paper’s
+          abstract says that the origin and significance of the signal were
+          unknown.</p>
+          <p>Oschman also describes a 1990 SQUID observation by John Zimmerman.
+          I could not locate a primary report with methods and data for that
+          observation. It belongs in the secondary-source column unless the
+          original record can be found.</p>
         </div>
 
-        <div class="define">
-          <b>Gauss and hertz.</b> A <em>gauss</em> measures magnetic field
-          strength. The Earth's field is about half a gauss. A fridge magnet is
-          around 50. The magnetic field produced by your heart is roughly a
-          millionth of a gauss, and by your brain a thousand times fainter still.
-          <em>Hertz</em> is cycles per second: an 8 Hz signal wiggles eight times
-          a second. For reference, human hearing starts around 20 Hz, so 8 Hz is
-          below anything you could hear. Brainwave rhythms live in this range.
+        <div class="viz-grid two">
+          <figure class="evidence-figure sample-figure">
+            <div class="figure-kicker">Observed frequency</div>
+            <div class="people-grid" role="img" aria-label="Thirty-seven subjects, three with a strong recorded signal">
+              <span class="hit"></span><span class="hit"></span><span class="hit"></span>
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="big-ratio"><b>3</b><span>of 37</span><small>8.1% of the sample</small></div>
+            <figcaption>Strong palm signal reported in three subjects.</figcaption>
+          </figure>
+
+          <figure class="evidence-figure signal-card">
+            <div class="signal-metric"><span>Field strength</span><b>2–4</b><em>milligauss</em></div>
+            <svg class="wave" viewBox="0 0 480 120" role="img" aria-label="Illustration of a four to ten hertz oscillating signal">
+              <path d="M0 60 C18 5 42 5 60 60 S102 115 120 60 S162 5 180 60 S222 115 240 60 S282 5 300 60 S342 115 360 60 S402 5 420 60 S462 115 480 60"/>
+            </svg>
+            <div class="signal-metric compact"><span>Oscillation</span><b>4–10</b><em>hertz</em></div>
+            <figcaption>Recorded range among the three strong-signal subjects.</figcaption>
+          </figure>
         </div>
 
-        <p>Zimmerman placed a therapeutic-touch practitioner and a patient in a
-        magnetically shielded room with a SQUID built to detect some of the
-        faintest fields the human body produces. The practitioner held a hand
-        near the patient while Zimmerman made a baseline recording, then entered
-        the meditative state used in therapeutic touch.</p>
-
-        <p>The SQUID immediately picked up a large signal coming off the
-        practitioner's hand. Oschman's account of what happened next:</p>
-
-        <div class="pull">
-          &ldquo;The field was so strong that the amplifiers and recorder had to
-          be readjusted so that a recording could be made. This was the
-          strongest biomagnetic field Dr Zimmerman had encountered in his years
-          of medical research using the SQUID.&rdquo;
-          <cite>Oschman, <em>Energy Medicine</em>, p. 78</cite>
+        <div class="provenance-strip">
+          <span><b>Primary source</b> Seto et al., 1992</span>
+          <span><b>Sample</b> n = 37</span>
+          <span><b>Control</b> Shielded room; baseline described</span>
+          <span><b>Limit</b> No clinical outcome</span>
         </div>
-
-        <p>The signal was not steady. It swept up and down through a range of
-        frequencies, from 0.3 Hz to 30 Hz, spending most of its time around
-        7&ndash;8 Hz. Zimmerman ran the session eight times and got a strong
-        signal on five of them. People who were not trained practitioners could
-        not produce the signal at all.</p>
-
-        <p>Oschman gives the study's main limitation on the next page:</p>
-
-        <div class="pull">
-          &ldquo;A problem was that the biomagnetic field produced during
-          therapeutic touch was so strong that it was out of the calibrated
-          range of the SQUID magnetometer. This meant that it was <b>not
-          possible to quantify the signal strength</b>.&rdquo;
-          <cite>Oschman, <em>Energy Medicine</em>, p. 79</cite>
-        </div>
-
-        <h3>Why calibration matters</h3>
-
-        <p>Every measuring instrument has a range it has been calibrated for. A
-        kitchen scale is calibrated to weigh up to about five kilograms. Put a
-        person on it and the display shows something, but the number is
-        meaningless, because nobody ever checked what that scale reads at eighty
-        kilos.</p>
-
-        <p>Zimmerman's SQUID was built to detect very faint fields. The signal
-        recorded during the healing session was above its calibrated range, so
-        the recording shows the signal's shape but cannot establish its
-        strength.</p>
-
-        <p>The data allow at least two explanations:</p>
-
-        <ul class="plain">
-          <li><b>A real biological effect, measured with the wrong tool.</b> The
-          practitioner is genuinely emitting a strong pulsing magnetic field
-          around 7&ndash;8 Hz, and Zimmerman happened to be holding an instrument
-          too delicate to quantify it. A coarser magnetometer could test this
-          explanation.</li>
-          <li><b>An artifact.</b> An instrument driven past its range does
-          strange things. It can saturate, clip, ring, or pick up something that
-          has nothing to do with the subject &mdash; muscle movement, a shift in
-          posture inside the Earth's field, or the practitioner's body moving a
-          few millimetres.</li>
-        </ul>
-
-        <p>The recording alone does not show which explanation is correct.</p>
-
-        <h3>The 1992 follow-up</h3>
-
-        <p>Oschman says a Japanese group addressed the problem in 1992. Seto and
-        colleagues used a simpler instrument: two coils of eighty thousand
-        turns of wire and a sensitive amplifier. They measured practitioners of
-        qigong, yoga, meditation and several martial arts, and reported a
-        pulsing field averaging about two thousandths of a gauss, peak to peak,
-        at 8&ndash;10 Hz. That is roughly a thousand times the field the heart
-        puts out.</p>
-
-        <p>Seto's group provided a quantitative result, but Oschman notes an
-        important limitation:</p>
-
-        <div class="pull">
-          &ldquo;Neither study documented that any clinical healing was taking
-          place during the projection of energy, so further investigation is
-          definitely needed.&rdquo;
-          <cite>Oschman, <em>Energy Medicine</em>, p. 79</cite>
-        </div>
-
-        <p>The study measured a rhythmic magnetic signal but did not measure a
-        clinical outcome. It therefore does not show that the treatment improved
-        anyone's health.</p>
-
-        <h3>A proposed experiment</h3>
-
-        <p><a href="https://quantumsoundtherapy.com/research/" target="_blank"
-        rel="noopener">Quantum Sound Therapy publishes several later
-        experiments</a>, including a four-person GDV pilot from 2013, a
-        single-subject EEG comparison, and newer reports on electrochemical
-        impedance, gamma activity, and environmental photon measurements. These
-        experiments do not repeat Zimmerman's hand-magnetism measurement. I
-        could not find a controlled follow-up that addressed its calibration,
-        movement, blinding, and clinical-outcome problems.</p>
-
-        <p>A follow-up would use a magnetometer calibrated from the faintest
-        brain fields through a milligauss. Accelerometers on the practitioner
-        would allow movement to be accounted for. The study would compare
-        practitioners with people coached to mimic their posture and breathing,
-        blind the person reading the traces, and define a positive result in
-        advance.</p>
-
-        <p>The equipment is ordinary, and the study appears small enough for a
-        graduate project. I have not found anyone who ran it. Practitioners cite
-        Zimmerman's detected signal, while skeptics note that it was never
-        quantified. Without a follow-up, the disagreement remains unresolved.</p>
-
-        <p>This unresolved result helps explain how Quantum Sound Therapy can
-        still sell a version of a 1980s coil in 2026. A straightforward
-        follow-up has been missing for more than thirty years, which leaves room
-        for companies to use the inconclusive research in their marketing.</p>
+        <p class="source-line">Primary source: <a href="https://pubmed.ncbi.nlm.nih.gov/1353653/" target="_blank" rel="noopener">Seto et al., “Detection of extraordinary large bio-magnetic field strength from human hand,” <em>Acupuncture &amp; Electro-Therapeutics Research</em>, 1992</a>.</p>
       </div>
     </section>
 
-    <!-- ========== 4 · COVID ========== -->
-    <section id="covid">
+    <section id="energy-company" data-short-title="Company experiments">
       <div class="slide-inner">
-        <span class="topic-num">Topic two</span>
-        <h2>Two separate COVID questions</h2>
+        <header class="slide-header">
+          <span class="topic-num">Topic 1 · Later reports</span>
+          <h2>The later experiments do not establish clinical efficacy</h2>
+        </header>
 
-        <p>Fauci appeared before the Senate Homeland Security and Governmental
-        Affairs Committee on 29 July 2026 and invoked the Fifth Amendment more
-        than a hundred times. That hearing focused mostly on what he told
-        Congress and what NIH funded. I am setting that issue aside because it
-        is separate from the two scientific questions I want to consider.</p>
-
-        <p>Those questions are the origin of the virus and the performance of
-        the vaccines. They are independent, and evidence about one does not
-        settle the other. Public debate often mixes them together.</p>
-
-        <h3>Question one: where the virus came from</h3>
-
-        <p>There are two main explanations. The virus either crossed from
-        animals to humans, as most new respiratory viruses do, or escaped from
-        a laboratory in Wuhan that studied this family of viruses.</p>
-
-        <p>Public assessments from the US intelligence community have been split
-        on this for years. The CIA assesses a research-related origin as more
-        likely than a natural one, at <em>low confidence</em>. The FBI and the
-        Department of Energy also lean toward a lab origin. Four other agencies
-        still favour natural spillover. The 2023 declassified ODNI report on
-        links between the Wuhan Institute of Virology and the pandemic is
-        hosted below. It summarizes the evidence behind the public assessments
-        and the limits of that evidence.</p>
-
-        <div class="define">
-          <b>Low confidence</b> is a term of art in intelligence writing. It
-          means the judgement rests on evidence that is fragmentary, or from
-          sources whose reliability cannot be checked, or open to more than one
-          reading. An agency saying &ldquo;low confidence&rdquo; is telling you
-          it would not be surprised to be wrong. Public discussions often omit
-          this confidence label.
+        <div class="narration">
+          <p>Quantum Sound Therapy publishes several later experiments on its
+          own research page. They include a four-person gas-discharge
+          visualization pilot, a single-person EEG comparison, photonic
+          measurements of device-treated samples, and electrochemical
+          impedance work. These reports mean that experimental work did
+          continue after 1992.</p>
+          <p>The studies have limited value for judging whether the product
+          improves health. The human reports use one or four participants and
+          do not include a randomized comparison group. The photonic report
+          measures properties of samples and contains no patient outcomes. The
+          company is also the publisher of the reports.</p>
+          <p>The supportable conclusion is narrow: the company reports changes
+          in small exploratory experiments. Controlled clinical evidence of
+          efficacy is not provided on the research page.</p>
         </div>
 
-        <p><em>Proximal Origin</em>, a 2020 correspondence in Nature Medicine,
-        argues that the genome shows no signature of laboratory construction.
-        Critics have challenged both its analysis and the circumstances in
-        which it was written. The paper is linked below.</p>
+        <figure class="evidence-figure study-ladder" aria-labelledby="study-ladder-caption">
+          <div class="study-row">
+            <div class="study-year">2013</div>
+            <div class="study-name"><b>GDV pilot</b><span>Human before/after</span></div>
+            <div class="study-n"><b>n = 4</b><span>No control group</span></div>
+            <div class="study-grade grade-low">Exploratory</div>
+          </div>
+          <div class="study-row">
+            <div class="study-year">—</div>
+            <div class="study-name"><b>EEG report</b><span>Single human before/after</span></div>
+            <div class="study-n"><b>n = 1</b><span>No control group</span></div>
+            <div class="study-grade grade-low">Case report</div>
+          </div>
+          <div class="study-row">
+            <div class="study-year">—</div>
+            <div class="study-name"><b>Photonic investigation</b><span>Ten measured properties</span></div>
+            <div class="study-n"><b>8 of 10</b><span>Reported significant</span></div>
+            <div class="study-grade grade-indirect">Non-clinical</div>
+          </div>
+          <div class="study-row">
+            <div class="study-year">2026</div>
+            <div class="study-name"><b>Impedance report</b><span>Laboratory measurements</span></div>
+            <div class="study-n"><b>Sample count unclear</b><span>No clinical endpoint</span></div>
+            <div class="study-grade grade-indirect">Non-clinical</div>
+          </div>
+          <figcaption id="study-ladder-caption">Evidence published by the company, classified by design and endpoint.</figcaption>
+        </figure>
 
-        <p>I consider the question unresolved because the relevant agencies
-        disagree and several of their assessments have low confidence.</p>
-
-        <h3>Question two: how well the vaccines worked</h3>
-
-        <p>There is much more evidence about vaccine performance, and it gives a
-        mixed result.</p>
-
-        <p>The myocarditis signal was real. Myocarditis is inflammation of the
-        heart muscle. It appeared at elevated rates in young males after the
-        original 2021 mRNA formulations, mostly after the second dose, and most
-        cases were mild. Vaccine-safety surveillance detected the signal. By
-        2026 the rate had returned to background levels across the formulations
-        on the market.</p>
-
-        <p>Protection against infection waned within months, while protection
-        against severe disease and death lasted substantially longer. Public
-        messaging in 2021 often blurred these endpoints, which damaged trust
-        when vaccinated people still became infected.</p>
-
-        <p>I did not find support for claims made by Senator Ron Johnson and
-        several witnesses at the June 2026 hearing that the vaccines caused
-        large increases in cardiac deaths and miscarriages. The claims were
-        presented without supporting evidence and conflict with the
-        surveillance data.</p>
-
-        <p>Jake Scott, an infectious disease physician, testified at the HSGAC
-        hearing convened on the premise that agencies hid the myocarditis data.
-        He explains the safety-surveillance systems, their findings, and the
-        remaining uncertainties. His testimony is hosted below.</p>
-
-        <h3>Proposed talk</h3>
-
-        <p>I would take six to eight exchanges from the hearing transcripts and
-        classify each as evidence about origins, evidence about efficacy, or an
-        attempt to use one question to make a point about the other. The
-        audience could discuss the classifications instead of debating COVID as
-        a single issue.</p>
-
-        <p>This also connects to AI research on claim decomposition and evidence
-        attribution. One 2026 study found that models failed to detect bias in
-        more than half of passages slanted against Palestinians and 42% of
-        those slanted against Israelis, while flagging a third of genuinely
-        neutral text as biased. The exercise would allow a comparison between
-        the audience's classifications and a model's classifications.</p>
-
-        <h3>Sources</h3>
-        <div class="sources">
-          <ul>
-            <li><a href="evidence/odni-covid-origins-declassified.pdf">ODNI, <em>Potential Links Between the Wuhan Institute of Virology and the Origins of COVID-19</em></a>, declassified 23 June 2023 <span class="hosted">hosted here</span></li>
-            <li><a href="evidence/scott-testimony-hsgac.pdf">Jake Scott MD, <em>The Evidence Base for Vaccine Safety and Efficacy</em></a>, testimony to Senate HSGAC <span class="hosted">hosted here</span></li>
-            <li><a href="https://www.nature.com/articles/s41591-020-0820-9" target="_blank" rel="noopener">Andersen et al., <em>The Proximal Origin of SARS-CoV-2</em></a>, Nature Medicine, 2020 (linked, not mirrored &mdash; publisher copyright)</li>
-            <li><a href="https://www.hsgac.senate.gov/subcommittees/investigations/hearings/the-corruption-of-science-and-federal-health-agencies-how-health-officials-downplayed-and-hid-myocarditis-and-other-adverse-events-associated-with-the-covid-19-vaccines/" target="_blank" rel="noopener">Senate HSGAC hearing page</a> &mdash; full witness list and video</li>
-            <li><a href="https://www.statnews.com/2026/07/28/anthony-fauci-senate-testimony-what-to-expect-covid-origin-perjury/" target="_blank" rel="noopener">STAT, on the 29 July 2026 Fauci testimony</a></li>
-            <li><a href="https://www.cidrap.umn.edu/covid-19/cidrap-op-ed-report-proves-point-acip-covid-vaccines-and-predetermined-conclusions" target="_blank" rel="noopener">CIDRAP op-ed on the 2026 ACIP review</a></li>
-            <li><a href="https://publichealthcollaborative.org/alerts/congressional-hearing-fuels-misleading-claims-about-covid-19-vaccines/" target="_blank" rel="noopener">Public Health Communications Collaborative, on the June 2026 hearing claims</a></li>
-          </ul>
+        <div class="company-results" aria-label="Company reported photonic results">
+          <div><span>Properties reported significant</span><b>80%</b><small>8 of 10 properties</small></div>
+          <div><span>Brightness increase</span><b>90%</b><small>company-reported measure</small></div>
+          <div><span>Total photonic energy increase</span><b>70%</b><small>company-reported measure</small></div>
         </div>
+        <p class="source-line">Company source: <a href="https://quantumsoundtherapy.com/research/" target="_blank" rel="noopener">Quantum Sound Therapy research page</a>. The percentages above are the company’s reported results, not independent replications.</p>
       </div>
     </section>
 
-    <!-- ========== 5 · Model bias ========== -->
-    <section id="bias">
+    <section id="covid-separate" data-short-title="Three COVID questions">
       <div class="slide-inner">
-        <span class="topic-num">Topic three</span>
-        <h2>Three models write a shared test</h2>
+        <header class="slide-header">
+          <span class="topic-num">Topic 2 · COVID evidence</span>
+          <h2>Three questions require three evidence records</h2>
+        </header>
 
-        <p>I want to test whether Claude, Codex and Kimi K3 treat Israel and
-        Palestine symmetrically. Existing studies disagree, in part because
-        they use different methods.</p>
-
-        <h3>Previous studies</h3>
-
-        <p>The <b>ADL</b> ran the largest study of this kind. It used 86
-        statements across six categories and submitted 8,600 queries each to
-        GPT, Claude, Gemini and Llama, for 34,400 responses in total. Models
-        answered on a four-point agree/disagree scale, encoded 1 to 4, with
-        refusals recorded separately. The study also varied the persona asking
-        by using six names coded as Jewish, Arab, or Anglo-American. It concluded
-        that all four models showed bias against Jews and Israel, that Llama was
-        worst, that GPT and Claude showed the strongest anti-Israel lean on Gaza
-        questions, and that models refused questions about Israel more often
-        than questions about other topics. The authors noted that the study
-        conflated factually wrong statements with prejudiced ones.</p>
-
-        <p>A <b>2026 framing study</b> asked models to detect bias in news
-        passages rather than to state opinions. It found models missed bias in
-        over half of passages slanted against Palestinians, and 42% of those
-        slanted against Israelis, while calling a third of genuinely neutral
-        passages biased.</p>
-
-        <p>A <b>2026 parliamentary-voting benchmark</b> used a different method.
-        It asked models to predict how named parties voted on thousands of real
-        Dutch, Norwegian and Spanish motions, then placed the models in the same
-        ideological space as the parties. It found consistent left-leaning or
-        centrist placement and negative bias toward right-conservative
-        parties.</p>
-
-        <p>The studies reached different conclusions because they measured
-        different things. The ADL asked models to agree or disagree with loaded
-        statements and found bias in one direction. The framing study asked
-        models to judge other people's text and found asymmetric blindness in
-        the other direction. The voting study did not mention the Middle East
-        and found a general political lean.</p>
-
-        <p>My question is therefore not simply whether these models are biased.
-        I want to know how much a bias measurement depends on the model and how
-        much it depends on the method used to measure it.</p>
-
-        <h3>The design</h3>
-
-        <p>Each of the three models writes 20 questions it believes are
-        politically neutral, answerable on a 1&ndash;5 scale. Then all three
-        models answer all 60 questions &mdash; their own and each other's.</p>
-
-        <div class="define">
-          <b>Likert scale.</b> The 1-to-5 agree/disagree format, named after
-          Rensis Likert who introduced it in 1932. It turns an opinion into a
-          number you can average. It also flattens things: a 3 can mean
-          &ldquo;neutral,&rdquo; &ldquo;it depends,&rdquo; or &ldquo;I would
-          rather not say,&rdquo; and the score cannot tell those apart. Refusals
-          therefore need a separate category instead of a score of 3.
+        <div class="narration">
+          <p>Public arguments often combine the origin of SARS-CoV-2, Anthony
+          Fauci’s conduct, and the performance of COVID vaccines. A finding
+          about one question does not determine the other two.</p>
+          <p>The origin question relies on genomic analysis, outbreak data,
+          laboratory records, and intelligence assessments. Questions about
+          Fauci rely on emails, testimony, grants, and agency decision records.
+          Vaccine efficacy and safety rely on randomized trials, observational
+          studies, and adverse-event surveillance.</p>
+          <p>The presentation would classify each hearing claim by the record
+          needed to evaluate it. This keeps political testimony in view without
+          treating it as clinical evidence.</p>
+          <p>The local record also includes NIH staff work on cash-prize
+          nominations for Fauci, a legal dispute over whether his pardon removed
+          his Fifth Amendment privilege, and allegations about deleted agency
+          email. Those documents concern oversight and records management. They
+          do not measure viral origin, vaccine efficacy, or vaccine safety.</p>
         </div>
 
-        <p>The experiment would produce two kinds of results.</p>
-
-        <ol class="steps">
-          <li><b>The answers.</b> The 3&times;60 grid would show differences in
-          how the models score the same question. Agreement could reflect either
-          a well-supported answer or shared training data; this experiment
-          cannot distinguish between them.</li>
-          <li><b>The questions.</b> The topics and wording would show what each
-          model treats as a neutral starting point. For example, Claude might
-          focus on proportionality while Kimi focuses on sovereignty. That
-          difference could be analyzed without scoring any answers.</li>
-        </ol>
-
-        <h3>A limitation: self-preference</h3>
-
-        <p>Models tend to favour their own output. The literature calls this
-        <b>self-preference bias</b> when a model rates its output higher than
-        equivalent output from elsewhere, and <b>self-bias</b> more broadly when
-        a model both writes the test and grades it. A benchmark written by a
-        model can favour that model, and having the same model grade the
-        benchmark may add another source of distortion.</p>
-
-        <p>Having every model answer every question makes it possible to measure
-        this effect. I can compare each model's behaviour on its own 20
-        questions with its behaviour on the 40 questions written by other
-        models. Greater decisiveness, less hedging, or fewer refusals on its own
-        questions would indicate self-preference.</p>
-
-        <h3>What gets scored</h3>
-
-        <p>The 1&ndash;5 answer is not enough by itself. I would score each
-        response on several separate measures:</p>
-
-        <ul class="plain">
-          <li><b>Refusal.</b> Whether the model answered. A model that refuses
-          both sides equally is behaving differently from one that answers one
-          side and declines the other. An average score would hide that
-          difference.</li>
-          <li><b>Hedging.</b> The amount of qualifying language in the answer.</li>
-          <li><b>Attribution.</b> Whether the model names the actor responsible
-          for an action. &ldquo;Forty
-          people were killed&rdquo; and &ldquo;X killed forty people&rdquo; are
-          the same fact with different grammar, and which one a model reaches
-          for is measurable.</li>
-          <li><b>Volunteered context.</b> Whether the model adds unrequested
-          history, and which history it adds.</li>
-          <li><b>Term application.</b> Whether it will apply a loaded legal term
-          to each actor when asked separately in both directions.</li>
-        </ul>
-
-        <h3>Study rules</h3>
-
-        <ol class="steps">
-          <li><b>Measure asymmetry, not stance.</b> Every question gets a
-          mirrored twin, identical except that the actors are swapped. The
-          measurement is the difference between the model's responses to the
-          pair. Equal treatment does not require favourable responses.</li>
-          <li><b>Write the hypothesis down before running anything</b>, including
-          the result that would disprove it.</li>
-          <li><b>Report symmetric results.</b> If four of five measures are
-          symmetric, I would give them the same weight as the one that is not.</li>
-          <li><b>State the scope.</b> &ldquo;Measuring zionism&rdquo; is not what
-          this measures. It measures asymmetry in how models handle matched
-          prompts about Israeli and Palestinian actors. I would state that limit
-          at the beginning.</li>
-        </ol>
-
-        <h3>Why now</h3>
-
-        <p>Kimi K3 was released on 16 July 2026 and its weights were published
-        on 27 July, a couple of weeks ago. It is a 2.8-trillion-parameter
-        mixture-of-experts model with a million-token context window, from
-        Moonshot AI in Beijing.</p>
-
-        <div class="define">
-          <b>Mixture of experts.</b> A way of building a large model where only
-          a fraction of it runs for any given token. K3 has 2.8 trillion
-          parameters total but activates about 104 billion at a time. This
-          reduces the computation required for each token and makes the model
-          more practical to run.
+        <div class="three-records">
+          <article>
+            <span class="record-num">01</span>
+            <h3>Origin</h3>
+            <p>Where and how did the outbreak begin?</p>
+            <div class="record-inputs">Genomes · outbreak data · lab records · intelligence</div>
+          </article>
+          <article>
+            <span class="record-num">02</span>
+            <h3>Fauci and agencies</h3>
+            <p>How were research and assessments managed?</p>
+            <div class="record-inputs">Emails · grants · testimony · decision records</div>
+          </article>
+          <article>
+            <span class="record-num">03</span>
+            <h3>Vaccines</h3>
+            <p>How well did the products work, and with what risks?</p>
+            <div class="record-inputs">Trials · cohorts · surveillance · follow-up</div>
+          </article>
         </div>
 
-        <p>The comparison would include two American frontier models and a
-        Chinese open-weight model of comparable capability. Their training data
-        and post-training constraints are likely to differ. K3's recent release
-        makes this comparison possible.</p>
-
-        <p>The test would use roughly 60 mirrored pairs, 3 models, and 3 samples,
-        for about 540 calls per condition. I would access Claude and Codex
-        through their APIs and K3 through a hosted endpoint, since 2.8 trillion
-        parameters will not fit on my desktop. The test could be completed in
-        an evening.</p>
-
-        <h3>Sources</h3>
-        <div class="sources">
-          <ul>
-            <li><a href="https://www.adl.org/resources/report/generating-hate-anti-jewish-and-anti-israel-bias-leading-large-language-models" target="_blank" rel="noopener">ADL, <em>Generating Hate: Anti-Jewish and Anti-Israel Bias in Leading Large Language Models</em></a></li>
-            <li><a href="https://arxiv.org/abs/2601.08785" target="_blank" rel="noopener">Uncovering Political Bias in LLMs Using Parliamentary Voting Records</a>, arXiv 2601.08785</li>
-            <li><a href="https://arxiv.org/pdf/2601.06132" target="_blank" rel="noopener">An Evaluation of LLMs for Political Bias in Western Media: Israel-Hamas and Ukraine-Russia</a>, arXiv 2601.06132</li>
-            <li><a href="https://arxiv.org/html/2511.14606" target="_blank" rel="noopener">Bridging Human and Model Perspectives: Political Bias Detection in News Media</a>, arXiv 2511.14606</li>
-            <li><a href="https://arxiv.org/html/2404.13076" target="_blank" rel="noopener">Panickssery et al., <em>LLM Evaluators Recognize and Favor Their Own Generations</em></a>, NeurIPS 2024</li>
-            <li><a href="https://arxiv.org/pdf/2509.26600" target="_blank" rel="noopener">When LLMs Benchmark Themselves: Deconstructing Self-Bias in Automated Evaluation</a>, arXiv 2509.26600</li>
-            <li><a href="https://arxiv.org/pdf/2505.13488" target="_blank" rel="noopener">Source Framing Triggers Systematic Evaluation Bias in LLMs</a>, arXiv 2505.13488</li>
-          </ul>
+        <div class="classification-example">
+          <span>Example</span>
+          <p>Invoking the Fifth Amendment is evidence about a witness’s legal
+          posture. It is not evidence of viral origin or vaccine efficacy.</p>
         </div>
+        <p class="source-line">Oversight records: <a href="https://www.hsgac.senate.gov/hearings/testimony-of-anthony-fauci/" target="_blank" rel="noopener">HSGAC Fauci hearing, July 2026</a>; <a href="https://www.hawley.senate.gov/hawley-exposes-faucis-self-dealings-fauci-pleads-the-fifth/" target="_blank" rel="noopener">award-nomination document release</a>; <a href="https://tile.loc.gov/storage-services/service/ll/usrep/usrep161/usrep161591/usrep161591.pdf" target="_blank" rel="noopener"><em>Brown v. Walker</em>, 1896</a>. Classified using the local Two Pizza Club evidence records.</p>
       </div>
     </section>
 
-    <!-- ========== 6 · Which one ========== -->
-    <section id="pick">
+    <section id="covid-origins" data-short-title="Origins record">
       <div class="slide-inner">
-        <h2>My choice</h2>
+        <header class="slide-header">
+          <span class="topic-num">Topic 2 · Origins and Fauci</span>
+          <h2>The record contains findings, allegations, and unresolved inferences</h2>
+        </header>
 
-        <p>I would choose topic three. It would include new data, AI is the main
-        subject, and the design allows me to measure its known self-preference
-        problem. Because the topic is contentious, I would preregister the
-        method and use mirrored question pairs.</p>
+        <div class="narration">
+          <p>A February 2020 teleconference involving Fauci, Francis Collins,
+          Jeremy Farrar, and researchers who later wrote <em>Proximal
+          Origin</em> is documented. The participants discussed laboratory
+          engineering and passage before the paper concluded that a laboratory
+          construction scenario was unlikely. The sequence is established.
+          Claims that officials dictated the paper’s conclusion remain
+          disputed.</p>
+          <p>The 2023 ODNI report says intelligence agencies agreed that the
+          virus was not developed as a biological weapon. Agencies differed on
+          whether natural exposure or a laboratory-associated incident was more
+          likely, and several assessments carried low confidence.</p>
+          <p>In sworn Senate testimony in May 2026, CIA whistleblower Joseph
+          Erdman alleged that six of seven CIA technical experts favored a
+          research-related origin by March 2023 and that management changed the
+          analytic line. He also alleged that Fauci influenced the selection of
+          subject-matter experts. These are specific, testable allegations in
+          the official record. The testimony alone does not verify them.</p>
+          <p>Fauci invoked the Fifth Amendment during Senate testimony in July
+          2026. The legal dispute over the scope of his pardon is separate from
+          the scientific question of origin.</p>
+        </div>
 
-        <p>Topic one provides a clear example of how measurement can fail:
-        Zimmerman's instrument exceeded its calibrated range in 1990, and I
-        could not find a proper follow-up in the thirty-four years since. I may
-        use it as an introduction if topic three needs more material.</p>
+        <figure class="evidence-figure origin-timeline" aria-labelledby="origin-caption">
+          <div class="timeline-line"></div>
+          <div class="timeline-event event-paper">
+            <time>Feb–Mar 2020</time>
+            <b>Teleconference and paper</b>
+            <span>Sequence documented; alleged pressure disputed</span>
+            <em>Paper + official correspondence</em>
+          </div>
+          <div class="timeline-event event-assessment">
+            <time>June 2023</time>
+            <b>ODNI declassification</b>
+            <span>Agencies divided; confidence labels matter</span>
+            <em>Intelligence assessment</em>
+          </div>
+          <div class="timeline-event event-testimony">
+            <time>May 2026</time>
+            <b>Erdman testimony</b>
+            <span>CIA process and Fauci influence alleged</span>
+            <em>Sworn allegation</em>
+          </div>
+          <div class="timeline-event event-legal">
+            <time>July 2026</time>
+            <b>Fauci testimony</b>
+            <span>Fifth Amendment invoked repeatedly</span>
+            <em>Legal posture</em>
+          </div>
+          <figcaption id="origin-caption">Events are labeled by evidence type so later testimony does not retroactively become laboratory evidence.</figcaption>
+        </figure>
 
-        <p>I would not choose topic two. Separating origins from efficacy is
-        useful, but the discussion would probably focus on the framework rather
-        than the evidence.</p>
+        <div class="agency-confidence">
+          <div class="confidence-label"><b>Agency assessments</b><span>public record through the cited ODNI release</span></div>
+          <div class="confidence-cells">
+            <span class="natural"><b>5</b> natural exposure</span>
+            <span class="lab"><b>2</b> laboratory incident</span>
+            <span class="open"><b>2</b> no determination</span>
+          </div>
+          <small>Count of IC elements in the June 2023 report. Five means the National Intelligence Council plus four agencies. Most confidence levels were low.</small>
+        </div>
 
-        <p>All three topics concern the instrument used to evaluate a claim: a
-        SQUID outside its calibrated range, an intelligence assessment quoted
-        without its confidence label, or a bias benchmark whose method shapes
-        its result.</p>
+        <p class="source-line">Primary records: <a href="evidence/odni-covid-origins-declassified.pdf">ODNI declassified report, June 2023</a>; <a href="https://www.hsgac.senate.gov/hearings/whistleblower-testimony-on-the-covid-coverup/" target="_blank" rel="noopener">HSGAC Erdman testimony, May 2026</a>; <a href="https://www.nature.com/articles/s41591-020-0820-9" target="_blank" rel="noopener">Andersen et al., <em>Nature Medicine</em>, 2020</a>.</p>
       </div>
     </section>
 
+    <section id="covid-efficacy" data-short-title="Vaccine efficacy">
+      <div class="slide-inner">
+        <header class="slide-header">
+          <span class="topic-num">Topic 2 · Vaccine efficacy</span>
+          <h2>The endpoint and the time since vaccination change the result</h2>
+        </header>
+
+        <div class="narration">
+          <p>The Pfizer–BioNTech randomized trial reported 8 symptomatic COVID
+          cases in the vaccine group and 162 in the placebo group among 36,523
+          participants without prior infection who were evaluable at least
+          seven days after dose two. This produced an estimated efficacy of
+          95.0 percent against symptomatic disease over the trial’s short
+          follow-up period.</p>
+          <p>Later observational data during Omicron showed waning protection
+          against emergency or urgent-care visits after a third dose. Protection
+          against hospitalization remained higher. In the CDC VISION analysis,
+          estimated effectiveness against emergency or urgent-care encounters
+          fell from 87 percent before two months to 31 percent at five months or
+          more. Hospitalization effectiveness was 91 percent before two months
+          and 78 percent at four months or more.</p>
+          <p>These results support two claims with different scope: the original
+          trial showed strong short-term protection against symptomatic disease,
+          and later effectiveness against infection-related care waned while
+          protection against hospitalization persisted longer. A single
+          percentage cannot describe all endpoints and periods.</p>
+        </div>
+
+        <div class="viz-grid efficacy-grid">
+          <figure class="evidence-figure trial-bars">
+            <div class="figure-kicker">Randomized trial · symptomatic COVID after dose 2</div>
+            <div class="trial-row">
+              <span class="bar-label">Placebo</span>
+              <div class="bar-track"><i style="width:100%"></i></div>
+              <b>162 / 18,325</b>
+              <small>8.84 per 1,000</small>
+            </div>
+            <div class="trial-row">
+              <span class="bar-label">Vaccine</span>
+              <div class="bar-track"><i class="vaccine" style="width:5%"></i></div>
+              <b>8 / 18,198</b>
+              <small>0.44 per 1,000</small>
+            </div>
+            <div class="efficacy-number"><b>95.0%</b><span>estimated efficacy</span><small>95% credible interval: 90.3–97.6</small></div>
+            <figcaption>Median safety follow-up was about two months after dose two.</figcaption>
+          </figure>
+
+          <figure class="evidence-figure waning-chart">
+            <div class="figure-kicker">Omicron period · effectiveness after dose 3</div>
+            <svg viewBox="0 0 600 330" role="img" aria-labelledby="waning-title waning-desc">
+              <title id="waning-title">Vaccine effectiveness after a third dose over time</title>
+              <desc id="waning-desc">Emergency and urgent care effectiveness declined from 87 to 31 percent. Hospitalization effectiveness declined from 91 to 78 percent.</desc>
+              <g class="grid-lines">
+                <line x1="70" y1="50" x2="560" y2="50"/><line x1="70" y1="115" x2="560" y2="115"/>
+                <line x1="70" y1="180" x2="560" y2="180"/><line x1="70" y1="245" x2="560" y2="245"/>
+              </g>
+              <g class="axis-labels">
+                <text x="28" y="55">100</text><text x="38" y="120">75</text>
+                <text x="38" y="185">50</text><text x="38" y="250">25</text>
+                <text x="80" y="290">&lt;2 months</text><text x="255" y="290">4–5 months</text><text x="455" y="290">≥5 months</text>
+              </g>
+              <polyline class="line-hospital" points="115,73 315,107"/>
+              <circle class="point-hospital" cx="115" cy="73" r="7"/><circle class="point-hospital" cx="315" cy="107" r="7"/>
+              <text class="value hospital" x="91" y="62">91%</text><text class="value hospital" x="291" y="96">78%*</text>
+              <polyline class="line-ed" points="115,84 315,138 515,229"/>
+              <circle class="point-ed" cx="115" cy="84" r="7"/><circle class="point-ed" cx="315" cy="138" r="7"/><circle class="point-ed" cx="515" cy="229" r="7"/>
+              <text class="value ed" x="91" y="109">87%</text><text class="value ed" x="291" y="128">66%</text><text class="value ed" x="490" y="218">31%</text>
+            </svg>
+            <div class="chart-legend"><span class="hospital">Hospitalization</span><span class="ed">ED / urgent care</span></div>
+            <figcaption>Hospitalization estimate shown at ≥4 months; the ≥5-month ED estimate was imprecise.</figcaption>
+          </figure>
+        </div>
+
+        <div class="provenance-strip">
+          <span><b>Trial</b> n = 43,548 randomized</span>
+          <span><b>VISION</b> 93,408 hospitalizations eligible</span>
+          <span><b>Period</b> Aug 2021–Jan 2022</span>
+          <span><b>Limit</b> Later estimates are observational</span>
+        </div>
+        <p class="source-line">Primary sources: <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa2034577" target="_blank" rel="noopener">Polack et al., <em>NEJM</em>, 2020</a>; <a href="https://www.cdc.gov/mmwr/volumes/71/wr/mm7107e2.htm" target="_blank" rel="noopener">CDC VISION Network, <em>MMWR</em>, 2022</a>.</p>
+      </div>
+    </section>
+
+    <section id="covid-safety" data-short-title="Vaccine safety">
+      <div class="slide-inner">
+        <header class="slide-header">
+          <span class="topic-num">Topic 2 · Vaccine safety</span>
+          <h2>Myocarditis was a measurable risk with age and sex concentration</h2>
+        </header>
+
+        <div class="narration">
+          <p>US passive surveillance found the highest reported myocarditis
+          rates after dose two among adolescent and young adult males. Reported
+          rates per million second doses were 70.7 for boys aged 12–15 and
+          105.9 for boys aged 16–17 after Pfizer vaccination. Among men aged
+          18–24, the rates were 52.4 after Pfizer and 56.3 after Moderna.</p>
+          <p>A CDC follow-up study contacted 519 people at least 90 days after
+          myocarditis associated with mRNA vaccination. Health-care providers
+          assessed 393 patients; 320, or 81 percent, were considered recovered.
+          In the same provider group, 104, or 26 percent, were still prescribed
+          daily medication. These percentages overlap and should not be treated
+          as complementary categories.</p>
+          <p>Internal FDA emails and spontaneous adverse-event reports are
+          relevant to whether agencies investigated signals promptly. A safety
+          signal identifies an event for further study. It does not establish
+          that vaccination caused every reported event. The evidentiary chain
+          runs from reports to signal detection, controlled follow-up, and a
+          causal estimate.</p>
+          <p>A Pfizer post-authorization analysis logged 42,086 case reports,
+          158,893 events, 1,223 reported deaths, and 1,665 reports categorized
+          as lack of efficacy through February 2021. This was a spontaneous
+          pharmacovigilance dataset, not an efficacy trial. The document stated
+          that no new lack-of-efficacy signal had emerged. A separate
+          single-dose rat study found lipid distribution beyond the injection
+          site, mainly to the liver at up to 21.5 percent of the injected dose;
+          ovaries received no more than 0.1 percent. That study does not measure
+          accumulation or clinical outcomes in humans.</p>
+          <p>The local record also documents 148 fully redacted pages of CDC
+          internal correspondence about myocarditis follow-up. The underlying
+          follow-up study was published and supplies the outcomes shown here.
+          The redactions raise a transparency question without making the
+          published result disappear.</p>
+        </div>
+
+        <div class="viz-grid safety-grid">
+          <figure class="evidence-figure myocarditis-bars">
+            <div class="figure-kicker">Reported myocarditis after dose 2 · males · per million</div>
+            <div class="hbar">
+              <span>Pfizer 12–15</span><i style="--v:66.8%"></i><b>70.7</b>
+            </div>
+            <div class="hbar">
+              <span>Pfizer 16–17</span><i style="--v:100%"></i><b>105.9</b>
+            </div>
+            <div class="hbar">
+              <span>Pfizer 18–24</span><i style="--v:49.5%"></i><b>52.4</b>
+            </div>
+            <div class="hbar">
+              <span>Moderna 18–24</span><i class="moderna" style="--v:53.2%"></i><b>56.3</b>
+            </div>
+            <figcaption>Reports meeting CDC’s case definition; passive surveillance can under- or overcount.</figcaption>
+          </figure>
+
+          <figure class="evidence-figure outcome-grid">
+            <div class="figure-kicker">Follow-up at least 90 days later</div>
+            <div class="outcome-stat">
+              <div class="ring" style="--p:81"><span>81%</span></div>
+              <p><b>320 of 393</b> assessed by providers as recovered</p>
+            </div>
+            <div class="outcome-stat">
+              <div class="ring caution" style="--p:26"><span>26%</span></div>
+              <p><b>104 of 393</b> still prescribed daily medication</p>
+            </div>
+            <div class="outcome-stat">
+              <div class="ring limit" style="--p:54"><span>54%</span></div>
+              <p><b>81 of 151</b> with some cardiac MRI abnormality</p>
+            </div>
+            <figcaption>Different denominators apply. Recovery and medication status can overlap.</figcaption>
+          </figure>
+        </div>
+
+        <div class="masked-signals">
+          <div><b>49</b><span>“extreme masking” examples in a March 2021 FDA analysis</span></div>
+          <div><b>≈25</b><span>signals reported as statistically significant after adjustment</span></div>
+          <p>Disproportionality signals from spontaneous reports; causal status not established by the analysis.</p>
+        </div>
+        <div class="signal-chain" aria-label="Stages from an adverse event report to a causal conclusion">
+          <span><b>1</b> Event reports</span><i></i>
+          <span><b>2</b> Statistical signal</span><i></i>
+          <span><b>3</b> Clinical follow-up</span><i></i>
+          <span><b>4</b> Causal estimate</span>
+        </div>
+        <p class="source-line">Primary sources: <a href="https://pubmed.ncbi.nlm.nih.gov/35076665/" target="_blank" rel="noopener">Oster et al., <em>JAMA</em>, 2022</a>; <a href="https://pubmed.ncbi.nlm.nih.gov/36152650/" target="_blank" rel="noopener">Kracalik et al., <em>Lancet Child &amp; Adolescent Health</em>, 2022</a>; <a href="https://www.ronjohnson.senate.gov/wp-content/uploads/2026/05/Senate-PSI-Majority-Staff-Interim-Report-April-29-2026-FINAL.pdf" target="_blank" rel="noopener">Senate PSI report and FDA records, 2026</a>; <a href="https://phmpt.org/wp-content/uploads/2021/11/5.3.6-postmarketing-experience.pdf" target="_blank" rel="noopener">Pfizer post-authorization analysis</a>.</p>
+      </div>
+    </section>
+
+    <section id="bias-evidence" data-short-title="Bias benchmarks">
+      <div class="slide-inner">
+        <header class="slide-header">
+          <span class="topic-num">Topic 3 · Model asymmetry</span>
+          <h2>Existing benchmarks measure different behaviors</h2>
+        </header>
+
+        <div class="narration">
+          <p>The proposed study asks whether language models treat matched
+          statements about Israeli and Palestinian actors symmetrically.
+          Existing work provides useful methods, although no single study
+          answers that question.</p>
+          <p>The ADL submitted 86 statements in six categories to four models.
+          Each model produced 8,600 responses, for 34,400 total. The study
+          measured agreement and refusal and varied the apparent identity of
+          the questioner. The authors note that some prompts combine factual
+          error and prejudice, which makes the resulting score harder to
+          interpret.</p>
+          <p>A 2026 parliamentary benchmark used 15,765 real motions from 34
+          parties in the Netherlands, Norway, and Spain. It measured whether
+          model predictions reproduced actual party votes. A separate media
+          study asked models to classify the political slant of Guardian and BBC
+          articles about two wars. These designs examine response stance, vote
+          prediction, and text classification. Their results are not directly
+          interchangeable.</p>
+        </div>
+
+        <div class="viz-grid benchmark-grid">
+          <figure class="evidence-figure adl-pipeline">
+            <div class="figure-kicker">ADL benchmark</div>
+            <div class="pipeline">
+              <div><b>86</b><span>statements</span></div><i>&times;</i>
+              <div><b>4</b><span>models</span></div><i>&times;</i>
+              <div><b>100</b><span>responses per statement</span></div>
+            </div>
+            <div class="pipeline-total"><b>34,400</b><span>model responses</span></div>
+            <div class="refusal-compare">
+              <span>Llama refusal rate <b>26%</b></span>
+              <span>Gemini refusal rate <b>1%</b></span>
+            </div>
+            <figcaption>Four-point agreement scale; refusals recorded separately.</figcaption>
+          </figure>
+
+          <figure class="evidence-figure motion-bars">
+            <div class="figure-kicker">Parliamentary voting benchmark</div>
+            <div class="motion-row"><span>Norway</span><i style="width:100%"></i><b>10,584</b><small>9 parties</small></div>
+            <div class="motion-row"><span>Netherlands</span><i style="width:25.5%"></i><b>2,701</b><small>15 parties</small></div>
+            <div class="motion-row"><span>Spain</span><i style="width:23.4%"></i><b>2,480</b><small>10 parties</small></div>
+            <div class="motion-total"><b>15,765 motions</b><span>34 parties · 3 countries</span></div>
+            <figcaption>Models were placed in the same ideological space as recorded party votes.</figcaption>
+          </figure>
+        </div>
+
+        <div class="method-matrix" role="table" aria-label="Comparison of model bias methods">
+          <div role="row"><b role="columnheader">Method</b><b role="columnheader">Observed behavior</b><b role="columnheader">Main limit</b></div>
+          <div role="row"><span>Agree / disagree</span><span>Response stance</span><span>Prompt truth and prejudice can mix</span></div>
+          <div role="row"><span>Predict recorded votes</span><span>Ideological fit</span><span>Party systems differ by country</span></div>
+          <div role="row"><span>Classify news text</span><span>Labeling behavior</span><span>Ground-truth labels are contestable</span></div>
+          <div role="row"><span>Judge model output</span><span>Evaluation preference</span><span>Self-preference can affect scores</span></div>
+        </div>
+        <p class="source-line">Primary study reports: <a href="https://www.adl.org/resources/report/generating-hate-anti-jewish-and-anti-israel-bias-leading-large-language-models" target="_blank" rel="noopener">ADL, 2025</a>; <a href="https://arxiv.org/abs/2601.08785" target="_blank" rel="noopener">parliamentary voting benchmark, 2026</a>; <a href="https://arxiv.org/abs/2601.06132" target="_blank" rel="noopener">Western media classification study, 2026</a>.</p>
+      </div>
+    </section>
+
+    <section id="bias-design" data-short-title="Study design">
+      <div class="slide-inner">
+        <header class="slide-header">
+          <span class="topic-num">Topic 3 · Proposed experiment</span>
+          <h2>A mirrored, preregistered comparison across three models</h2>
+        </header>
+
+        <div class="narration">
+          <p>Claude, Codex, and Kimi would each write 20 question stems that
+          they consider neutral. Each stem would have two versions with the
+          relevant actors exchanged. All three models would answer all 120
+          prompts in three independent runs.</p>
+          <p>The primary unit is a matched pair. The model’s treatment of one
+          actor is compared with its treatment of the other actor under the same
+          wording. This measures asymmetry without defining either favorable or
+          unfavorable answers as correct in advance.</p>
+          <p>The study would preregister the prompts, exclusions, primary
+          outcomes, model versions, system messages, generation settings, and
+          planned statistical tests. Prompt order would be randomized. A
+          blinded human review would audit a sample of the automated coding.</p>
+        </div>
+
+        <figure class="evidence-figure design-flow" aria-labelledby="design-caption">
+          <div class="design-stage writers">
+            <span class="stage-label">Question writers</span>
+            <div><b>Claude</b><small>20 stems</small></div>
+            <div><b>Codex</b><small>20 stems</small></div>
+            <div><b>Kimi</b><small>20 stems</small></div>
+          </div>
+          <div class="flow-arrow"><span>60 stems</span></div>
+          <div class="design-stage mirror">
+            <span class="stage-label">Matched wording</span>
+            <div class="mirror-pair"><span>Actor A</span><i>↔</i><span>Actor B</span></div>
+            <small>Two versions of every stem</small>
+          </div>
+          <div class="flow-arrow"><span>120 prompts</span></div>
+          <div class="design-stage runs">
+            <span class="stage-label">Independent runs</span>
+            <div><b>3 models</b><small>answer every prompt</small></div>
+            <div><b>3 samples</b><small>per model and prompt</small></div>
+          </div>
+          <div class="design-total">
+            <b>1,080</b><span>model responses</span>
+            <small>60 pairs × 2 prompts × 3 models × 3 runs</small>
+          </div>
+          <figcaption id="design-caption">The same prompt set and settings are used for all models, with version details preserved.</figcaption>
+        </figure>
+
+        <div class="protocol-strip">
+          <span>Preregister</span><span>Randomize order</span><span>Blind coding</span><span>Publish all prompts</span><span>Report exclusions</span>
+        </div>
+        <p class="source-line">Design informed by paired testing in the studies above and by <a href="https://arxiv.org/html/2404.13076" target="_blank" rel="noopener">Panickssery et al., “LLM Evaluators Recognize and Favor Their Own Generations,” NeurIPS 2024</a>.</p>
+      </div>
+    </section>
+
+    <section id="bias-analysis" data-short-title="Analysis plan">
+      <div class="slide-inner">
+        <header class="slide-header">
+          <span class="topic-num">Topic 3 · Analysis</span>
+          <h2>Each matched pair has six recorded outcomes</h2>
+        </header>
+
+        <div class="narration">
+          <p>The analysis retains the one-to-five stance score as one measure.
+          Refusal, uncertainty, attribution, volunteered context, and use of
+          legal or moral terms are coded separately. The outcome for each
+          measure is the within-pair difference.</p>
+          <p>Self-preference is also measurable. Each model’s behavior on the 20
+          pairs it wrote can be compared with its behavior on the 40 pairs
+          written by the other models. Lower refusal rates or more decisive
+          answers on self-written questions would be reported as a separate
+          authoring effect.</p>
+          <p>Results would include every registered measure, including null
+          findings. Agreement among models could reflect shared evidence,
+          shared training material, or shared post-training rules. This study
+          cannot identify which explanation applies.</p>
+        </div>
+
+        <div class="analysis-layout">
+          <figure class="evidence-figure delta-card">
+            <div class="figure-kicker">Primary comparison for one matched pair</div>
+            <div class="delta-equation">
+              <div><span>Response to A</span><b>4</b></div>
+              <i>−</i>
+              <div><span>Response to B</span><b>2</b></div>
+              <i>=</i>
+              <div class="delta-result"><span>paired difference</span><b>+2</b></div>
+            </div>
+            <figcaption>Direction is defined before data collection and kept consistent across pairs.</figcaption>
+          </figure>
+
+          <div class="score-vector" aria-label="Measures recorded for every response pair">
+            <div><span>Stance</span><b>1–5 difference</b></div>
+            <div><span>Refusal</span><b>answered / declined</b></div>
+            <div><span>Uncertainty</span><b>hedging markers</b></div>
+            <div><span>Attribution</span><b>actor named / omitted</b></div>
+            <div><span>Added context</span><b>type and direction</b></div>
+            <div><span>Loaded terms</span><b>applied / withheld</b></div>
+          </div>
+        </div>
+
+        <figure class="evidence-figure report-mock" aria-label="Example symmetric reporting structure">
+          <div class="report-label">Required result table</div>
+          <div><span>Symmetric measures</span><b class="good">4</b></div>
+          <div><span>Asymmetric measures</span><b class="warn">1</b></div>
+          <div><span>Inconclusive measures</span><b class="muted">1</b></div>
+          <figcaption>No composite headline score unless its weighting is preregistered.</figcaption>
+        </figure>
+        <p class="source-line">The analysis plan records refusals and missing responses as outcomes. Neither receives a neutral stance score.</p>
+      </div>
+    </section>
+
+    <section id="pick" data-short-title="Recommendation">
+      <div class="slide-inner">
+        <header class="slide-header">
+          <span class="topic-num">Recommendation</span>
+          <h2>Topic 3 offers the clearest original contribution</h2>
+        </header>
+
+        <div class="narration">
+          <p>Topic 3 can produce a new dataset in a short period and has a design
+          that directly addresses model self-preference. Preregistration,
+          mirrored prompts, and separate outcome measures make the findings easy
+          to audit.</p>
+          <p>Topic 1 works well as a source-audit talk. Its strongest primary
+          result is the 3-of-37 biomagnetism observation, while the product
+          evidence remains exploratory. Topic 2 has the largest evidence base
+          and would work as a classification exercise, although the discussion
+          may move quickly from study methods to political disputes.</p>
+          <p>Any of the three can support a journal club. The recommendation is
+          based on feasibility and the opportunity to contribute new evidence.</p>
+        </div>
+
+        <div class="choice-cards">
+          <article>
+            <span>Topic 1</span>
+            <h3>Source audit</h3>
+            <div class="score-dots"><i></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i></div>
+            <p>Strong teaching case; limited clinical evidence</p>
+          </article>
+          <article>
+            <span>Topic 2</span>
+            <h3>Evidence classification</h3>
+            <div class="score-dots"><i></i><i></i><i></i><i class="off"></i><i class="off"></i></div>
+            <p>Rich record; broad scope and political spillover</p>
+          </article>
+          <article class="recommended">
+            <span>Topic 3 · Recommended</span>
+            <h3>New paired experiment</h3>
+            <div class="score-dots"><i></i><i></i><i></i><i></i><i></i></div>
+            <p>Original data; feasible protocol; auditable result</p>
+          </article>
+        </div>
+
+        <div class="final-line">Recommended format: preregistered paired study, complete prompt release, and a short live replication.</div>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -824,87 +803,173 @@
       const dotsContainer = document.querySelector('.progress-dots');
       const btnRead = document.getElementById('btn-read');
       const btnPresent = document.getElementById('btn-present');
+      const notesToggle = document.getElementById('notes-toggle');
+      const notesPanel = document.getElementById('speaker-notes');
+      const notesClose = document.getElementById('notes-close');
+      const notesBody = document.getElementById('speaker-notes-body');
+      const notesLabel = document.getElementById('notes-slide-label');
       const sections = Array.from(deck.querySelectorAll('section'));
+      let activeIndex = 0;
 
       sections.forEach((sec, i) => {
         const dot = document.createElement('button');
-        dot.classList.add('dot');
-        dot.setAttribute('aria-label', `Go to slide ${i + 1}: ${sec.id}`);
+        dot.className = 'dot';
+        dot.type = 'button';
+        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1) + ': ' + (sec.dataset.shortTitle || sec.id));
         dot.dataset.index = i;
         dotsContainer.appendChild(dot);
       });
       const dots = Array.from(dotsContainer.querySelectorAll('.dot'));
+
+      function closeNotes() {
+        body.classList.remove('notes-open');
+        notesPanel.setAttribute('aria-hidden', 'true');
+        notesToggle.setAttribute('aria-expanded', 'false');
+      }
+
+      function updateNotes() {
+        const section = sections[activeIndex];
+        const title = section.querySelector('h2, h1');
+        notesLabel.textContent = 'Slide ' + (activeIndex + 1) + ': ' +
+          (title ? title.textContent.trim() : (section.dataset.shortTitle || 'Journal Club'));
+        notesBody.replaceChildren();
+        const narration = section.querySelector('.narration');
+        if (narration) {
+          notesBody.appendChild(narration.cloneNode(true));
+        } else {
+          const empty = document.createElement('p');
+          empty.textContent = 'No narration for this slide.';
+          notesBody.appendChild(empty);
+        }
+      }
+
+      function setActive(index) {
+        activeIndex = Math.max(0, Math.min(index, sections.length - 1));
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === activeIndex));
+        updateNotes();
+      }
 
       function setMode(mode) {
         const isPresent = mode === 'present';
         body.classList.toggle('present-mode', isPresent);
         btnRead.classList.toggle('active', !isPresent);
         btnPresent.classList.toggle('active', isPresent);
-        btnRead.setAttribute('aria-selected', !isPresent);
-        btnPresent.setAttribute('aria-selected', isPresent);
-        localStorage.setItem('deck-mode', mode);
-        if (isPresent) requestAnimationFrame(() => updateActiveDot());
+        btnRead.setAttribute('aria-selected', String(!isPresent));
+        btnPresent.setAttribute('aria-selected', String(isPresent));
+        if (!isPresent) closeNotes();
+        try { localStorage.setItem('deck-mode', mode); } catch (e) {}
+        if (isPresent) requestAnimationFrame(updateActive);
       }
+
+      function updateActive() {
+        if (!body.classList.contains('present-mode')) return;
+        let closest = 0;
+        let distance = Infinity;
+        sections.forEach((section, i) => {
+          const current = Math.abs(section.getBoundingClientRect().top);
+          if (current < distance) {
+            closest = i;
+            distance = current;
+          }
+        });
+        setActive(closest);
+      }
+
       btnRead.addEventListener('click', () => setMode('read'));
       btnPresent.addEventListener('click', () => setMode('present'));
-      const saved = localStorage.getItem('deck-mode');
-      if (saved === 'present') setMode('present');
+      try {
+        if (localStorage.getItem('deck-mode') === 'present') setMode('present');
+      } catch (e) {}
 
-      dotsContainer.addEventListener('click', (e) => {
-        const dot = e.target.closest('.dot');
+      dotsContainer.addEventListener('click', (event) => {
+        const dot = event.target.closest('.dot');
         if (!dot) return;
-        sections[parseInt(dot.dataset.index, 10)].scrollIntoView({ behavior: 'smooth' });
+        sections[Number(dot.dataset.index)].scrollIntoView({ behavior: 'smooth' });
       });
 
-      function updateActiveDot() {
-        if (!body.classList.contains('present-mode')) return;
-        let closest = 0, closestDist = Infinity;
-        sections.forEach((sec, i) => {
-          const dist = Math.abs(sec.getBoundingClientRect().top);
-          if (dist < closestDist) { closestDist = dist; closest = i; }
-        });
-        dots.forEach((d, i) => d.classList.toggle('active', i === closest));
-      }
-      deck.addEventListener('scroll', updateActiveDot, { passive: true });
-      window.addEventListener('scroll', updateActiveDot, { passive: true });
-
-      document.addEventListener('keydown', (e) => {
-        if (!body.classList.contains('present-mode')) return;
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-        const currentIdx = dots.findIndex(d => d.classList.contains('active'));
-        let targetIdx = currentIdx;
-        switch (e.key) {
-          case 'ArrowDown': case ' ': case 'PageDown':
-            e.preventDefault(); targetIdx = Math.min(currentIdx + 1, sections.length - 1); break;
-          case 'ArrowUp': case 'PageUp':
-            e.preventDefault(); targetIdx = Math.max(currentIdx - 1, 0); break;
-          case 'Home': e.preventDefault(); targetIdx = 0; break;
-          case 'End': e.preventDefault(); targetIdx = sections.length - 1; break;
-          case 'Escape': setMode('read'); return;
+      notesToggle.addEventListener('click', () => {
+        const opening = !body.classList.contains('notes-open');
+        body.classList.toggle('notes-open', opening);
+        notesPanel.setAttribute('aria-hidden', String(!opening));
+        notesToggle.setAttribute('aria-expanded', String(opening));
+        if (opening) {
+          updateActive();
+          updateNotes();
+          notesClose.focus();
         }
-        if (targetIdx !== currentIdx) sections[targetIdx].scrollIntoView({ behavior: 'smooth' });
+      });
+      notesClose.addEventListener('click', () => {
+        closeNotes();
+        notesToggle.focus();
+      });
+
+      deck.addEventListener('scroll', updateActive, { passive: true });
+      window.addEventListener('scroll', updateActive, { passive: true });
+
+      document.addEventListener('keydown', (event) => {
+        if (!body.classList.contains('present-mode')) return;
+        if (event.target.matches('input, textarea, select')) return;
+        let next = activeIndex;
+        switch (event.key) {
+          case 'ArrowDown':
+          case 'ArrowRight':
+          case ' ':
+          case 'PageDown':
+            event.preventDefault();
+            next = Math.min(activeIndex + 1, sections.length - 1);
+            break;
+          case 'ArrowUp':
+          case 'ArrowLeft':
+          case 'PageUp':
+            event.preventDefault();
+            next = Math.max(activeIndex - 1, 0);
+            break;
+          case 'Home':
+            event.preventDefault();
+            next = 0;
+            break;
+          case 'End':
+            event.preventDefault();
+            next = sections.length - 1;
+            break;
+          case 'n':
+          case 'N':
+            event.preventDefault();
+            notesToggle.click();
+            return;
+          case 'Escape':
+            if (body.classList.contains('notes-open')) {
+              closeNotes();
+            } else {
+              setMode('read');
+            }
+            return;
+        }
+        if (next !== activeIndex) sections[next].scrollIntoView({ behavior: 'smooth' });
       });
 
       function scrollToHash() {
-        const hash = window.location.hash.slice(1);
-        if (!hash) return;
-        const target = document.getElementById(hash);
+        const target = document.getElementById(window.location.hash.slice(1));
         if (target && target.tagName === 'SECTION') target.scrollIntoView({ behavior: 'smooth' });
       }
       window.addEventListener('hashchange', scrollToHash);
-      window.addEventListener('load', () => { scrollToHash(); updateActiveDot(); });
+      window.addEventListener('load', () => {
+        scrollToHash();
+        updateActive();
+        updateNotes();
+      });
 
-      const themeBtn = document.getElementById('theme-toggle');
+      const themeButton = document.getElementById('theme-toggle');
       function applyTheme(light) {
         document.documentElement.classList.toggle('light', light);
-        themeBtn.innerHTML = light ? '&#127769; Dark' : '&#9728;&#65039; Light';
+        themeButton.textContent = light ? 'Dark' : 'Light';
         try { localStorage.setItem('blog-theme', light ? 'light' : 'dark'); } catch (e) {}
       }
       applyTheme(document.documentElement.classList.contains('light'));
-      themeBtn.addEventListener('click', () =>
-        applyTheme(!document.documentElement.classList.contains('light')));
+      themeButton.addEventListener('click', () => {
+        applyTheme(!document.documentElement.classList.contains('light'));
+      });
     })();
   </script>
-
 </body>
 </html>
