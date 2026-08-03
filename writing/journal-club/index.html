@@ -83,6 +83,83 @@
     ul.plain { padding-left: 1.2rem; font-size: 0.93rem; line-height: 1.7; }
     ul.plain li { margin-bottom: 0.5rem; }
 
+    /* ---------- Door picker (first slide) ---------- */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+    .doors-slide { padding-top: 0; }
+    .doors {
+      position: relative; line-height: 0;
+      border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--dot-inactive);
+    }
+    .doors img { width: 100%; height: auto; display: block; }
+
+    /* Each door is an absolutely-placed link. Its box comes from the four
+       custom properties set inline, measured off the image. */
+    .door {
+      position: absolute;
+      left: var(--x); top: var(--y); width: var(--w); height: var(--h);
+      display: block; text-decoration: none; border-radius: 3px;
+      /* Faint at rest so they read as interactable without shouting. */
+      outline: 2px solid rgba(255, 214, 64, 0.22);
+      outline-offset: -2px;
+      transition: outline-color 0.12s steps(2), background-color 0.12s steps(2),
+                  box-shadow 0.12s steps(2);
+    }
+    .door:hover, .door:focus-visible {
+      outline: 3px solid #ffd640;
+      outline-offset: -3px;
+      background-color: rgba(255, 214, 64, 0.16);
+      box-shadow: inset 0 0 34px rgba(255, 214, 64, 0.30),
+                  0 0 18px rgba(255, 214, 64, 0.45);
+      opacity: 1;
+    }
+    /* Brass nameplate that appears on the door when you point at it. */
+    .door-plate {
+      position: absolute; left: 50%; bottom: 6%;
+      transform: translateX(-50%);
+      display: none; width: max-content; max-width: 94%;
+      background: rgba(10, 9, 6, 0.92);
+      border: 2px solid #ffd640; border-radius: 4px;
+      padding: 0.5rem 0.8rem; text-align: center; line-height: 1.35;
+      box-shadow: 0 0 14px rgba(255, 214, 64, 0.4);
+    }
+    .door:hover .door-plate, .door:focus-visible .door-plate { display: block; }
+    .door-plate b {
+      display: block; color: #ffd640; font-size: 0.9rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .door-plate em {
+      display: block; color: var(--text); font-style: normal;
+      font-size: 0.78rem; opacity: 0.85; margin-top: 0.15rem;
+    }
+    .doors-caption {
+      text-align: center; color: var(--muted); margin-top: 1rem;
+      font-size: 0.8rem; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    /* Hover cannot be relied on for touch — same routes, plainly. */
+    .doors-list { display: none; list-style: none; padding: 0; margin: 1.2rem 0 0; }
+    .doors-list li { border-top: 1px solid var(--dot-inactive); }
+    .doors-list li:last-child { border-bottom: 1px solid var(--dot-inactive); }
+    .doors-list a {
+      display: block; padding: 0.85rem 0.2rem;
+      color: var(--text); font-size: 0.9rem; line-height: 1.45;
+    }
+    .doors-list b {
+      color: #ffd640; text-transform: uppercase; letter-spacing: 0.08em;
+      font-size: 0.78rem; display: block; margin-bottom: 0.15rem;
+    }
+    @media (hover: none) {
+      .doors-list { display: block; }
+      .doors-caption { display: none; }
+      .door { outline-color: rgba(255, 214, 64, 0.4); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .door { transition: none; }
+    }
+
     /* The back-link and mode pills are fixed; on narrow screens they sit on
        top of the title. Drop the first slide's content clear of them. */
     @media (max-width: 700px) {
