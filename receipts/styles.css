@@ -57,7 +57,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.85rem 1.25rem;
+    /* iOS standalone PWA: clear the Dynamic Island / status bar. */
+    padding: calc(0.85rem + env(safe-area-inset-top, 0px)) calc(1.25rem + env(safe-area-inset-right, 0px)) 0.85rem calc(1.25rem + env(safe-area-inset-left, 0px));
     background: var(--chrome-bg);
     border-bottom: 1px solid var(--chrome-rule);
     font-family: var(--mono);
@@ -106,6 +107,10 @@ body {
     gap: 0;
     max-width: 78rem;
     margin: 0 auto;
+    /* landscape iPhone: the notch/home indicator eats a side edge */
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* ---------------- timeline rail ---------------- */
@@ -117,9 +122,9 @@ body {
     font-size: 0.78rem;
     line-height: 1.5;
     position: sticky;
-    top: 3rem;
+    top: calc(3rem + env(safe-area-inset-top, 0px));
     align-self: start;
-    height: calc(100vh - 3rem);
+    height: calc(100vh - 3rem - env(safe-area-inset-top, 0px));
     overflow-y: auto;
 }
 .timeline-toggle {
@@ -512,13 +517,13 @@ body.prose-off .narrative-blurb { display: none; }
 
 .theme-bar {
     position: sticky;
-    top: 2.85rem;
+    top: calc(2.85rem + env(safe-area-inset-top, 0px));
     z-index: 4;
     background: var(--chrome-bg);
     border-bottom: 1px solid var(--chrome-rule);
     font-family: var(--mono);
     font-size: 0.78rem;
-    padding: 0.55rem 1.25rem;
+    padding: 0.55rem calc(1.25rem + env(safe-area-inset-right, 0px)) 0.55rem calc(1.25rem + env(safe-area-inset-left, 0px));
 }
 .theme-bar:empty { display: none; }
 .theme-bar-inner {
@@ -636,7 +641,7 @@ body.prose-off .narrative-blurb { display: none; }
 }
 
 @media (max-width: 880px) {
-    .theme-bar { padding: 0.5rem 1rem; }
+    .theme-bar { padding: 0.5rem calc(1rem + env(safe-area-inset-right, 0px)) 0.5rem calc(1rem + env(safe-area-inset-left, 0px)); }
     .timeline { top: 0; height: auto; }
     .see-also { margin: 0.5rem 1rem 0; }
 }

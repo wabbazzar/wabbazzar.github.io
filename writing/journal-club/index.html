@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Journal Club</title>
   <meta name="description" content="Three topics worked out far enough to pick one: energy medicine and the device it sells, COVID origins and vaccine efficacy, and measuring political slant across three language models.">
   <meta property="og:title" content="Journal Club">
@@ -11,10 +11,10 @@
   <meta property="og:url" content="https://wabbazzar.com/writing/journal-club/">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="stylesheet" href="styles.css?v=1">
+  <link rel="stylesheet" href="styles.css?v=2">
   <style>
     .back-to-writing {
-      position: fixed; top: 1.5rem; left: 1.5rem; z-index: 100;
+      position: fixed; top: calc(1.5rem + env(safe-area-inset-top, 0px)); left: calc(1.5rem + env(safe-area-inset-left, 0px)); z-index: 100;
       display: inline-flex; align-items: center; gap: 0.4rem;
       background: #111; border: 1px solid #222; border-radius: 999px;
       padding: 0.45rem 1rem; color: var(--muted); font-size: 0.8rem;
@@ -113,26 +113,45 @@
 
   <main id="deck">
 
-    <!-- ========== 1 · Title ========== -->
+    <!-- ========== 1 · Doors ========== -->
     <section id="title">
-      <div class="slide-inner">
-        <h1>Journal Club</h1>
-        <p class="subtitle">three topics, worked out far enough to pick one</p>
+      <div class="slide-inner doors-slide">
+        <h1 class="sr-only">Journal Club &mdash; three topics, worked out far enough to pick one</h1>
 
-        <p>I have to give a talk on Thursday. It has to touch on AI somewhere.
-        These are the three things I want to talk about, written out to the
-        point where I can tell which one is actually a talk and which two are
-        just interesting.</p>
+        <div class="doors">
+          <picture>
+            <source srcset="doors.webp" type="image/webp">
+            <img src="doors.jpg" width="1363" height="768" decoding="async"
+                 alt="Three doors in a dark hallway, each painted with red lettering: NOT AI AT ALL, SOME AI, and VERY AI.">
+          </picture>
 
-        <p>The first is about a book on energy healing and a company selling a
-        device based on it. The second is about the COVID hearings, narrowed to
-        two questions that can be answered separately. The third is an
-        experiment I can run before Thursday, where three language models write
-        their own test questions and then grade each other.</p>
+          <a class="door" href="#energy"
+             style="--x:8.51%; --y:6.77%; --w:24.06%; --h:93.23%"
+             aria-label="Not AI at all — energy medicine and the device it sells">
+            <span class="door-plate"><b>Not AI at all</b><em>Energy medicine</em></span>
+          </a>
 
-        <p>Where I cite a document, I link it. Where the document is a
-        government work and free to redistribute, I put a copy on this site so
-        the link does not rot.</p>
+          <a class="door" href="#covid"
+             style="--x:40.50%; --y:1.82%; --w:18.93%; --h:98.18%"
+             aria-label="Some AI — COVID origins and vaccine efficacy">
+            <span class="door-plate"><b>Some AI</b><em>COVID origins &amp; efficacy</em></span>
+          </a>
+
+          <a class="door" href="#bias"
+             style="--x:71.46%; --y:11.98%; --w:19.96%; --h:88.02%"
+             aria-label="Very AI — measuring political slant across three models">
+            <span class="door-plate"><b>Very AI</b><em>Measuring model slant</em></span>
+          </a>
+        </div>
+
+        <p class="doors-caption">Pick a door.</p>
+
+        <!-- Touch screens have no hover, so the same three routes get a plain list. -->
+        <ul class="doors-list">
+          <li><a href="#energy"><b>Not AI at all</b> &mdash; energy medicine and the device it sells</a></li>
+          <li><a href="#covid"><b>Some AI</b> &mdash; COVID origins and vaccine efficacy</a></li>
+          <li><a href="#bias"><b>Very AI</b> &mdash; measuring political slant across three models</a></li>
+        </ul>
       </div>
     </section>
 
