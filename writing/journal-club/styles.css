@@ -431,22 +431,66 @@ figcaption {
   outline: none;
 }
 
-.door-shape {
+.door-hit {
   fill: rgba(255, 214, 64, 0);
-  stroke: rgba(255, 214, 64, 0.35);
-  stroke-width: 2;
+  pointer-events: all;
+}
+
+.door-wash {
+  fill: transparent;
+  pointer-events: none;
+  transition: fill 100ms steps(2);
+}
+
+.door-halo,
+.door-shape {
+  fill: none;
+  pointer-events: none;
+  stroke-linecap: round;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
-  pointer-events: all;
-  transition: fill 100ms steps(2), stroke 100ms steps(2), stroke-width 100ms steps(2);
+  transition: stroke 100ms steps(2), stroke-width 100ms steps(2), filter 100ms steps(2);
+}
+
+.door-halo {
+  stroke: rgba(0, 0, 0, 0.62);
+  stroke-width: 5;
+}
+
+.door-shape {
+  stroke: rgba(255, 225, 70, 0.58);
+  stroke-width: 1.7;
+}
+
+.door:hover .door-wash,
+.door:focus-visible .door-wash {
+  fill: rgba(255, 214, 64, 0.1);
+}
+
+.door:hover .door-halo,
+.door:focus-visible .door-halo {
+  stroke: rgba(0, 0, 0, 0.92);
+  stroke-width: 7;
 }
 
 .door:hover .door-shape,
 .door:focus-visible .door-shape {
-  fill: rgba(255, 214, 64, 0.16);
-  stroke: #ffd640;
-  stroke-width: 4;
-  filter: drop-shadow(0 0 6px rgba(255, 214, 64, 0.85));
+  stroke: #ffe146;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 4px rgba(255, 220, 50, 0.9));
+}
+
+@media (hover: none) {
+  .door-halo {
+    stroke: rgba(0, 0, 0, 0.92);
+    stroke-width: 7;
+  }
+
+  .door-shape {
+    stroke: #ffe146;
+    stroke-width: 2.5;
+    filter: drop-shadow(0 0 3px rgba(255, 220, 50, 0.8));
+  }
 }
 
 .door-plate {
@@ -746,6 +790,184 @@ figcaption {
   line-height: 1.1;
 }
 
+.iqube-figure {
+  padding: 0.9rem 1rem 1rem;
+}
+
+.iqube-cutaway {
+  display: block;
+  width: 100%;
+  max-height: 25rem;
+  margin-top: 0.25rem;
+}
+
+.cutaway-scroll-hint {
+  display: none;
+}
+
+.iqube-cutaway text {
+  fill: var(--text);
+  font: 700 12px var(--mono);
+  letter-spacing: 0.04em;
+  text-anchor: middle;
+}
+
+.iqube-cutaway .cutaway-sub {
+  fill: var(--muted);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.iqube-cutaway .cutaway-sub.left,
+.iqube-cutaway .cutaway-labels text {
+  text-anchor: start;
+}
+
+.cutaway-signal rect {
+  fill: var(--panel-2);
+  stroke: var(--rule-strong);
+}
+
+.cutaway-signal path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  marker-end: url(#cutaway-arrow);
+}
+
+.cutaway-signal marker path {
+  fill: var(--accent);
+}
+
+.cutaway-case rect {
+  fill: color-mix(in srgb, var(--panel-2) 84%, transparent);
+  stroke: var(--rule-strong);
+  stroke-width: 2;
+}
+
+.cutaway-case text {
+  fill: var(--muted);
+  text-anchor: start;
+}
+
+.cutaway-case circle {
+  fill: var(--measured);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--measured) 65%, transparent));
+}
+
+.cutaway-coils path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.cutaway-coils path:nth-child(n + 4) {
+  stroke: var(--limited);
+}
+
+.cutaway-core path {
+  fill: color-mix(in srgb, var(--accent) 24%, var(--panel));
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.cutaway-core text {
+  fill: var(--accent);
+  font-size: 13px;
+}
+
+.cutaway-labels path,
+.cutaway-brace path {
+  fill: none;
+  stroke: var(--rule-strong);
+  stroke-width: 1.4;
+}
+
+.cutaway-labels circle {
+  fill: var(--accent);
+}
+
+.cutaway-brace text {
+  fill: var(--muted);
+  font-size: 9px;
+}
+
+.construction-record {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: calc(var(--radius) - 2px);
+  background: var(--rule);
+}
+
+.construction-record div {
+  min-height: 4.2rem;
+  padding: 0.7rem;
+  background: var(--panel-2);
+}
+
+.construction-record b,
+.construction-record span {
+  display: block;
+}
+
+.construction-record b {
+  color: var(--measured);
+  font: 700 0.66rem/1.2 var(--mono);
+  text-transform: uppercase;
+}
+
+.construction-record span {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.67rem;
+}
+
+.construction-record .record-missing b {
+  color: var(--absent);
+}
+
+.photonic-definition {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto 1fr;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.65rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--panel-2);
+  font: 700 0.64rem/1.2 var(--mono);
+}
+
+.photonic-definition span {
+  padding: 0.35rem 0.45rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 3px;
+  color: var(--text);
+}
+
+.photonic-definition i {
+  color: var(--muted);
+  font-style: normal;
+}
+
+.photonic-definition b {
+  color: var(--limited);
+}
+
+.photonic-definition em {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 0.58rem;
+  font-style: normal;
+  font-weight: 500;
+}
+
 /* Topic 2 */
 .three-records {
   display: grid;
@@ -811,6 +1033,233 @@ figcaption {
 
 .classification-example p {
   font-size: 0.78rem;
+}
+
+.erdman-figure {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 0.8rem 1rem;
+}
+
+.testimony-record {
+  display: grid;
+  align-content: center;
+  padding: 0.9rem 1rem;
+  border-left: 3px solid var(--limited);
+  background: var(--panel-2);
+}
+
+.testimony-record span,
+.testimony-record em {
+  font: 600 0.62rem/1.35 var(--mono);
+}
+
+.testimony-record span {
+  color: var(--limited);
+  text-transform: uppercase;
+}
+
+.testimony-record b {
+  margin-top: 0.25rem;
+  font-size: 1rem;
+}
+
+.testimony-record em {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-style: normal;
+}
+
+.analyst-vote {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--rule);
+  border-radius: calc(var(--radius) - 2px);
+}
+
+.analyst-icons {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(22px, 1fr));
+  gap: 0.35rem;
+}
+
+.analyst-icons span {
+  position: relative;
+  aspect-ratio: 0.78;
+  border: 1px solid var(--rule-strong);
+  border-radius: 50% 50% 34% 34%;
+  background: var(--panel-2);
+}
+
+.analyst-icons span::after {
+  content: '';
+  position: absolute;
+  right: 18%;
+  bottom: -0.28rem;
+  left: 18%;
+  height: 0.38rem;
+  border-radius: 4px 4px 0 0;
+  background: inherit;
+}
+
+.analyst-icons .lab {
+  border-color: var(--limited);
+  background: var(--limited);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--limited) 25%, transparent);
+}
+
+.vote-number {
+  min-width: 9rem;
+  text-align: right;
+}
+
+.vote-number b,
+.vote-number span,
+.vote-number small {
+  display: block;
+}
+
+.vote-number b {
+  color: var(--limited);
+  font-size: 2.35rem;
+  line-height: 0.95;
+}
+
+.vote-number span {
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.vote-number small {
+  margin-top: 0.15rem;
+  color: var(--muted);
+  font-size: 0.58rem;
+}
+
+.analytic-flow {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.analytic-flow > div {
+  min-height: 6.3rem;
+  padding: 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: calc(var(--radius) - 2px);
+  background: var(--panel-2);
+}
+
+.analytic-flow > i {
+  display: grid;
+  color: var(--muted);
+  font-style: normal;
+  place-items: center;
+}
+
+.analytic-flow span,
+.analytic-flow b,
+.analytic-flow small {
+  display: block;
+}
+
+.analytic-flow span {
+  color: var(--accent);
+  font: 700 0.58rem/1 var(--mono);
+}
+
+.analytic-flow b {
+  margin-top: 0.55rem;
+  font-size: 0.8rem;
+}
+
+.analytic-flow small {
+  margin-top: 0.35rem;
+  color: var(--muted);
+  font-size: 0.62rem;
+  line-height: 1.35;
+}
+
+.analytic-flow .management {
+  border-color: color-mix(in srgb, var(--absent) 58%, var(--rule));
+}
+
+.analytic-flow .management span,
+.analytic-flow .management b {
+  color: var(--absent);
+}
+
+.analytic-flow .published span {
+  color: var(--muted);
+}
+
+.testimony-quote {
+  display: grid;
+  align-content: center;
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--limited);
+  border-radius: calc(var(--radius) - 2px);
+  background: color-mix(in srgb, var(--limited) 7%, var(--panel));
+}
+
+.testimony-quote p {
+  font-size: 0.82rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.testimony-quote cite {
+  margin-top: 0.4rem;
+  color: var(--muted);
+  font: 600 0.58rem/1.2 var(--mono);
+  font-style: normal;
+}
+
+.testimony-status {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: calc(var(--radius) - 2px);
+  background: var(--rule);
+}
+
+.testimony-status div {
+  padding: 0.55rem 0.65rem;
+  background: var(--panel-2);
+}
+
+.testimony-status b,
+.testimony-status span {
+  display: block;
+}
+
+.testimony-status b {
+  color: var(--measured);
+  font: 700 0.57rem/1.2 var(--mono);
+  text-transform: uppercase;
+}
+
+.testimony-status div:nth-child(n + 3) b {
+  color: var(--absent);
+}
+
+.testimony-status span {
+  margin-top: 0.16rem;
+  color: var(--muted);
+  font-size: 0.58rem;
+}
+
+.erdman-figure figcaption {
+  grid-column: 1 / -1;
 }
 
 .origin-timeline {
@@ -1740,6 +2189,11 @@ body.present-mode .doors img {
   object-fit: contain;
 }
 
+body.present-mode .doors-list,
+body.present-mode .doors-caption {
+  display: none;
+}
+
 @media (max-height: 760px) and (min-width: 801px) {
   body.present-mode .slide-inner {
     transform: scale(0.88);
@@ -1776,6 +2230,28 @@ body.present-mode .doors img {
 
   .origin-timeline {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .erdman-figure {
+    grid-template-columns: 1fr;
+  }
+
+  .analytic-flow,
+  .erdman-figure figcaption {
+    grid-column: 1;
+  }
+
+  .analytic-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .analytic-flow > i {
+    height: 0.8rem;
+    transform: rotate(90deg);
+  }
+
+  .analytic-flow > div {
+    min-height: 0;
   }
 
   .timeline-line {
@@ -1854,8 +2330,44 @@ body.present-mode .doors img {
     display: none;
   }
 
-  .door-shape {
-    stroke: rgba(255, 214, 64, 0.6);
+  body:not(.present-mode) .iqube-figure {
+    overflow-x: auto;
+  }
+
+  body:not(.present-mode) .iqube-cutaway {
+    width: 650px;
+    max-width: none;
+  }
+
+  body:not(.present-mode) .cutaway-scroll-hint {
+    display: block;
+    margin-top: 0.45rem;
+    color: var(--muted);
+    font: 600 0.58rem/1.3 var(--mono);
+  }
+
+  .analyst-vote {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.45rem;
+    padding: 0.55rem;
+  }
+
+  .analyst-icons {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.2rem;
+  }
+
+  .vote-number {
+    min-width: 7.2rem;
+  }
+
+  .construction-record {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .photonic-definition {
+    grid-template-columns: 1fr;
+    text-align: center;
   }
 
   .claim-map-head {
@@ -2170,6 +2682,88 @@ body.present-mode .doors img {
     grid-template-columns: 1fr 1fr;
     gap: 0.45rem;
     padding: 0.65rem;
+  }
+
+  body.present-mode .erdman-figure {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  body.present-mode .analytic-flow,
+  body.present-mode .erdman-figure figcaption {
+    grid-column: 1;
+  }
+
+  body.present-mode .analytic-flow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.25rem;
+  }
+
+  body.present-mode .analytic-flow > i {
+    display: none;
+  }
+
+  body.present-mode .analytic-flow > div {
+    min-height: 3.8rem;
+    padding: 0.38rem;
+  }
+
+  body.present-mode .construction-record {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  body.present-mode .construction-record div {
+    min-height: 2.5rem;
+    padding: 0.35rem;
+  }
+
+  body.present-mode .construction-record b,
+  body.present-mode .construction-record span {
+    font-size: 0.43rem;
+  }
+
+  body.present-mode .photonic-definition {
+    grid-template-columns: auto auto auto auto auto 1fr;
+    gap: 0.2rem;
+    margin-top: 0.35rem;
+    padding: 0.35rem;
+    font-size: 0.42rem;
+    text-align: left;
+  }
+
+  body.present-mode .photonic-definition span {
+    padding: 0.2rem;
+  }
+
+  body.present-mode .photonic-definition em {
+    font-size: 0.4rem;
+  }
+
+  body.present-mode .testimony-record,
+  body.present-mode .analyst-vote,
+  body.present-mode .testimony-quote,
+  body.present-mode .testimony-status div {
+    padding: 0.4rem;
+  }
+
+  body.present-mode .vote-number b {
+    font-size: 1.4rem;
+  }
+
+  body.present-mode .analytic-flow b,
+  body.present-mode .testimony-quote p {
+    font-size: 0.56rem;
+  }
+
+  body.present-mode .analytic-flow small,
+  body.present-mode .testimony-record span,
+  body.present-mode .testimony-record em,
+  body.present-mode .testimony-quote cite,
+  body.present-mode .testimony-status b,
+  body.present-mode .testimony-status span,
+  body.present-mode .vote-number span,
+  body.present-mode .vote-number small {
+    font-size: 0.44rem;
   }
 
   body.present-mode .timeline-event {
