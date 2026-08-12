@@ -3489,52 +3489,6 @@ body.present-mode .bench-card p {
   letter-spacing: 0.05em;
 }
 
-/* Topic 3 · fact-check record */
-.factcheck-record .factcheck-row {
-  display: grid;
-  grid-template-columns: 9.5rem 1fr auto;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.85rem 0.2rem;
-}
-
-.factcheck-record .factcheck-row + .factcheck-row {
-  border-top: 1px solid var(--rule);
-}
-
-.fc-source {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-}
-
-.fc-source b {
-  font-size: 0.9rem;
-  letter-spacing: -0.01em;
-}
-
-.fc-source span {
-  color: var(--faint);
-  font: 600 0.64rem/1 var(--mono);
-  letter-spacing: 0.08em;
-}
-
-.factcheck-row p {
-  color: color-mix(in srgb, var(--text) 84%, var(--muted));
-  font-size: 0.82rem;
-  line-height: 1.5;
-}
-
-.fc-verdict {
-  padding: 0.32rem 0.7rem;
-  border: 1px solid color-mix(in srgb, var(--absent) 45%, var(--rule));
-  border-radius: 99px;
-  color: var(--absent);
-  font: 600 0.66rem/1 var(--mono);
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-}
-
 /* Topic 3 · findings */
 .findings-grid {
   display: grid;
@@ -3582,23 +3536,10 @@ body.present-mode .findings-grid {
   gap: 0.8rem;
 }
 
-body.present-mode .factcheck-record .factcheck-row {
-  padding: 0.6rem 0.2rem;
-}
-
 @media (max-width: 720px) {
   .harness-strip,
   .findings-grid {
     grid-template-columns: 1fr;
-  }
-
-  .factcheck-record .factcheck-row {
-    grid-template-columns: 1fr;
-    gap: 0.35rem;
-  }
-
-  .fc-verdict {
-    justify-self: start;
   }
 
   .ledger-row em {

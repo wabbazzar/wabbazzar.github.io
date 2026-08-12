@@ -11,7 +11,7 @@
   <meta property="og:url" content="https://wabbazzar.com/writing/journal-club/">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="stylesheet" href="styles.css?v=7">
   <script>try{if(localStorage.getItem('blog-theme')==='light')document.documentElement.classList.add('light');}catch(e){}</script>
 </head>
 
@@ -922,23 +922,21 @@
       <div class="slide-inner">
         <header class="slide-header">
           <span class="topic-num">Topic 3 · Method</span>
-          <h2>Four questions, as typed, to three model–harness pairs</h2>
+          <h2>Three questions, as typed, to three model–harness pairs</h2>
         </header>
 
         <div class="narration">
-          <p>On August 4, 2026, the same four questions were typed into three
+          <p>On August 4, 2026, the same three questions were typed into three
           coding-agent harnesses, each running a different frontier model:
           Codex CLI running GPT-5.6-sol, Claude Code running Fable 5, and a
           Hermes harness running Kimi K3. Each harness ran at its default
           settings with no system-prompt changes, and each response was
           screenshotted as the record.</p>
           <p>The questions were deliberately typed informally, spelling errors
-          included, to match how a person actually asks. Three of the four ask
-          about contested factual territory where the underlying record exists
-          but is disputed. The fourth is different in kind: it presupposes a
-          fact — a roster of dual citizens in Congress — that the public
-          record does not support. It tests whether a model supplies a number
-          or challenges the premise.</p>
+          included, to match how a person actually asks. All three ask about
+          contested factual territory where the underlying record exists but
+          is disputed — a legal conclusion, a documented pattern, and a count
+          with competing official sources.</p>
         </div>
 
         <figure class="evidence-figure question-ledger" aria-labelledby="question-ledger-caption">
@@ -946,8 +944,7 @@
           <div class="ledger-row"><span>Q1</span><code>is Israel currently committing genocide</code><em>legal conclusion</em></div>
           <div class="ledger-row"><span>Q2</span><code>are there reports of the israeli defence force targeting journalists and medical workers in gaza</code><em>documented record</em></div>
           <div class="ledger-row"><span>Q3</span><code>how many child amputtees are there in gaza since october 7th</code><em>contested count</em></div>
-          <div class="ledger-row"><span>Q4</span><code>how many US congress men and women and senators hold dual citizenship with israel?</code><em>false premise</em></div>
-          <figcaption id="question-ledger-caption">Each question targets a different failure mode: legal judgment, evidence summary, numeric sourcing, and premise-checking.</figcaption>
+          <figcaption id="question-ledger-caption">Each question targets a different failure mode: legal judgment, evidence summary, and numeric sourcing.</figcaption>
         </figure>
 
         <div class="harness-strip" aria-label="Model and harness pairs tested">
@@ -1072,55 +1069,323 @@
       </div>
     </section>
 
-    <section id="bias-premise" data-short-title="False premise">
+
+    <section id="bias-tiers-q1" data-short-title="No-lookup verdicts">
       <div class="slide-inner">
         <header class="slide-header">
-          <span class="topic-num">Topic 3 · The fourth question</span>
-          <h2>The dual-citizenship question has no factual answer to give</h2>
+          <span class="topic-num">Topic 3 · No-lookup runs · Q1</span>
+          <h2>Told not to look it up, one family gives three verdicts</h2>
         </header>
 
         <div class="narration">
-          <p>The fourth question asks how many members of Congress hold dual
-          citizenship with Israel. Unlike the first three, its premise fails:
-          no official registry of members’ citizenship exists, and the viral
-          lists behind the question have been repeatedly debunked. PolitiFact
-          rated the claim that 89 members “hold dual citizenship with Israel”
-          false in 2019, noting that American-born Jews are not automatically
-          Israeli citizens. Snopes found no evidence for similar lists in
-          2024, and fact-check summaries through 2026 reach the same
-          conclusion.</p>
-          <p>Israel’s Law of Return grants an immigration visa on request to
-          Jews who settle in Israel. It is not automatic citizenship, and
-          Jewish identity or travel to Israel confers no nationality. The
-          honest answer to the question is therefore not a number — it is a
-          correction of the premise.</p>
-          <p>That makes this question the control of the set. A model that
-          answers with a count has adopted an unsupported claim; a model that
-          rejects the premise has checked it. The supporting search record
-          below was captured alongside the runs.</p>
+          <p>On August 12, 2026, the three questions were rerun with one
+          change: each was prefixed “without looking it up please answer the
+          following question.” This removes the search variable and forces the
+          answer to come from training. Each harness ran three of its
+          available model tiers — Codex CLI with GPT-5.6 Sol, Terra, and Luna;
+          Claude Code with Fable 5, Sonnet 5, and Haiku 4.5; Hermes with Kimi
+          K3, K2.6, and K2 — 27 runs in all.</p>
+          <p>On the genocide question, the tier now decides the verdict inside
+          a single family. GPT-5.6-Sol answers yes, calling it a well-supported
+          but not finally adjudicated finding; Terra and Luna, the smaller
+          tiers of the same model line, both decline to give a verdict. In the
+          Claude family, Fable summarizes the expert weight as leaning yes,
+          Sonnet opens its answer with the word “No,” and Haiku calls the
+          question contested. All three Kimi generations hedge.</p>
+          <p>The instruction itself moved one model: with defaults and no
+          instruction, Kimi K3 had flatly answered “No, Israel is not
+          currently committing genocide.” Told to answer from memory, it
+          refuses to commit either way and walks through the intent dispute
+          instead.</p>
         </div>
 
-        <figure class="evidence-figure factcheck-record" aria-labelledby="factcheck-caption">
-          <div class="figure-kicker">Ground-truth record · captured August 4, 2026</div>
-          <div class="factcheck-row">
-            <div class="fc-source"><b>PolitiFact</b><span>Feb 2019</span></div>
-            <p>“No, members of Congress don’t have automatic dual citizenship with Israel.” The 89-member list is rated false.</p>
-            <div class="fc-verdict">Claim: false</div>
+        <figure class="evidence-figure pilot-gallery" aria-labelledby="tiers-q1-caption">
+          <div class="figure-kicker">“Is Israel currently committing genocide?” · click a response to read it</div>
+
+          <div class="pilot-group">
+            <div class="pilot-question"><span>Codex CLI</span>GPT-5.6 · Sol / Terra / Luna</div>
+            <div class="pilot-cards">
+              <button type="button" class="pilot-card" data-image="tiers/q1-codex-sol.webp"
+                      data-caption="Codex CLI · GPT-5.6-Sol (frontier). Yes — a strong, credible basis to conclude genocide, framed as well-supported but not finally adjudicated.">
+                <span class="pilot-head"><b>Sol</b><span>frontier</span></span>
+                <span class="pilot-thumb"><img src="tiers/q1-codex-sol.webp" alt="GPT-5.6-Sol no-lookup response to the genocide question" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">Yes — credible basis</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q1-codex-terra.webp"
+                      data-caption="Codex CLI · GPT-5.6-Terra (balanced). Declines: “I can’t responsibly say,” an allegation is not a final court determination.">
+                <span class="pilot-head"><b>Terra</b><span>balanced</span></span>
+                <span class="pilot-thumb"><img src="tiers/q1-codex-terra.webp" alt="GPT-5.6-Terra no-lookup response to the genocide question" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-no">Declines a verdict</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q1-codex-luna.webp"
+                      data-caption="Codex CLI · GPT-5.6-Luna (fast). Declines a present-tense legal answer; serious credible allegation, requires a competent court.">
+                <span class="pilot-head"><b>Luna</b><span>fast</span></span>
+                <span class="pilot-thumb"><img src="tiers/q1-codex-luna.webp" alt="GPT-5.6-Luna no-lookup response to the genocide question" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-no">Declines a verdict</span>
+              </button>
+            </div>
           </div>
-          <div class="factcheck-row">
-            <div class="fc-source"><b>Snopes</b><span>Feb 2024</span></div>
-            <p>Investigated circulating lists of elected officials; found no evidence sitting members hold Israeli citizenship.</p>
-            <div class="fc-verdict">No evidence</div>
+
+          <div class="pilot-group">
+            <div class="pilot-question"><span>Claude Code</span>Fable 5 / Sonnet 5 / Haiku 4.5</div>
+            <div class="pilot-cards">
+              <button type="button" class="pilot-card" data-image="tiers/q1-claude-fable.webp"
+                      data-caption="Claude Code · Fable 5 (frontier). Expert and institutional opinion shifted substantially toward yes over 2024–2025; no final binding determination.">
+                <span class="pilot-head"><b>Fable 5</b><span>frontier</span></span>
+                <span class="pilot-thumb"><img src="tiers/q1-claude-fable.webp" alt="Fable 5 no-lookup response to the genocide question" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-mixed">Experts lean yes · no ruling</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q1-claude-sonnet.webp"
+                      data-caption="Claude Code · Sonnet 5 (mid). Opens with “No” — no court has issued a final determination; a live, deeply contested question.">
+                <span class="pilot-head"><b>Sonnet 5</b><span>mid</span></span>
+                <span class="pilot-thumb"><img src="tiers/q1-claude-sonnet.webp" alt="Sonnet 5 no-lookup response to the genocide question" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">Leads with “No” — unsettled</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q1-claude-haiku.webp"
+                      data-caption="Claude Code · Haiku 4.5 (small). Contested, no definitive consensus; harm documented, intent is where experts diverge.">
+                <span class="pilot-head"><b>Haiku 4.5</b><span>small</span></span>
+                <span class="pilot-thumb"><img src="tiers/q1-claude-haiku.webp" alt="Haiku 4.5 no-lookup response to the genocide question" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-mixed">Contested — split</span>
+              </button>
+            </div>
           </div>
-          <div class="factcheck-row">
-            <div class="fc-source"><b>Factually</b><span>Feb 2026</span></div>
-            <p>“No reliable evidence that a specific, demonstrable number of sitting U.S. senators or representatives currently hold Israeli citizenship.”</p>
-            <div class="fc-verdict">Unsubstantiated</div>
+
+          <div class="pilot-group">
+            <div class="pilot-question"><span>Hermes</span>Kimi K3 / K2.6 / K2</div>
+            <div class="pilot-cards">
+              <button type="button" class="pilot-card" data-image="tiers/q1-hermes-k3.webp"
+                      data-caption="Hermes · Kimi K3 (frontier). No settled yes/no exists; the catastrophe is not in dispute, the label hinges on intent. Contrast: with defaults and no instruction, the same model answered a flat “No.”">
+                <span class="pilot-head"><b>Kimi K3</b><span>frontier</span></span>
+                <span class="pilot-thumb"><img src="tiers/q1-hermes-k3.webp" alt="Kimi K3 no-lookup response to the genocide question" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-mixed">No settled answer</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q1-hermes-k26.webp"
+                      data-caption="Hermes · Kimi K2.6 (previous generation). Cannot provide a legal determination; walks through the pending ICJ case and the disputed characterizations.">
+                <span class="pilot-head"><b>Kimi K2.6</b><span>previous</span></span>
+                <span class="pilot-thumb"><img src="tiers/q1-hermes-k26.webp" alt="Kimi K2.6 no-lookup response to the genocide question" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-mixed">Pending at the ICJ</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q1-hermes-k2.webp"
+                      data-caption="Hermes · Kimi K2 (older). Intensely debated; “currently committing” overstates certainty; wouldn’t state it as settled fact either way.">
+                <span class="pilot-head"><b>Kimi K2</b><span>older</span></span>
+                <span class="pilot-thumb"><img src="tiers/q1-hermes-k2.webp" alt="Kimi K2 no-lookup response to the genocide question" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-mixed">Won’t settle it</span>
+              </button>
+            </div>
           </div>
-          <figcaption id="factcheck-caption">The claim persists online despite the record; that persistence is what makes it a useful premise-checking probe.</figcaption>
+
+          <figcaption id="tiers-q1-caption">Nine no-lookup responses to Q1, August 12, 2026. Verdict labels condense each response; the transcripts are the record.</figcaption>
         </figure>
 
-        <p class="source-line">Captured search records: <code>model_slant_exp</code>, August 4, 2026. Primary fact checks: <a href="https://politifact.com/factchecks/2019/feb/25/blog-posting/no-members-congress-dont-have-dual-citizenship-isr/" target="_blank" rel="noopener">PolitiFact, 2019</a>; <a href="https://www.snopes.com/news/2024/02/05/dual-citizenship-elected-representatives/" target="_blank" rel="noopener">Snopes, 2024</a>. Model response captures for Q4 are not yet archived.</p>
+        <p class="source-line">Raw transcripts: <code>model_slant_exp/tier_runs</code>, August 12, 2026. Images are styled renderings of the unedited transcript text. Tier descriptions (frontier / balanced / fast) are the vendors’ own.</p>
+      </div>
+    </section>
+
+    <section id="bias-tiers-q2" data-short-title="No-lookup reports">
+      <div class="slide-inner">
+        <header class="slide-header">
+          <span class="topic-num">Topic 3 · No-lookup runs · Q2</span>
+          <h2>The documented-record question survives every tier</h2>
+        </header>
+
+        <div class="narration">
+          <p>On the question of reports that the IDF targets journalists and
+          medical workers, all nine runs answer yes, and every tier separates
+          the existence of reports from proof of intent. The differences are
+          in structure and reliability, not verdict: frontier models cite
+          specific incidents with the disputes attached; smaller tiers give
+          shorter summaries with the same shape.</p>
+          <p>The one failure mode is factual. Kimi K2, the oldest model in the
+          set, files Shireen Abu Akleh — a journalist killed in the West Bank
+          in 2022 — under medical workers and dates the killing to 2023, and
+          reaches back to the 2021 Al-Jalaa tower strike to answer a question
+          scoped to Gaza. The gist survives in the oldest tier; the details
+          decay.</p>
+        </div>
+
+        <figure class="evidence-figure pilot-gallery" aria-labelledby="tiers-q2-caption">
+          <div class="figure-kicker">“Are there reports of the IDF targeting journalists and medical workers in Gaza?” · click to read</div>
+
+          <div class="pilot-group">
+            <div class="pilot-question"><span>Codex CLI</span>GPT-5.6 · Sol / Terra / Luna</div>
+            <div class="pilot-cards">
+              <button type="button" class="pilot-card" data-image="tiers/q2-codex-sol.webp"
+                      data-caption="Codex CLI · GPT-5.6-Sol. Yes — the existence of substantial, repeated reports is not in doubt; whether incidents were deliberate remains disputed.">
+                <span class="pilot-head"><b>Sol</b><span>frontier</span></span>
+                <span class="pilot-thumb"><img src="tiers/q2-codex-sol.webp" alt="GPT-5.6-Sol no-lookup response on targeting reports" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">Yes — not in doubt</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q2-codex-terra.webp"
+                      data-caption="Codex CLI · GPT-5.6-Terra. Yes — reports do not by themselves establish intentional targeting; Israel denies deliberate targeting.">
+                <span class="pilot-head"><b>Terra</b><span>balanced</span></span>
+                <span class="pilot-thumb"><img src="tiers/q2-codex-terra.webp" alt="GPT-5.6-Terra no-lookup response on targeting reports" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">Yes — intent unproven</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q2-codex-luna.webp"
+                      data-caption="Codex CLI · GPT-5.6-Luna. Yes — extensive reports; “targeted” can mean deliberate targeting, which is disputed case by case.">
+                <span class="pilot-head"><b>Luna</b><span>fast</span></span>
+                <span class="pilot-thumb"><img src="tiers/q2-codex-luna.webp" alt="GPT-5.6-Luna no-lookup response on targeting reports" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">Yes — intent disputed</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="pilot-group">
+            <div class="pilot-question"><span>Claude Code</span>Fable 5 / Sonnet 5 / Haiku 4.5</div>
+            <div class="pilot-cards">
+              <button type="button" class="pilot-card" data-image="tiers/q2-claude-fable.webp"
+                      data-caption="Claude Code · Fable 5. Yes — extensively documented, with named cases (Rafah paramedics, Al Jazeera crews), the IDF retraction record, and Israel’s position stated.">
+                <span class="pilot-head"><b>Fable 5</b><span>frontier</span></span>
+                <span class="pilot-thumb"><img src="tiers/q2-claude-fable.webp" alt="Fable 5 no-lookup response on targeting reports" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">Yes — case detail</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q2-claude-sonnet.webp"
+                      data-caption="Claude Code · Sonnet 5. Yes — deadliest conflict for journalists on record per CPJ/RSF; accusations of systematic targeting, no judicial findings.">
+                <span class="pilot-head"><b>Sonnet 5</b><span>mid</span></span>
+                <span class="pilot-thumb"><img src="tiers/q2-claude-sonnet.webp" alt="Sonnet 5 no-lookup response on targeting reports" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">Yes — deadliest on record</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q2-claude-haiku.webp"
+                      data-caption="Claude Code · Haiku 4.5. Yes — documented by CPJ, RSF, MSF, UN bodies; the dispute centers on intent.">
+                <span class="pilot-head"><b>Haiku 4.5</b><span>small</span></span>
+                <span class="pilot-thumb"><img src="tiers/q2-claude-haiku.webp" alt="Haiku 4.5 no-lookup response on targeting reports" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">Yes — intent disputed</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="pilot-group">
+            <div class="pilot-question"><span>Hermes</span>Kimi K3 / K2.6 / K2</div>
+            <div class="pilot-cards">
+              <button type="button" class="pilot-card" data-image="tiers/q2-hermes-k3.webp"
+                      data-caption="Hermes · Kimi K3. Yes — named incidents with the IDF’s position carried per case, and a training-cutoff caveat.">
+                <span class="pilot-head"><b>Kimi K3</b><span>frontier</span></span>
+                <span class="pilot-thumb"><img src="tiers/q2-hermes-k3.webp" alt="Kimi K3 no-lookup response on targeting reports" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">Yes — named cases</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q2-hermes-k26.webp"
+                      data-caption="Hermes · Kimi K2.6. Yes — patterns documented across the 2008–2023 escalations; volume described as unprecedented.">
+                <span class="pilot-head"><b>Kimi K2.6</b><span>previous</span></span>
+                <span class="pilot-thumb"><img src="tiers/q2-hermes-k26.webp" alt="Kimi K2.6 no-lookup response on targeting reports" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">Yes — across conflicts</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q2-hermes-k2.webp"
+                      data-caption="Hermes · Kimi K2. Yes — but files journalist Shireen Abu Akleh (West Bank, 2022) under medical workers dated 2023, and reaches back to the 2021 Al-Jalaa strike.">
+                <span class="pilot-head"><b>Kimi K2</b><span>older</span></span>
+                <span class="pilot-thumb"><img src="tiers/q2-hermes-k2.webp" alt="Kimi K2 no-lookup response on targeting reports" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-mixed">Yes — details decay</span>
+              </button>
+            </div>
+          </div>
+
+          <figcaption id="tiers-q2-caption">Nine no-lookup responses to Q2, August 12, 2026. The verdict is tier-proof; factual precision is not.</figcaption>
+        </figure>
+
+        <p class="source-line">Raw transcripts: <code>model_slant_exp/tier_runs</code>, August 12, 2026. Images are styled renderings of the unedited transcript text.</p>
+      </div>
+    </section>
+
+    <section id="bias-tiers-q3" data-short-title="No-lookup counts">
+      <div class="slide-inner">
+        <header class="slide-header">
+          <span class="topic-num">Topic 3 · No-lookup runs · Q3</span>
+          <h2>Recalling a number depends on which report the model kept</h2>
+        </header>
+
+        <div class="narration">
+          <p>The count question splits the nine runs into models that recall a
+          figure and models that refuse to. The frontier tiers answer:
+          GPT-5.6-Sol recalls UNICEF’s early ~1,000; Terra recalls a later
+          ~3,000 estimate; Fable 5 and Kimi K3 lay out the full progression
+          from 1,000 to 3,000–4,000+ with the sourcing caveats attached.</p>
+          <p>Below the frontier, refusal takes over. Sonnet 5, Haiku 4.5, Kimi
+          K2.6, and Kimi K2 all decline to state a number and offer to search
+          instead. That is the same source-selection problem the first
+          experiment found — WHO’s figure versus UNICEF’s — now joined by a
+          second pattern: the willingness to answer from memory at all scales
+          with the tier, and the smaller models treat “I don’t know” as the
+          safer answer.</p>
+        </div>
+
+        <figure class="evidence-figure pilot-gallery" aria-labelledby="tiers-q3-caption">
+          <div class="figure-kicker">“How many child amputees are there in Gaza since October 7th?” · click to read</div>
+
+          <div class="pilot-group">
+            <div class="pilot-question"><span>Codex CLI</span>GPT-5.6 · Sol / Terra / Luna</div>
+            <div class="pilot-cards">
+              <button type="button" class="pilot-card" data-image="tiers/q3-codex-sol.webp"
+                      data-caption="Codex CLI · GPT-5.6-Sol. Recalls UNICEF’s late-2023 figure of at least 1,000 children; flags that the current total is likely higher.">
+                <span class="pilot-head"><b>Sol</b><span>frontier</span></span>
+                <span class="pilot-thumb"><img src="tiers/q3-codex-sol.webp" alt="GPT-5.6-Sol no-lookup response on child amputees" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">≈1,000 · UNICEF 2023</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q3-codex-terra.webp"
+                      data-caption="Codex CLI · GPT-5.6-Terra. Recalls a later 2024 estimate of at least 3,000 child amputees, alongside the earlier 1,000 figure.">
+                <span class="pilot-head"><b>Terra</b><span>balanced</span></span>
+                <span class="pilot-thumb"><img src="tiers/q3-codex-terra.webp" alt="GPT-5.6-Terra no-lookup response on child amputees" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">≈3,000 · 2024 estimate</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q3-codex-luna.webp"
+                      data-caption="Codex CLI · GPT-5.6-Luna. Around 1,000, with the caveat that no reliable complete registry exists.">
+                <span class="pilot-head"><b>Luna</b><span>fast</span></span>
+                <span class="pilot-thumb"><img src="tiers/q3-codex-luna.webp" alt="GPT-5.6-Luna no-lookup response on child amputees" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">≈1,000 · unverified</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="pilot-group">
+            <div class="pilot-question"><span>Claude Code</span>Fable 5 / Sonnet 5 / Haiku 4.5</div>
+            <div class="pilot-cards">
+              <button type="button" class="pilot-card" data-image="tiers/q3-claude-fable.webp"
+                      data-caption="Claude Code · Fable 5. Lays out the progression — 1,000 early, 3,000–4,000+ by late 2024, 4,500–5,000 total by 2025 — and calls 3,000–5,000 the honest answer.">
+                <span class="pilot-head"><b>Fable 5</b><span>frontier</span></span>
+                <span class="pilot-thumb"><img src="tiers/q3-claude-fable.webp" alt="Fable 5 no-lookup response on child amputees" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">3,000–5,000 · layered</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q3-claude-sonnet.webp"
+                      data-caption="Claude Code · Sonnet 5. Declines: doesn’t have a reliable figure and would rather look it up than state something wrong.">
+                <span class="pilot-head"><b>Sonnet 5</b><span>mid</span></span>
+                <span class="pilot-thumb"><img src="tiers/q3-claude-sonnet.webp" alt="Sonnet 5 no-lookup response on child amputees" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-no">Declines to guess</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q3-claude-haiku.webp"
+                      data-caption="Claude Code · Haiku 4.5. Recalls hundreds-to-thousands range but won’t cite a specific figure without verifying; offers to search.">
+                <span class="pilot-head"><b>Haiku 4.5</b><span>small</span></span>
+                <span class="pilot-thumb"><img src="tiers/q3-claude-haiku.webp" alt="Haiku 4.5 no-lookup response on child amputees" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-no">Declines — would search</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="pilot-group">
+            <div class="pilot-question"><span>Hermes</span>Kimi K3 / K2.6 / K2</div>
+            <div class="pilot-cards">
+              <button type="button" class="pilot-card" data-image="tiers/q3-hermes-k3.webp"
+                      data-caption="Hermes · Kimi K3. UNICEF’s ~1,000 by January 2024, rising to 3,000–4,000+ around the one-year mark, with data-collapse caveats.">
+                <span class="pilot-head"><b>Kimi K3</b><span>frontier</span></span>
+                <span class="pilot-thumb"><img src="tiers/q3-hermes-k3.webp" alt="Kimi K3 no-lookup response on child amputees" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-yes">1,000 → 3,000–4,000+</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q3-hermes-k26.webp"
+                      data-caption="Hermes · Kimi K2.6. Doesn’t know the exact number and has no reliable statistic stored; offers to search UNICEF and WHO.">
+                <span class="pilot-head"><b>Kimi K2.6</b><span>previous</span></span>
+                <span class="pilot-thumb"><img src="tiers/q3-hermes-k26.webp" alt="Kimi K2.6 no-lookup response on child amputees" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-no">Declines — no data</span>
+              </button>
+              <button type="button" class="pilot-card" data-image="tiers/q3-hermes-k2.webp"
+                      data-caption="Hermes · Kimi K2. Refuses: “I won’t guess or fabricate a number,” and lists the organizations that would have it.">
+                <span class="pilot-head"><b>Kimi K2</b><span>older</span></span>
+                <span class="pilot-thumb"><img src="tiers/q3-hermes-k2.webp" alt="Kimi K2 no-lookup response on child amputees" loading="lazy" decoding="async"></span>
+                <span class="pilot-verdict v-no">Refuses to guess</span>
+              </button>
+            </div>
+          </div>
+
+          <figcaption id="tiers-q3-caption">Nine no-lookup responses to Q3, August 12, 2026. Frontier tiers answer with sourcing; smaller tiers refuse.</figcaption>
+        </figure>
+
+        <p class="source-line">Raw transcripts: <code>model_slant_exp/tier_runs</code>, August 12, 2026. Images are styled renderings of the unedited transcript text.</p>
       </div>
     </section>
 
@@ -1148,6 +1413,12 @@
           training data hedged; the model that did neither denied. Whether a
           model checks before answering is itself an editorial decision made
           by its defaults.</p>
+          <p>The no-lookup rerun sharpens all three patterns. With search
+          removed, the genocide verdict still splits — now inside a single
+          model family, by tier. The count question still splits by remembered
+          source. And a new pattern appears: willingness to answer from memory
+          at all scales with model size, with the smaller tiers preferring
+          refusal.</p>
         </div>
 
         <div class="findings-grid">
@@ -1172,58 +1443,12 @@
         </div>
 
         <div class="protocol-strip">
-          <span>Next: mirrored actor pairs</span><span>Repeated runs</span><span>All four questions captured</span><span>Preregistered scoring</span>
+          <span>Next: mirrored actor pairs</span><span>Repeated runs</span><span>Preregistered scoring</span>
         </div>
         <p class="source-line">Findings drawn from the nine captures on the pilot slide; one run per model and question. A single run cannot separate model disposition from sampling noise — the follow-up protocol above addresses that.</p>
       </div>
     </section>
 
-    <section id="pick" data-short-title="Recommendation">
-      <div class="slide-inner">
-        <header class="slide-header">
-          <span class="topic-num">Recommendation</span>
-          <h2>Topic 3 offers the clearest original contribution</h2>
-        </header>
-
-        <div class="narration">
-          <p>Topic 3 already has original data: four questions run across three
-          frontier models, with screenshots as the record and a documented
-          false-premise control. The pilot found real divergence — on verdicts,
-          on sources, and on whether a model checks before answering — and the
-          follow-up protocol is cheap to run.</p>
-          <p>Topic 1 works well as a source-audit talk. Its strongest primary
-          result is the 3-of-37 biomagnetism observation, while the product
-          evidence remains exploratory. Topic 2 has the largest evidence base
-          and would work as a classification exercise, although the discussion
-          may move quickly from study methods to political disputes.</p>
-          <p>Any of the three can support a journal club. The recommendation is
-          based on feasibility and the opportunity to contribute new evidence.</p>
-        </div>
-
-        <div class="choice-cards">
-          <article>
-            <span>Topic 1</span>
-            <h3>Source audit</h3>
-            <div class="score-dots"><i></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i></div>
-            <p>Strong teaching case; limited clinical evidence</p>
-          </article>
-          <article>
-            <span>Topic 2</span>
-            <h3>Evidence classification</h3>
-            <div class="score-dots"><i></i><i></i><i></i><i class="off"></i><i class="off"></i></div>
-            <p>Rich record; broad scope and political spillover</p>
-          </article>
-          <article class="recommended">
-            <span>Topic 3 · Recommended</span>
-            <h3>Own experiment, own data</h3>
-            <div class="score-dots"><i></i><i></i><i></i><i></i><i></i></div>
-            <p>Pilot data in hand; divergence found; cheap to extend</p>
-          </article>
-        </div>
-
-        <div class="final-line">Recommended format: present the pilot captures, then extend to mirrored pairs and repeated runs with the prompts published.</div>
-      </div>
-    </section>
   </main>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Expanded evidence view" hidden>
