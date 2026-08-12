@@ -232,6 +232,7 @@ body.present-mode .speaker-notes .narration {
   top: 50%;
   transform: translateY(-50%);
   flex-direction: column;
+  align-items: center;
   gap: 0.45rem;
 }
 
@@ -458,7 +459,7 @@ figcaption {
 }
 
 .door-shape {
-  stroke: rgba(255, 225, 70, 0.58);
+  stroke: rgba(255, 225, 70, 0.24);
   stroke-width: 1.7;
 }
 
@@ -3544,5 +3545,190 @@ body.present-mode .findings-grid {
 
   .ledger-row em {
     display: none;
+  }
+}
+
+/* Milestone progress dots — title + each topic intro */
+.dot.milestone {
+  width: 13px;
+  height: 13px;
+  background: color-mix(in srgb, var(--limited) 75%, var(--faint));
+  opacity: 0.75;
+}
+
+.dot.milestone.active {
+  background: var(--accent);
+  opacity: 1;
+  transform: scale(1.3);
+}
+
+/* Source-quote tooltips — same element and behavior in read and present modes */
+.tipped {
+  position: relative;
+}
+
+.tipped::before {
+  content: '\201D';
+  position: absolute;
+  top: 0.45rem;
+  right: 0.5rem;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--rule));
+  border-radius: 50%;
+  color: var(--accent);
+  font: 700 0.95rem/0.4 Georgia, serif;
+  padding-top: 0.3rem;
+  opacity: 0.55;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.tipped:hover::before,
+.tipped:focus-within::before,
+.tipped:focus::before {
+  opacity: 1;
+}
+
+.src-tip {
+  position: absolute;
+  top: 0.4rem;
+  left: 50%;
+  z-index: 60;
+  width: min(56ch, calc(100% - 1.2rem));
+  padding: 0.85rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--rule));
+  border-radius: calc(var(--radius) - 3px);
+  background: color-mix(in srgb, var(--panel-2) 97%, var(--accent));
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.4);
+  transform: translateX(-50%) translateY(-4px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s;
+}
+
+.tipped:hover .src-tip,
+.tipped:focus .src-tip,
+.tipped:focus-within .src-tip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.src-tip q {
+  display: block;
+  color: color-mix(in srgb, var(--text) 92%, var(--muted));
+  font-size: 0.8rem;
+  font-style: italic;
+  line-height: 1.55;
+  quotes: '\201C' '\201D';
+}
+
+.src-tip cite {
+  display: block;
+  margin-top: 0.55rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--rule);
+  color: var(--muted);
+  font: 600 0.64rem/1.4 var(--mono);
+  font-style: normal;
+  letter-spacing: 0.04em;
+}
+
+/* Topic 2 · captured-reel bubbles */
+.reel-bubbles .bubble-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.35rem;
+  padding: 0.4rem 0.2rem 0.2rem;
+}
+
+.reel-bubble {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  width: 86px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.bubble-thumb {
+  position: relative;
+  width: 78px;
+  height: 78px;
+  overflow: hidden;
+  border: 2px solid var(--rule);
+  border-radius: 50%;
+  transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.bubble-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bubble-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(165deg, transparent 55%, rgba(0, 0, 0, 0.45));
+}
+
+.bubble-thumb::before {
+  content: '';
+  position: absolute;
+  right: 6px;
+  bottom: 8px;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 0 5px 8px;
+  border-color: transparent transparent transparent rgba(255, 255, 255, 0.92);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+}
+
+.reel-bubble:hover .bubble-thumb,
+.reel-bubble:focus-visible .bubble-thumb {
+  border-color: var(--accent);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.reel-bubble small {
+  color: var(--muted);
+  font: 600 0.62rem/1.3 var(--mono);
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+.reel-bubble:hover small,
+.reel-bubble:focus-visible small {
+  color: var(--text);
+}
+
+body.present-mode .bubble-thumb {
+  width: 66px;
+  height: 66px;
+}
+
+@media (max-width: 720px) {
+  .reel-bubbles .bubble-row {
+    gap: 0.8rem;
+    justify-content: center;
+  }
+
+  .src-tip {
+    width: calc(100% - 0.8rem);
   }
 }
