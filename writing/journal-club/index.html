@@ -11,7 +11,7 @@
   <meta property="og:url" content="https://wabbazzar.com/writing/journal-club/">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="stylesheet" href="styles.css?v=8">
+  <link rel="stylesheet" href="styles.css?v=9">
   <script>try{if(localStorage.getItem('blog-theme')==='light')document.documentElement.classList.add('light');}catch(e){}</script>
 </head>
 
@@ -121,6 +121,43 @@
           from the mechanisms and product additions for which the book provides
           no direct test.</p>
         </div>
+
+        <figure class="evidence-figure reel-bubbles" aria-labelledby="energy-bubbles-caption">
+          <div class="figure-kicker">The claim space, in its own voice · click a bubble to watch</div>
+          <div class="bubble-row">
+            <button type="button" class="reel-bubble" data-video="https://2pizzaclub.com/sources/captures/Db21RCjPCHW/reel.webm"
+                    data-caption="@neigongdisciple · Aug 10, 2026 · Two Shaolin grandmasters presented as demonstrating pyro-kinetic abilities attained through neigong practice. Capture and transcript archived; no independent test on record.">
+              <span class="bubble-thumb"><img src="reels/Db21RCjPCHW.webp" alt="Video still from the Shaolin pyrokinesis reel" loading="lazy" decoding="async"></span>
+              <small>Shaolin fire</small>
+            </button>
+            <button type="button" class="reel-bubble" data-video="https://2pizzaclub.com/sources/captures/DUyswAiEo0L/reel.webm"
+                    data-caption="@benzamaman · Feb 15, 2026 · The “Dynamo Jack” clip from Ring of Fire (1988): a Java healer filmed delivering electric-shock-like jolts and igniting newspaper, attributed to qi from meditation. Capture and transcript archived.">
+              <span class="bubble-thumb"><img src="reels/DUyswAiEo0L.webp" alt="Video still from the Dynamo Jack reel" loading="lazy" decoding="async"></span>
+              <small>Dynamo Jack</small>
+            </button>
+            <button type="button" class="reel-bubble" data-video="https://2pizzaclub.com/sources/captures/DUTTtdGAK7O/reel.webm"
+                    data-caption="@benzamaman · Feb 3, 2026 · Sound-healing lineage clip: tuning-fork resonance, then a claimed 11th-harmonic frequency combination that “shatters microorganisms.” Capture and transcript archived.">
+              <span class="bubble-thumb"><img src="reels/DUTTtdGAK7O.webp" alt="Video still from the sound frequency reel" loading="lazy" decoding="async"></span>
+              <small>Sound on cells</small>
+            </button>
+            <button type="button" class="reel-bubble" data-video="https://2pizzaclub.com/sources/captures/DZNubfoMCx7/reel.webm"
+                    data-caption="@carolinecoryofficial · Jun 5, 2026 · “Vibravision”: blindfolded children reading card colors and shapes, framed as consciousness perceiving vibration. Trailer for Superhuman 2. Capture and transcript archived.">
+              <span class="bubble-thumb"><img src="reels/DZNubfoMCx7.webp" alt="Video still from the Vibravision reel" loading="lazy" decoding="async"></span>
+              <small>Vibravision</small>
+            </button>
+            <button type="button" class="reel-bubble" data-video="https://2pizzaclub.com/sources/captures/DbkvVg7JiHx/reel.webm"
+                    data-caption="@first.house.rahu · Aug 3, 2026 · “Advanced Mindsight” session: children asked to see behind cardboard through a camera by changing belief. Capture and transcript archived.">
+              <span class="bubble-thumb"><img src="reels/DbkvVg7JiHx.webp" alt="Video still from the Mindsight reel" loading="lazy" decoding="async"></span>
+              <small>Mindsight</small>
+            </button>
+            <button type="button" class="reel-bubble" data-video="https://2pizzaclub.com/sources/captures/DZ8V_uzPA9r/reel.webm"
+                    data-caption="@dianamdivine · Jun 23, 2026 · Federico Faggin on Quantum Information Panpsychism: the body operated “like a drone” from a conscious quantum field. Capture and transcript archived.">
+              <span class="bubble-thumb"><img src="reels/DZ8V_uzPA9r.webp" alt="Video still from the Faggin panpsychism reel" loading="lazy" decoding="async"></span>
+              <small>Quantum mind</small>
+            </button>
+          </div>
+          <figcaption id="energy-bubbles-caption">Six captures, August 2026. Four recurring theses: a demonstrable bio-force, trained blindfold perception, frequencies acting on cells, and consciousness as a field. The iQube marketing draws on all four.</figcaption>
+        </figure>
 
         <figure class="evidence-figure claim-map" aria-labelledby="claim-map-caption">
           <div class="claim-map-head">
@@ -1738,6 +1775,8 @@
           video.controls = true;
           video.autoplay = true;
           video.playsInline = true;
+          video.muted = false;
+          video.volume = 1;
           video.className = 'lightbox-video';
           openLightbox(card, video, card.dataset.caption);
         });

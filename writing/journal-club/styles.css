@@ -3317,7 +3317,7 @@ body.present-mode .doors-caption {
   place-items: center;
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  overflow: hidden;
   border-radius: calc(var(--radius) - 4px);
 }
 
@@ -3333,8 +3333,11 @@ body.present-mode .doors-caption {
 
 .lightbox-video {
   display: block;
+  width: auto;
+  height: 100%;
   max-width: 100%;
   max-height: 100%;
+  object-fit: contain;
   border-radius: calc(var(--radius) - 4px);
   background: black;
 }
