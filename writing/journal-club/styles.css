@@ -3646,6 +3646,7 @@ body.present-mode .findings-grid {
 .reel-bubbles .bubble-row {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 1rem 1.35rem;
   padding: 0.4rem 0.2rem 0.2rem;
 }
