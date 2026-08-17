@@ -1,0 +1,435 @@
+:root {
+    --mdt-ink: #f5f5f4;
+    --mdt-dim: #9b9a96;
+    --mdt-faint: #666560;
+    --mdt-line: #2b2a27;
+    --mdt-panel: #11110f;
+    --mdt-signal: #b9adff;
+    --mdt-warm: #eadf9f;
+    --mdt-mono: 'Space Mono', ui-monospace, monospace;
+}
+
+body {
+    min-width: 300px;
+}
+
+.top-nav a[aria-current="page"] {
+    color: var(--text);
+}
+
+.episode {
+    padding: 2.5rem 0 9rem;
+}
+
+.episode-head {
+    position: relative;
+    min-height: 30rem;
+    padding-bottom: 7rem;
+}
+
+.episode-head::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 7rem;
+    width: min(42vw, 32rem);
+    height: 1px;
+    background: repeating-linear-gradient(90deg, var(--mdt-signal) 0 2px, transparent 2px 8px);
+    opacity: 0.68;
+}
+
+.kicker {
+    display: flex;
+    gap: 1.25rem;
+    margin-bottom: 3.75rem;
+    color: var(--mdt-dim);
+    font: 0.69rem/1.3 var(--mdt-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.kicker span + span::before {
+    content: '/';
+    padding-right: 1.25rem;
+    color: var(--mdt-faint);
+}
+
+.episode h1 {
+    max-width: none;
+    font-size: clamp(4.6rem, 15vw, 12rem);
+    font-weight: 600;
+    line-height: 0.75;
+    letter-spacing: -0.085em;
+}
+
+.episode-byline {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.45fr) 1fr;
+    gap: clamp(2rem, 8vw, 8rem);
+    width: min(48rem, 72%);
+    margin-top: 5rem;
+    margin-left: auto;
+    color: var(--mdt-dim);
+    font-size: 0.95rem;
+}
+
+.episode-byline > p:first-child {
+    color: var(--mdt-ink);
+    font-weight: 600;
+}
+
+.dek {
+    max-width: 40ch;
+    line-height: 1.65;
+}
+
+.player {
+    border-top: 1px solid var(--mdt-line);
+    border-bottom: 1px solid var(--mdt-line);
+    padding: 1.4rem 0 1.25rem;
+}
+
+.player-label,
+.player-foot,
+.time-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.player-label {
+    color: var(--mdt-dim);
+    font: 0.68rem/1.3 var(--mdt-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+#status {
+    color: var(--mdt-signal);
+}
+
+.transport {
+    display: grid;
+    grid-template-columns: 5rem 1fr 3.6rem;
+    align-items: center;
+    gap: 1.5rem;
+    padding: clamp(2.5rem, 6vw, 5rem) 0;
+}
+
+.play,
+.rate,
+.signal-path button {
+    border: 0;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+.play {
+    display: grid;
+    place-items: center;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background: var(--mdt-ink);
+    transition: transform 180ms ease, background 180ms ease;
+}
+
+.play:hover {
+    transform: scale(1.04);
+    background: var(--mdt-warm);
+}
+
+.play-icon {
+    width: 0;
+    height: 0;
+    margin-left: 0.3rem;
+    border-top: 0.55rem solid transparent;
+    border-bottom: 0.55rem solid transparent;
+    border-left: 0.85rem solid var(--bg);
+}
+
+.play.is-playing .play-icon {
+    width: 0.8rem;
+    height: 1.1rem;
+    margin-left: 0;
+    border: 0;
+    border-left: 0.28rem solid var(--bg);
+    border-right: 0.28rem solid var(--bg);
+}
+
+.transport-main {
+    min-width: 0;
+}
+
+.time-row {
+    margin-bottom: 0.65rem;
+    color: var(--mdt-dim);
+    font: 0.72rem/1 var(--mdt-mono);
+}
+
+#now-playing {
+    overflow: hidden;
+    padding: 0 1rem;
+    color: var(--mdt-ink);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.scrub-label {
+    display: block;
+}
+
+#scrub {
+    --played: 0%;
+    width: 100%;
+    height: 1.2rem;
+    margin: 0;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+#scrub::-webkit-slider-runnable-track {
+    height: 2px;
+    background: linear-gradient(90deg, var(--mdt-signal) var(--played), var(--mdt-line) var(--played));
+}
+
+#scrub::-moz-range-track {
+    height: 2px;
+    background: var(--mdt-line);
+}
+
+#scrub::-moz-range-progress {
+    height: 2px;
+    background: var(--mdt-signal);
+}
+
+#scrub::-webkit-slider-thumb {
+    width: 0.85rem;
+    height: 0.85rem;
+    margin-top: -0.36rem;
+    appearance: none;
+    border: 2px solid var(--bg);
+    border-radius: 50%;
+    background: var(--mdt-signal);
+    box-shadow: 0 0 0 1px var(--mdt-signal);
+}
+
+#scrub::-moz-range-thumb {
+    width: 0.65rem;
+    height: 0.65rem;
+    border: 2px solid var(--bg);
+    border-radius: 50%;
+    background: var(--mdt-signal);
+}
+
+.rate {
+    padding: 0.7rem 0.35rem;
+    border: 1px solid var(--mdt-line);
+    border-radius: 99px;
+    background: transparent;
+    color: var(--mdt-dim);
+    font: 0.68rem/1 var(--mdt-mono);
+}
+
+.rate:hover {
+    border-color: var(--mdt-faint);
+    color: var(--mdt-ink);
+}
+
+.signal-path {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    list-style: none;
+    border-top: 1px solid var(--mdt-line);
+    border-bottom: 1px solid var(--mdt-line);
+}
+
+.signal-path li {
+    position: relative;
+}
+
+.signal-path li + li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+    background: var(--mdt-line);
+}
+
+.signal-path li + li::after {
+    content: '→';
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 0;
+    padding: 0.2rem;
+    background: var(--bg);
+    color: var(--mdt-faint);
+    font: 0.62rem/1 var(--mdt-mono);
+    transform: translate(-50%, -50%);
+}
+
+.signal-path button {
+    width: 100%;
+    min-height: 6rem;
+    padding: 1rem clamp(0.45rem, 1.4vw, 1rem);
+    background: transparent;
+    color: var(--mdt-dim);
+    font-size: 0.72rem;
+    text-align: left;
+    transition: color 160ms ease, background 160ms ease;
+}
+
+.signal-path button span {
+    display: block;
+    margin-bottom: 1.15rem;
+    color: var(--mdt-faint);
+    font: 0.6rem/1 var(--mdt-mono);
+}
+
+.signal-path button:hover,
+.signal-path button.active {
+    background: var(--mdt-panel);
+    color: var(--mdt-ink);
+}
+
+.signal-path button.active span {
+    color: var(--mdt-signal);
+}
+
+.player-foot {
+    padding-top: 1.1rem;
+    color: var(--mdt-faint);
+    font: 0.66rem/1.4 var(--mdt-mono);
+}
+
+.player-foot a,
+.site-footer a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.player-foot a:hover,
+.site-footer a:hover {
+    color: var(--mdt-ink);
+}
+
+.note {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.35fr) 1fr;
+    gap: 2rem;
+    padding: clamp(5rem, 10vw, 9rem) 0;
+}
+
+.note-label {
+    color: var(--mdt-faint);
+    font: 0.66rem/1.4 var(--mdt-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.note blockquote {
+    max-width: 24ch;
+    font-size: clamp(1.8rem, 4vw, 3.6rem);
+    font-weight: 500;
+    line-height: 1.16;
+    letter-spacing: -0.035em;
+}
+
+.site-footer a {
+    color: var(--text-faint);
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--mdt-warm);
+    outline-offset: 4px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@media (max-width: 760px) {
+    .episode {
+        padding-top: 1rem;
+    }
+
+    .episode-head {
+        min-height: 0;
+    }
+
+    .episode-head::after {
+        display: none;
+    }
+
+    .kicker {
+        flex-wrap: wrap;
+        row-gap: 0.65rem;
+        margin-bottom: 3rem;
+    }
+
+    .episode h1 {
+        font-size: clamp(4.25rem, 23vw, 7rem);
+    }
+
+    .episode-byline {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 82%;
+        margin-top: 3.5rem;
+    }
+
+    .transport {
+        grid-template-columns: 4rem 1fr;
+        gap: 1rem;
+    }
+
+    .play {
+        width: 4rem;
+        height: 4rem;
+    }
+
+    .rate {
+        grid-column: 2;
+        justify-self: end;
+        width: 3.6rem;
+        margin-top: -0.35rem;
+    }
+
+    .signal-path {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+    }
+
+    .signal-path li {
+        flex: 0 0 8.3rem;
+        scroll-snap-align: start;
+    }
+
+    .note {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .play,
+    .rate,
+    .signal-path button {
+        transition: none;
+    }
+}

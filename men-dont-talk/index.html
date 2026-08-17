@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Men Don't Talk — Wesley Beckner with Wesley Tatum. Listen to episode one, production cut v1.">
+    <meta name="theme-color" content="#0a0a09">
+    <title>Men Don't Talk — Tatum</title>
+
+    <meta property="og:type" content="music.radio_station">
+    <meta property="og:url" content="https://wabbazzar.com/men-dont-talk/">
+    <meta property="og:title" content="Men Don't Talk — Wesley Tatum">
+    <meta property="og:description" content="Episode one. Two old friends talk about kids, work, AI, power, and why men need an excuse to stay in touch.">
+
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/men-dont-talk/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <header class="site-header">
+            <a class="brand" href="/" aria-label="wabbazzar home">
+                <img class="brand-mark" src="/favicon.png" alt="" width="22" height="22">
+                <span>wabbazzar</span>
+            </a>
+            <nav class="top-nav" aria-label="Primary">
+                <a href="/#work">Work</a>
+                <a href="/writing/">Writing</a>
+                <a href="/men-dont-talk/" aria-current="page">MDT</a>
+            </nav>
+        </header>
+
+        <article class="episode">
+            <header class="episode-head">
+                <p class="kicker"><span>Episode 01</span><span>Production cut v1</span><span>44:15</span></p>
+                <h1>Men don&rsquo;t<br>talk.</h1>
+                <div class="episode-byline">
+                    <p>Wesley Beckner<br>with Wesley Tatum</p>
+                    <p class="dek">Two old friends on kids, work, AI, power, and the elaborate lengths men go to just to stay in touch.</p>
+                </div>
+            </header>
+
+            <section class="player" aria-labelledby="listen-title">
+                <div class="player-label">
+                    <span id="listen-title">Listen to v1</span>
+                    <span id="status" aria-live="polite">Ready</span>
+                </div>
+
+                <audio id="audio" preload="metadata" src="tatum-v1.mp3"></audio>
+
+                <div class="transport">
+                    <button class="play" id="play" type="button" aria-label="Play episode">
+                        <span class="play-icon" aria-hidden="true"></span>
+                    </button>
+                    <div class="transport-main">
+                        <div class="time-row">
+                            <time id="current">0:00</time>
+                            <span id="now-playing">Cold open</span>
+                            <time id="duration">44:15</time>
+                        </div>
+                        <label class="scrub-label">
+                            <span class="sr-only">Episode position</span>
+                            <input id="scrub" type="range" min="0" max="1000" value="0" step="1">
+                        </label>
+                    </div>
+                    <button class="rate" id="rate" type="button" aria-label="Change playback speed">1&times;</button>
+                </div>
+
+                <ol class="signal-path" aria-label="Episode sequence">
+                    <li><button type="button" data-time="0"><span>01</span>Cold open</button></li>
+                    <li><button type="button" data-time="10.12"><span>02</span>Motif</button></li>
+                    <li><button type="button" data-time="13.33"><span>03</span>Main intro</button></li>
+                    <li><button type="button" data-time="43.9"><span>04</span>Tatum intro</button></li>
+                    <li><button type="button" data-time="76.05"><span>05</span>Theme</button></li>
+                    <li><button type="button" data-time="92.16"><span>06</span>Conversation</button></li>
+                    <li><button type="button" data-time="1207.36"><span>07</span>Ad break</button></li>
+                </ol>
+
+                <div class="player-foot">
+                    <span>Recorded June 10, 2026</span>
+                    <a href="tatum-v1.mp3" download>Download MP3&nbsp;&darr;</a>
+                </div>
+            </section>
+
+            <aside class="note">
+                <p class="note-label">Why this exists</p>
+                <blockquote>&ldquo;The only way to keep in touch with my guy friends is if I make a podcast.&rdquo;</blockquote>
+            </aside>
+        </article>
+
+        <footer class="site-footer">
+            <span>&copy; 2026</span>
+            <a href="/">wabbazzar &rarr;</a>
+        </footer>
+    </main>
+
+    <script>
+        (() => {
+            const audio = document.getElementById('audio');
+            const play = document.getElementById('play');
+            const scrub = document.getElementById('scrub');
+            const current = document.getElementById('current');
+            const duration = document.getElementById('duration');
+            const status = document.getElementById('status');
+            const nowPlaying = document.getElementById('now-playing');
+            const rate = document.getElementById('rate');
+            const stageButtons = [...document.querySelectorAll('[data-time]')];
+            const fallbackDuration = 2655.56;
+            const rates = [1, 1.25, 1.5, 2];
+            let rateIndex = 0;
+
+            const stages = [
+                { start: 0, end: 10.12, label: 'Cold open' },
+                { start: 10.12, end: 13.33, label: 'Motif' },
+                { start: 13.33, end: 43.9, label: 'Main intro' },
+                { start: 43.9, end: 76.05, label: 'Tatum intro' },
+                { start: 76.05, end: 92.16, label: 'Theme' },
+                { start: 92.16, end: fallbackDuration, label: 'Conversation' },
+                { start: 1207.36, end: 1235.1, label: 'Ad break' }
+            ];
+
+            const fmt = (seconds) => {
+                const n = Math.max(0, Math.floor(Number.isFinite(seconds) ? seconds : 0));
+                const h = Math.floor(n / 3600);
+                const m = Math.floor((n % 3600) / 60);
+                const s = n % 60;
+                return h ? `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}` : `${m}:${String(s).padStart(2, '0')}`;
+            };
+
+            const activeStage = (time) => {
+                const ad = stages[6];
+                if (time >= ad.start && time < ad.end) return ad;
+                return stages.slice(0, 6).find((stage) => time >= stage.start && time < stage.end) || stages[5];
+            };
+
+            const sync = () => {
+                const total = audio.duration || fallbackDuration;
+                const progress = Math.min(1, audio.currentTime / total);
+                scrub.value = String(Math.round(progress * 1000));
+                scrub.style.setProperty('--played', `${progress * 100}%`);
+                current.textContent = fmt(audio.currentTime);
+                duration.textContent = fmt(total);
+                const active = activeStage(audio.currentTime);
+                nowPlaying.textContent = active.label;
+                stageButtons.forEach((button) => {
+                    const t = Number(button.dataset.time);
+                    const selected = active.label === button.textContent.trim().replace(/^\d+/, '').trim();
+                    button.classList.toggle('active', selected || (active.label === 'Conversation' && t === 92.16));
+                });
+            };
+
+            play.addEventListener('click', () => audio.paused ? audio.play() : audio.pause());
+            audio.addEventListener('play', () => {
+                play.classList.add('is-playing');
+                play.setAttribute('aria-label', 'Pause episode');
+                status.textContent = 'Playing';
+            });
+            audio.addEventListener('pause', () => {
+                play.classList.remove('is-playing');
+                play.setAttribute('aria-label', 'Play episode');
+                status.textContent = audio.ended ? 'Finished' : 'Paused';
+            });
+            audio.addEventListener('loadedmetadata', sync);
+            audio.addEventListener('timeupdate', sync);
+            audio.addEventListener('ended', sync);
+            audio.addEventListener('error', () => { status.textContent = 'Audio unavailable'; });
+
+            scrub.addEventListener('input', () => {
+                audio.currentTime = (audio.duration || fallbackDuration) * Number(scrub.value) / 1000;
+                sync();
+            });
+            rate.addEventListener('click', () => {
+                rateIndex = (rateIndex + 1) % rates.length;
+                audio.playbackRate = rates[rateIndex];
+                rate.textContent = `${rates[rateIndex]}×`;
+                rate.setAttribute('aria-label', `Playback speed ${rates[rateIndex]} times`);
+            });
+            stageButtons.forEach((button) => button.addEventListener('click', () => {
+                audio.currentTime = Number(button.dataset.time);
+                audio.play();
+            }));
+            document.addEventListener('keydown', (event) => {
+                if (event.code !== 'Space' || /button|input|a/i.test(document.activeElement.tagName)) return;
+                event.preventDefault();
+                audio.paused ? audio.play() : audio.pause();
+            });
+            sync();
+        })();
+    </script>
+</body>
+</html>

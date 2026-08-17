@@ -11,7 +11,7 @@
 //
 // Bump VERSION to invalidate old caches on next activation.
 
-const VERSION = 'v13';
+const VERSION = 'v14';
 const CACHE_STATIC = `wz-static-${VERSION}`;
 const CACHE_RUNTIME = `wz-runtime-${VERSION}`;
 
@@ -19,6 +19,8 @@ const PRECACHE_URLS = [
     '/',
     '/index.html',
     '/styles.css',
+    '/men-dont-talk/',
+    '/men-dont-talk/styles.css',
     '/ascii.js',
     '/fracture.js',
     '/easter-egg.js',
