@@ -430,8 +430,13 @@ a:focus-visible {
 }
 
 @media (max-width: 760px) {
+    .site-header {
+        padding-bottom: 1.5rem;
+    }
+
     .episode-index {
         grid-template-columns: 1fr;
+        margin-top: 1.5rem;
     }
 
     .episode-index p {
@@ -452,8 +457,13 @@ a:focus-visible {
         padding-top: 4rem;
     }
 
+    .episode.is-share-target {
+        padding-top: 1rem;
+    }
+
     .episode-head {
         min-height: 0;
+        padding-bottom: 4rem;
     }
 
     .episode-head::after {
@@ -462,8 +472,13 @@ a:focus-visible {
 
     .kicker {
         flex-wrap: wrap;
+        gap: 0.75rem;
         row-gap: 0.65rem;
-        margin-bottom: 3rem;
+        margin-bottom: 2rem;
+    }
+
+    .kicker span + span::before {
+        padding-right: 0.75rem;
     }
 
     .episode h1 {
@@ -472,9 +487,9 @@ a:focus-visible {
 
     .episode-byline {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 1.25rem;
         width: 82%;
-        margin-top: 3.5rem;
+        margin-top: 2.5rem;
     }
 
     .transport {
@@ -507,6 +522,12 @@ a:focus-visible {
 
     .note {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 350px) {
+    .kicker-detail {
+        display: none;
     }
 }
 

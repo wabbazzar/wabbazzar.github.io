@@ -51,7 +51,7 @@
 
         <article class="episode" id="episode-01-tatum">
             <header class="episode-head">
-                <p class="kicker"><span>Episode 01</span><span>Production cut v3</span><span>44:09</span></p>
+                <p class="kicker"><span>Episode 01</span><span><span class="kicker-detail">Production cut </span>v3</span><span>44:09</span></p>
                 <h1>Men don&rsquo;t<br>talk.</h1>
                 <div class="episode-byline">
                     <p>Wesley Beckner<br>with Wesley Tatum</p>
@@ -109,7 +109,7 @@
 
         <article class="episode" id="episode-05-camille-richie">
             <header class="episode-head">
-                <p class="kicker"><span>Episode 05</span><span>Production cut v1</span><span>44:07</span></p>
+                <p class="kicker"><span>Episode 05</span><span><span class="kicker-detail">Production cut </span>v1</span><span>44:07</span></p>
                 <h1>Camille<br>Richie.</h1>
                 <div class="episode-byline">
                     <p>Wesley Beckner<br>with Camille Richie</p>
@@ -275,6 +275,9 @@
             const showEpisode = (episodeId, keepShareUrl = false) => {
                 const target = document.getElementById(episodeId);
                 if (!target) return;
+                document.querySelectorAll('.episode').forEach((episode) => {
+                    episode.classList.toggle('is-share-target', episode === target);
+                });
                 const settle = () => requestAnimationFrame(() => {
                     target.scrollIntoView({ block: 'start' });
                     if (keepShareUrl) {
@@ -319,7 +322,13 @@
                     || (location.hash.startsWith('#episode-')
                         ? decodeURIComponent(location.hash.slice(1))
                         : null);
-                if (episodeId) showEpisode(episodeId);
+                if (episodeId) {
+                    showEpisode(episodeId);
+                } else {
+                    document.querySelectorAll('.episode').forEach((episode) => {
+                        episode.classList.remove('is-share-target');
+                    });
+                }
             });
         })();
     </script>
