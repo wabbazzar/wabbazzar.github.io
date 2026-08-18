@@ -1,0 +1,26 @@
+[
+  {
+    "number": "01",
+    "slug": "tatum",
+    "anchor": "episode-01-tatum",
+    "guest": "Wesley Tatum",
+    "duration": "44:08",
+    "version": "Production cut v1",
+    "recorded": "June 10, 2026",
+    "audio": "tatum-v1.mp3",
+    "description": "Two old friends on kids, work, AI, power, and the elaborate lengths men go to just to stay in touch.",
+    "quote": "The only way to keep in touch with my guy friends is if I make a podcast."
+  },
+  {
+    "number": "05",
+    "slug": "camille-richie",
+    "anchor": "episode-05-camille-richie",
+    "guest": "Camille Richie",
+    "duration": "44:07",
+    "version": "Production cut v1",
+    "recorded": "August 2026",
+    "audio": "camille-v1.mp3",
+    "description": "Lifelong friends on Adelaide, becoming a parent, politics, protest, the itty-bitty fish, and what it means to keep speaking anyway.",
+    "quote": "If you're not outraged, you're not paying attention."
+  }
+]
