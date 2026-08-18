@@ -36,7 +36,7 @@
 
         <article class="episode">
             <header class="episode-head">
-                <p class="kicker"><span>Episode 01</span><span>Production cut v1</span><span>44:15</span></p>
+                <p class="kicker"><span>Episode 01</span><span>Production cut v1</span><span>44:12</span></p>
                 <h1>Men don&rsquo;t<br>talk.</h1>
                 <div class="episode-byline">
                     <p>Wesley Beckner<br>with Wesley Tatum</p>
@@ -60,7 +60,7 @@
                         <div class="time-row">
                             <time id="current">0:00</time>
                             <span id="now-playing">Cold open</span>
-                            <time id="duration">44:15</time>
+                            <time id="duration">44:12</time>
                         </div>
                         <label class="scrub-label">
                             <span class="sr-only">Episode position</span>
@@ -72,12 +72,11 @@
 
                 <ol class="signal-path" aria-label="Episode sequence">
                     <li><button type="button" data-time="0"><span>01</span>Cold open</button></li>
-                    <li><button type="button" data-time="10.12"><span>02</span>Motif</button></li>
-                    <li><button type="button" data-time="13.33"><span>03</span>Main intro</button></li>
-                    <li><button type="button" data-time="43.9"><span>04</span>Tatum intro</button></li>
-                    <li><button type="button" data-time="76.05"><span>05</span>Theme</button></li>
-                    <li><button type="button" data-time="92.16"><span>06</span>Conversation</button></li>
-                    <li><button type="button" data-time="1207.36"><span>07</span>Ad break</button></li>
+                    <li><button type="button" data-time="10.12"><span>02</span>Full intro song</button></li>
+                    <li><button type="button" data-time="26.43"><span>03</span>Main intro</button></li>
+                    <li><button type="button" data-time="57"><span>04</span>Tatum intro</button></li>
+                    <li><button type="button" data-time="89.2"><span>05</span>Conversation</button></li>
+                    <li><button type="button" data-time="1204.4"><span>06</span>Ad break</button></li>
                 </ol>
 
                 <div class="player-foot">
@@ -109,18 +108,17 @@
             const nowPlaying = document.getElementById('now-playing');
             const rate = document.getElementById('rate');
             const stageButtons = [...document.querySelectorAll('[data-time]')];
-            const fallbackDuration = 2655.56;
+            const fallbackDuration = 2652.58;
             const rates = [1, 1.25, 1.5, 2];
             let rateIndex = 0;
 
             const stages = [
                 { start: 0, end: 10.12, label: 'Cold open' },
-                { start: 10.12, end: 13.33, label: 'Motif' },
-                { start: 13.33, end: 43.9, label: 'Main intro' },
-                { start: 43.9, end: 76.05, label: 'Tatum intro' },
-                { start: 76.05, end: 92.16, label: 'Theme' },
-                { start: 92.16, end: fallbackDuration, label: 'Conversation' },
-                { start: 1207.36, end: 1235.1, label: 'Ad break' }
+                { start: 10.12, end: 26.43, label: 'Full intro song' },
+                { start: 26.43, end: 57, label: 'Main intro' },
+                { start: 57, end: 89.2, label: 'Tatum intro' },
+                { start: 89.2, end: fallbackDuration, label: 'Conversation' },
+                { start: 1204.4, end: 1232.14, label: 'Ad break' }
             ];
 
             const fmt = (seconds) => {
@@ -132,9 +130,9 @@
             };
 
             const activeStage = (time) => {
-                const ad = stages[6];
+                const ad = stages[5];
                 if (time >= ad.start && time < ad.end) return ad;
-                return stages.slice(0, 6).find((stage) => time >= stage.start && time < stage.end) || stages[5];
+                return stages.slice(0, 5).find((stage) => time >= stage.start && time < stage.end) || stages[4];
             };
 
             const sync = () => {
@@ -149,7 +147,7 @@
                 stageButtons.forEach((button) => {
                     const t = Number(button.dataset.time);
                     const selected = active.label === button.textContent.trim().replace(/^\d+/, '').trim();
-                    button.classList.toggle('active', selected || (active.label === 'Conversation' && t === 92.16));
+                    button.classList.toggle('active', selected || (active.label === 'Conversation' && t === 89.2));
                 });
             };
 
