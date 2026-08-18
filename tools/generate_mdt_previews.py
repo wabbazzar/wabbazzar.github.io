@@ -256,6 +256,7 @@ def route_html(episode: dict) -> str:
     route = f"https://wabbazzar.com/men-dont-talk/episode/{episode['number']}-{episode['slug']}/"
     image = f"https://wabbazzar.com/men-dont-talk/previews/episode-{episode['number']}-{episode['slug']}.png"
     target = f"/men-dont-talk/#{episode['anchor']}"
+    handoff = f"/men-dont-talk/?episode={episode['anchor']}#{episode['anchor']}"
     title = f"{episode['guest']} — Men Don't Talk"
     esc = html.escape
     return f"""<!doctype html>
@@ -279,7 +280,7 @@ def route_html(episode: dict) -> str:
     <meta name="twitter:title" content="{esc(title, quote=True)}">
     <meta name="twitter:description" content="{esc(episode['description'], quote=True)}">
     <meta name="twitter:image" content="{image}">
-    <script>window.location.replace({json.dumps(target)});</script>
+    <script>window.location.replace({json.dumps(handoff)});</script>
     <style>
         html,body{{min-height:100%;margin:0;background:#0a0a09;color:#f5f5f4;font:16px/1.5 system-ui,sans-serif}}
         body{{display:grid;place-items:center}}

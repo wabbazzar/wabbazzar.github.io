@@ -11,7 +11,7 @@
 //
 // Bump VERSION to invalidate old caches on next activation.
 
-const VERSION = 'v17';
+const VERSION = 'v18';
 const CACHE_STATIC = `wz-static-${VERSION}`;
 const CACHE_RUNTIME = `wz-runtime-${VERSION}`;
 

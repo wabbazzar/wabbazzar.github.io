@@ -6,6 +6,7 @@
     <meta name="description" content="Men Don't Talk — conversations with Wesley Beckner and friends.">
     <meta name="theme-color" content="#0a0a09">
     <title>Men Don't Talk</title>
+    <base href="/men-dont-talk/">
 
     <meta property="og:type" content="music.radio_station">
     <meta property="og:url" content="https://wabbazzar.com/men-dont-talk/">
@@ -50,7 +51,7 @@
 
         <article class="episode" id="episode-01-tatum">
             <header class="episode-head">
-                <p class="kicker"><span>Episode 01</span><span>Production cut v1</span><span>44:08</span></p>
+                <p class="kicker"><span>Episode 01</span><span>Production cut v3</span><span>44:09</span></p>
                 <h1>Men don&rsquo;t<br>talk.</h1>
                 <div class="episode-byline">
                     <p>Wesley Beckner<br>with Wesley Tatum</p>
@@ -58,13 +59,13 @@
                 </div>
             </header>
 
-            <section class="player" data-episode-player data-duration="2648.29" aria-labelledby="listen-tatum">
+            <section class="player" data-episode-player data-duration="2649.34" aria-labelledby="listen-tatum">
                 <div class="player-label">
-                    <span id="listen-tatum">Listen to v1</span>
+                    <span id="listen-tatum">Listen to v3</span>
                     <span class="status" aria-live="polite">Ready</span>
                 </div>
 
-                <audio preload="metadata" src="tatum-v1.mp3?v=20260818-2"></audio>
+                <audio preload="metadata" src="tatum-v3.mp3?v=20260818-1"></audio>
 
                 <div class="transport">
                     <button class="play" type="button" aria-label="Play episode">
@@ -74,7 +75,7 @@
                         <div class="time-row">
                             <time class="current">0:00</time>
                             <span class="now-playing">Cold open</span>
-                            <time class="duration">44:08</time>
+                            <time class="duration">44:09</time>
                         </div>
                         <label class="scrub-label">
                             <span class="sr-only">Episode position</span>
@@ -86,17 +87,17 @@
 
                 <ol class="signal-path" aria-label="Episode sequence">
                     <li><button type="button" data-time="0" data-label="Cold open"><span>01</span>Cold open</button></li>
-                    <li><button type="button" data-time="10.12" data-label="Intro song"><span>02</span>Intro song</button></li>
-                    <li><button type="button" data-time="22.12" data-label="Main intro"><span>03</span>Main intro</button></li>
-                    <li><button type="button" data-time="52.69" data-label="Tatum intro"><span>04</span>Tatum intro</button></li>
-                    <li><button type="button" data-time="84.89" data-label="Conversation"><span>05</span>Conversation</button></li>
-                    <li><button type="button" data-time="1200.09" data-label="Ad break"><span>06</span>Ad break</button></li>
-                    <li><button type="button" data-time="1227.83" data-label="Final segment"><span>07</span>Final segment</button></li>
+                    <li><button type="button" data-time="11.17" data-label="Intro song"><span>02</span>Intro song</button></li>
+                    <li><button type="button" data-time="23.18" data-label="Main intro"><span>03</span>Main intro</button></li>
+                    <li><button type="button" data-time="53.75" data-label="Tatum intro"><span>04</span>Tatum intro</button></li>
+                    <li><button type="button" data-time="85.94" data-label="Conversation"><span>05</span>Conversation</button></li>
+                    <li><button type="button" data-time="1201.14" data-label="Ad break"><span>06</span>Ad break</button></li>
+                    <li><button type="button" data-time="1228.88" data-label="Final segment"><span>07</span>Final segment</button></li>
                 </ol>
 
                 <div class="player-foot">
                     <span>Recorded June 10, 2026</span>
-                    <span><a class="episode-link" href="/men-dont-talk/episode/01-tatum/">Episode link&nbsp;↗</a> &middot; <a href="tatum-v1.mp3?v=20260818-2" download>MP3&nbsp;&darr;</a></span>
+                    <span><a class="episode-link" href="/men-dont-talk/episode/01-tatum/">Episode link&nbsp;↗</a> &middot; <a href="tatum-v3.mp3?v=20260818-1" download>MP3&nbsp;&darr;</a></span>
                 </div>
             </section>
 
@@ -262,13 +263,64 @@
                 audio.paused ? audio.play() : audio.pause();
             });
 
-            const scrollToEpisode = () => {
-                if (!location.hash.startsWith('#episode-')) return;
-                const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-                if (target) requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+            const shareLinks = [...document.querySelectorAll('a.episode-link')];
+            const routeByEpisode = new Map(shareLinks.map((link) => [
+                link.closest('.episode').id,
+                new URL(link.href).pathname
+            ]));
+
+            const episodeAtPath = () => [...routeByEpisode.entries()]
+                .find(([, route]) => route === location.pathname)?.[0];
+
+            const showEpisode = (episodeId, keepShareUrl = false) => {
+                const target = document.getElementById(episodeId);
+                if (!target) return;
+                const settle = () => requestAnimationFrame(() => {
+                    target.scrollIntoView({ block: 'start' });
+                    if (keepShareUrl) {
+                        history.replaceState({ episodeId }, '', routeByEpisode.get(episodeId));
+                    }
+                });
+                document.fonts?.ready ? document.fonts.ready.then(settle) : settle();
             };
-            window.addEventListener('load', scrollToEpisode);
-            window.addEventListener('hashchange', scrollToEpisode);
+
+            const navigateToEpisode = (episodeId) => {
+                const route = routeByEpisode.get(episodeId);
+                if (!route) return;
+                history.pushState({ episodeId }, '', route);
+                showEpisode(episodeId);
+            };
+
+            shareLinks.forEach((link) => link.addEventListener('click', (event) => {
+                event.preventDefault();
+                navigateToEpisode(link.closest('.episode').id);
+            }));
+
+            document.querySelectorAll('.episode-index a[href^="#episode-"]').forEach((link) => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    navigateToEpisode(decodeURIComponent(link.hash.slice(1)));
+                });
+            });
+
+            const handoffEpisode = new URLSearchParams(location.search).get('episode');
+            if (handoffEpisode && routeByEpisode.has(handoffEpisode)) {
+                showEpisode(handoffEpisode, true);
+            } else {
+                const initialEpisode = episodeAtPath()
+                    || (location.hash.startsWith('#episode-')
+                        ? decodeURIComponent(location.hash.slice(1))
+                        : null);
+                if (initialEpisode) showEpisode(initialEpisode);
+            }
+
+            window.addEventListener('popstate', () => {
+                const episodeId = episodeAtPath()
+                    || (location.hash.startsWith('#episode-')
+                        ? decodeURIComponent(location.hash.slice(1))
+                        : null);
+                if (episodeId) showEpisode(episodeId);
+            });
         })();
     </script>
 </body>
