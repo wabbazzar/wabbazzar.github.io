@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Men Don't Talk — Wesley Beckner with Wesley Tatum. Listen to episode one, production cut v1.">
+    <meta name="description" content="Men Don't Talk — conversations with Wesley Beckner and friends.">
     <meta name="theme-color" content="#0a0a09">
-    <title>Men Don't Talk — Tatum</title>
+    <title>Men Don't Talk</title>
 
     <meta property="og:type" content="music.radio_station">
     <meta property="og:url" content="https://wabbazzar.com/men-dont-talk/">
-    <meta property="og:title" content="Men Don't Talk — Wesley Tatum">
-    <meta property="og:description" content="Episode one. Two old friends talk about kids, work, AI, power, and why men need an excuse to stay in touch.">
+    <meta property="og:title" content="Men Don't Talk">
+    <meta property="og:description" content="Long conversations with old friends about kids, work, power, and the elaborate lengths men go to just to stay in touch.">
 
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -34,9 +34,15 @@
             </nav>
         </header>
 
-        <article class="episode">
+        <nav class="episode-index" aria-label="Men Don't Talk episodes">
+            <p>Episodes</p>
+            <a href="#episode-01-tatum"><span>01</span><strong>Wesley Tatum</strong><small>June 10, 2026</small></a>
+            <a href="#episode-05-camille-richie"><span>05</span><strong>Camille Richie</strong><small>August 2026</small></a>
+        </nav>
+
+        <article class="episode" id="episode-01-tatum">
             <header class="episode-head">
-                <p class="kicker"><span>Episode 01</span><span>Production cut v1</span><span>44:12</span></p>
+                <p class="kicker"><span>Episode 01</span><span>Production cut v1</span><span>44:08</span></p>
                 <h1>Men don&rsquo;t<br>talk.</h1>
                 <div class="episode-byline">
                     <p>Wesley Beckner<br>with Wesley Tatum</p>
@@ -44,50 +50,109 @@
                 </div>
             </header>
 
-            <section class="player" aria-labelledby="listen-title">
+            <section class="player" data-episode-player data-duration="2648.29" aria-labelledby="listen-tatum">
                 <div class="player-label">
-                    <span id="listen-title">Listen to v1</span>
-                    <span id="status" aria-live="polite">Ready</span>
+                    <span id="listen-tatum">Listen to v1</span>
+                    <span class="status" aria-live="polite">Ready</span>
                 </div>
 
-                <audio id="audio" preload="metadata" src="tatum-v1.mp3"></audio>
+                <audio preload="metadata" src="tatum-v1.mp3?v=20260818-2"></audio>
 
                 <div class="transport">
-                    <button class="play" id="play" type="button" aria-label="Play episode">
+                    <button class="play" type="button" aria-label="Play episode">
                         <span class="play-icon" aria-hidden="true"></span>
                     </button>
                     <div class="transport-main">
                         <div class="time-row">
-                            <time id="current">0:00</time>
-                            <span id="now-playing">Cold open</span>
-                            <time id="duration">44:12</time>
+                            <time class="current">0:00</time>
+                            <span class="now-playing">Cold open</span>
+                            <time class="duration">44:08</time>
                         </div>
                         <label class="scrub-label">
                             <span class="sr-only">Episode position</span>
-                            <input id="scrub" type="range" min="0" max="1000" value="0" step="1">
+                            <input class="scrub" type="range" min="0" max="1000" value="0" step="1">
                         </label>
                     </div>
-                    <button class="rate" id="rate" type="button" aria-label="Change playback speed">1&times;</button>
+                    <button class="rate" type="button" aria-label="Change playback speed">1&times;</button>
                 </div>
 
                 <ol class="signal-path" aria-label="Episode sequence">
-                    <li><button type="button" data-time="0"><span>01</span>Cold open</button></li>
-                    <li><button type="button" data-time="10.12"><span>02</span>Full intro song</button></li>
-                    <li><button type="button" data-time="26.43"><span>03</span>Main intro</button></li>
-                    <li><button type="button" data-time="57"><span>04</span>Tatum intro</button></li>
-                    <li><button type="button" data-time="89.2"><span>05</span>Conversation</button></li>
-                    <li><button type="button" data-time="1204.4"><span>06</span>Ad break</button></li>
+                    <li><button type="button" data-time="0" data-label="Cold open"><span>01</span>Cold open</button></li>
+                    <li><button type="button" data-time="10.12" data-label="Intro song"><span>02</span>Intro song</button></li>
+                    <li><button type="button" data-time="22.12" data-label="Main intro"><span>03</span>Main intro</button></li>
+                    <li><button type="button" data-time="52.69" data-label="Tatum intro"><span>04</span>Tatum intro</button></li>
+                    <li><button type="button" data-time="84.89" data-label="Conversation"><span>05</span>Conversation</button></li>
+                    <li><button type="button" data-time="1200.09" data-label="Ad break"><span>06</span>Ad break</button></li>
+                    <li><button type="button" data-time="1227.83" data-label="Final segment"><span>07</span>Final segment</button></li>
                 </ol>
 
                 <div class="player-foot">
                     <span>Recorded June 10, 2026</span>
-                    <a href="tatum-v1.mp3" download>Download MP3&nbsp;&darr;</a>
+                    <span><a class="episode-link" href="#episode-01-tatum">Episode link&nbsp;↗</a> &middot; <a href="tatum-v1.mp3?v=20260818-2" download>MP3&nbsp;&darr;</a></span>
                 </div>
             </section>
 
             <aside class="note">
                 <p class="note-label">Why this exists</p>
                 <blockquote>&ldquo;The only way to keep in touch with my guy friends is if I make a podcast.&rdquo;</blockquote>
+            </aside>
+        </article>
+
+        <article class="episode" id="episode-05-camille-richie">
+            <header class="episode-head">
+                <p class="kicker"><span>Episode 05</span><span>Production cut v1</span><span>44:07</span></p>
+                <h1>Camille<br>Richie.</h1>
+                <div class="episode-byline">
+                    <p>Wesley Beckner<br>with Camille Richie</p>
+                    <p class="dek">Lifelong friends on Adelaide, becoming a parent, politics, protest, the itty-bitty fish, and what it means to keep speaking anyway.</p>
+                </div>
+            </header>
+
+            <section class="player" data-episode-player data-duration="2647.77" aria-labelledby="listen-camille">
+                <div class="player-label">
+                    <span id="listen-camille">Listen to v1</span>
+                    <span class="status" aria-live="polite">Ready</span>
+                </div>
+
+                <audio preload="metadata" src="camille-v1.mp3?v=20260818-1"></audio>
+
+                <div class="transport">
+                    <button class="play" type="button" aria-label="Play episode">
+                        <span class="play-icon" aria-hidden="true"></span>
+                    </button>
+                    <div class="transport-main">
+                        <div class="time-row">
+                            <time class="current">0:00</time>
+                            <span class="now-playing">Cold open</span>
+                            <time class="duration">44:07</time>
+                        </div>
+                        <label class="scrub-label">
+                            <span class="sr-only">Episode position</span>
+                            <input class="scrub" type="range" min="0" max="1000" value="0" step="1">
+                        </label>
+                    </div>
+                    <button class="rate" type="button" aria-label="Change playback speed">1&times;</button>
+                </div>
+
+                <ol class="signal-path" aria-label="Episode sequence">
+                    <li><button type="button" data-time="0" data-label="Cold open"><span>01</span>Cold open</button></li>
+                    <li><button type="button" data-time="10.14" data-label="Intro song"><span>02</span>Intro song</button></li>
+                    <li><button type="button" data-time="22.15" data-label="Main intro"><span>03</span>Main intro</button></li>
+                    <li><button type="button" data-time="29.83" data-label="Camille intro"><span>04</span>Camille intro</button></li>
+                    <li><button type="button" data-time="42.81" data-label="Conversation"><span>05</span>Conversation</button></li>
+                    <li><button type="button" data-time="1286.36" data-label="Ad break"><span>06</span>Ad break</button></li>
+                    <li><button type="button" data-time="1320.76" data-label="Final segment"><span>07</span>Final segment</button></li>
+                </ol>
+
+                <div class="player-foot">
+                    <span>Episode 05</span>
+                    <span><a class="episode-link" href="#episode-05-camille-richie">Episode link&nbsp;↗</a> &middot; <a href="camille-v1.mp3?v=20260818-1" download>MP3&nbsp;&darr;</a></span>
+                </div>
+            </section>
+
+            <aside class="note">
+                <p class="note-label">The itty-bitty fish</p>
+                <blockquote>&ldquo;If you&rsquo;re not outraged, you&rsquo;re not paying attention.&rdquo;</blockquote>
             </aside>
         </article>
 
@@ -99,27 +164,8 @@
 
     <script>
         (() => {
-            const audio = document.getElementById('audio');
-            const play = document.getElementById('play');
-            const scrub = document.getElementById('scrub');
-            const current = document.getElementById('current');
-            const duration = document.getElementById('duration');
-            const status = document.getElementById('status');
-            const nowPlaying = document.getElementById('now-playing');
-            const rate = document.getElementById('rate');
-            const stageButtons = [...document.querySelectorAll('[data-time]')];
-            const fallbackDuration = 2652.58;
             const rates = [1, 1.25, 1.5, 2];
-            let rateIndex = 0;
-
-            const stages = [
-                { start: 0, end: 10.12, label: 'Cold open' },
-                { start: 10.12, end: 26.43, label: 'Full intro song' },
-                { start: 26.43, end: 57, label: 'Main intro' },
-                { start: 57, end: 89.2, label: 'Tatum intro' },
-                { start: 89.2, end: fallbackDuration, label: 'Conversation' },
-                { start: 1204.4, end: 1232.14, label: 'Ad break' }
-            ];
+            const players = [...document.querySelectorAll('[data-episode-player]')];
 
             const fmt = (seconds) => {
                 const n = Math.max(0, Math.floor(Number.isFinite(seconds) ? seconds : 0));
@@ -129,64 +175,92 @@
                 return h ? `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}` : `${m}:${String(s).padStart(2, '0')}`;
             };
 
-            const activeStage = (time) => {
-                const ad = stages[5];
-                if (time >= ad.start && time < ad.end) return ad;
-                return stages.slice(0, 5).find((stage) => time >= stage.start && time < stage.end) || stages[4];
-            };
+            players.forEach((root) => {
+                const audio = root.querySelector('audio');
+                const play = root.querySelector('.play');
+                const scrub = root.querySelector('.scrub');
+                const current = root.querySelector('.current');
+                const duration = root.querySelector('.duration');
+                const status = root.querySelector('.status');
+                const nowPlaying = root.querySelector('.now-playing');
+                const rate = root.querySelector('.rate');
+                const stageButtons = [...root.querySelectorAll('[data-time]')];
+                const fallbackDuration = Number(root.dataset.duration);
+                const stages = stageButtons.map((button, index) => ({
+                    button,
+                    start: Number(button.dataset.time),
+                    end: index + 1 < stageButtons.length ? Number(stageButtons[index + 1].dataset.time) : fallbackDuration,
+                    label: button.dataset.label
+                }));
+                let rateIndex = 0;
 
-            const sync = () => {
-                const total = audio.duration || fallbackDuration;
-                const progress = Math.min(1, audio.currentTime / total);
-                scrub.value = String(Math.round(progress * 1000));
-                scrub.style.setProperty('--played', `${progress * 100}%`);
-                current.textContent = fmt(audio.currentTime);
-                duration.textContent = fmt(total);
-                const active = activeStage(audio.currentTime);
-                nowPlaying.textContent = active.label;
-                stageButtons.forEach((button) => {
-                    const t = Number(button.dataset.time);
-                    const selected = active.label === button.textContent.trim().replace(/^\d+/, '').trim();
-                    button.classList.toggle('active', selected || (active.label === 'Conversation' && t === 89.2));
+                const activeStage = (time) => stages.find((stage) => time >= stage.start && time < stage.end) || stages[stages.length - 1];
+                const sync = () => {
+                    const total = audio.duration || fallbackDuration;
+                    const progress = Math.min(1, audio.currentTime / total);
+                    scrub.value = String(Math.round(progress * 1000));
+                    scrub.style.setProperty('--played', `${progress * 100}%`);
+                    current.textContent = fmt(audio.currentTime);
+                    duration.textContent = fmt(total);
+                    const active = activeStage(audio.currentTime);
+                    nowPlaying.textContent = active.label;
+                    stages.forEach((stage) => stage.button.classList.toggle('active', stage === active));
+                };
+
+                play.addEventListener('click', () => audio.paused ? audio.play() : audio.pause());
+                audio.addEventListener('play', () => {
+                    players.forEach((other) => {
+                        const otherAudio = other.querySelector('audio');
+                        if (otherAudio !== audio) otherAudio.pause();
+                    });
+                    play.classList.add('is-playing');
+                    play.setAttribute('aria-label', 'Pause episode');
+                    status.textContent = 'Playing';
                 });
-            };
-
-            play.addEventListener('click', () => audio.paused ? audio.play() : audio.pause());
-            audio.addEventListener('play', () => {
-                play.classList.add('is-playing');
-                play.setAttribute('aria-label', 'Pause episode');
-                status.textContent = 'Playing';
-            });
-            audio.addEventListener('pause', () => {
-                play.classList.remove('is-playing');
-                play.setAttribute('aria-label', 'Play episode');
-                status.textContent = audio.ended ? 'Finished' : 'Paused';
-            });
-            audio.addEventListener('loadedmetadata', sync);
-            audio.addEventListener('timeupdate', sync);
-            audio.addEventListener('ended', sync);
-            audio.addEventListener('error', () => { status.textContent = 'Audio unavailable'; });
-
-            scrub.addEventListener('input', () => {
-                audio.currentTime = (audio.duration || fallbackDuration) * Number(scrub.value) / 1000;
+                audio.addEventListener('pause', () => {
+                    play.classList.remove('is-playing');
+                    play.setAttribute('aria-label', 'Play episode');
+                    status.textContent = audio.ended ? 'Finished' : 'Paused';
+                });
+                audio.addEventListener('loadedmetadata', sync);
+                audio.addEventListener('timeupdate', sync);
+                audio.addEventListener('ended', sync);
+                audio.addEventListener('error', () => { status.textContent = 'Audio unavailable'; });
+                scrub.addEventListener('input', () => {
+                    audio.currentTime = (audio.duration || fallbackDuration) * Number(scrub.value) / 1000;
+                    sync();
+                });
+                rate.addEventListener('click', () => {
+                    rateIndex = (rateIndex + 1) % rates.length;
+                    audio.playbackRate = rates[rateIndex];
+                    rate.textContent = `${rates[rateIndex]}×`;
+                    rate.setAttribute('aria-label', `Playback speed ${rates[rateIndex]} times`);
+                });
+                stages.forEach((stage) => stage.button.addEventListener('click', () => {
+                    audio.currentTime = stage.start;
+                    audio.play();
+                }));
                 sync();
             });
-            rate.addEventListener('click', () => {
-                rateIndex = (rateIndex + 1) % rates.length;
-                audio.playbackRate = rates[rateIndex];
-                rate.textContent = `${rates[rateIndex]}×`;
-                rate.setAttribute('aria-label', `Playback speed ${rates[rateIndex]} times`);
-            });
-            stageButtons.forEach((button) => button.addEventListener('click', () => {
-                audio.currentTime = Number(button.dataset.time);
-                audio.play();
-            }));
+
             document.addEventListener('keydown', (event) => {
                 if (event.code !== 'Space' || /button|input|a/i.test(document.activeElement.tagName)) return;
+                const visible = players.find((root) => {
+                    const box = root.getBoundingClientRect();
+                    return box.top < innerHeight && box.bottom > 0;
+                }) || players[0];
                 event.preventDefault();
+                const audio = visible.querySelector('audio');
                 audio.paused ? audio.play() : audio.pause();
             });
-            sync();
+
+            const scrollToEpisode = () => {
+                if (!location.hash.startsWith('#episode-')) return;
+                const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+                if (target) requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+            };
+            window.addEventListener('load', scrollToEpisode);
+            window.addEventListener('hashchange', scrollToEpisode);
         })();
     </script>
 </body>
