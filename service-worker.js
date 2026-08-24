@@ -11,7 +11,7 @@
 //
 // Bump VERSION to invalidate old caches on next activation.
 
-const VERSION = 'v24';
+const VERSION = 'v25';
 const CACHE_STATIC = `wz-static-${VERSION}`;
 const CACHE_RUNTIME = `wz-runtime-${VERSION}`;
 
@@ -35,13 +35,12 @@ const PRECACHE_URLS = [
     '/icon-192.png',
     '/icon-512.png',
     '/manifest.webmanifest',
-    // All eight icons are above the fold in the work index.
+    // All tile icons above the fold in the work index (truffletopia's is CSS-drawn).
     '/assets/icons/bopthere.png',
     '/assets/icons/shredly.png',
     '/assets/icons/quizly.png',
     '/assets/icons/starbird.png',
     '/assets/icons/portavec.png',
-    '/assets/icons/aurora.png',
     '/assets/icons/lantern.png',
     '/assets/icons/2pizzaclub.png',
     '/assets/screenshots/shredly/iphone/01-live.png',
