@@ -101,22 +101,18 @@ body {
 
 .episode-head {
     position: relative;
-    min-height: 30rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(16rem, 29vw, 22rem);
+    grid-template-areas:
+        "kicker kicker"
+        "title title"
+        "byline art";
+    column-gap: clamp(2.5rem, 7vw, 7rem);
     padding-bottom: 7rem;
 }
 
-.episode-head::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    bottom: 7rem;
-    width: min(42vw, 32rem);
-    height: 1px;
-    background: repeating-linear-gradient(90deg, var(--mdt-signal) 0 2px, transparent 2px 8px);
-    opacity: 0.68;
-}
-
 .kicker {
+    grid-area: kicker;
     display: flex;
     gap: 1.25rem;
     margin-bottom: 3.75rem;
@@ -133,6 +129,7 @@ body {
 }
 
 .episode h2 {
+    grid-area: title;
     max-width: none;
     font-size: clamp(4.6rem, 15vw, 12rem);
     font-weight: 600;
@@ -140,13 +137,36 @@ body {
     letter-spacing: -0.085em;
 }
 
+.episode-art {
+    grid-area: art;
+    align-self: start;
+    width: 100%;
+    aspect-ratio: 1;
+    margin-top: 3.5rem;
+    overflow: hidden;
+    border: 1px solid var(--mdt-line);
+    border-left: 0.7rem solid var(--mdt-signal);
+    background: var(--mdt-panel);
+}
+
+.episode-art--warm {
+    border-left-color: var(--mdt-warm);
+}
+
+.episode-art img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .episode-byline {
+    grid-area: byline;
     display: grid;
     grid-template-columns: minmax(12rem, 0.45fr) 1fr;
     gap: clamp(2rem, 8vw, 8rem);
-    width: min(48rem, 72%);
+    width: min(48rem, 100%);
     margin-top: 5rem;
-    margin-left: auto;
     color: var(--mdt-dim);
     font-size: 0.95rem;
 }
@@ -478,12 +498,8 @@ a:focus-visible {
     }
 
     .episode-head {
-        min-height: 0;
-        padding-bottom: 4rem;
-    }
-
-    .episode-head::after {
-        display: none;
+        display: block;
+        padding-bottom: 4.5rem;
     }
 
     .kicker {
@@ -501,11 +517,17 @@ a:focus-visible {
         font-size: clamp(4.25rem, 23vw, 7rem);
     }
 
+    .episode-art {
+        width: min(86%, 22rem);
+        margin: 2.5rem 0 0 auto;
+    }
+
     .episode-byline {
         grid-template-columns: 1fr;
         gap: 1.25rem;
         width: 82%;
-        margin-top: 2.5rem;
+        margin-top: 3.25rem;
+        margin-left: auto;
     }
 
     .transport {

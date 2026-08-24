@@ -20,7 +20,7 @@ import pathlib
 import subprocess
 import sys
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -34,7 +34,6 @@ W, H = 1200, 630
 # The web page's existing palette. Keeping this exact is more important than
 # making the cards resemble a generic podcast tile.
 BG = (10, 10, 9)
-BG_LIFT = (18, 18, 16)
 INK = (245, 245, 244)
 DIM = (155, 154, 150)
 FAINT = (102, 101, 96)
@@ -59,19 +58,22 @@ def mix(a: tuple[int, int, int], b: tuple[int, int, int], t: float):
     return tuple(round(x + (y - x) * t) for x, y in zip(a, b))
 
 
-def base_canvas() -> tuple[Image.Image, ImageDraw.ImageDraw]:
-    img = Image.new("RGB", (W, H), BG)
-    draw = ImageDraw.Draw(img)
-    for y in range(H):
-        draw.line((0, y, W, y), fill=mix(BG_LIFT, BG, y / H))
+def hex_color(value: str) -> tuple[int, int, int]:
+    value = value.lstrip("#")
+    return tuple(int(value[i : i + 2], 16) for i in (0, 2, 4))
 
-    # A quiet signal grid: enough texture to survive an unfurl thumbnail,
-    # never enough to compete with the guest's name.
-    grid = mix(BG, SIGNAL, 0.075)
-    for x in range(0, W, 40):
-        draw.point((x, 18), fill=grid)
-        draw.point((x, H - 19), fill=grid)
-    return img, draw
+
+def load_photo(episode: dict) -> Image.Image:
+    return Image.open(MDT / episode["photo"]).convert("RGB")
+
+
+def cover_photo(photo: Image.Image, size: tuple[int, int], center=(0.5, 0.5)) -> Image.Image:
+    return ImageOps.fit(
+        photo,
+        size,
+        method=Image.Resampling.LANCZOS,
+        centering=tuple(center),
+    )
 
 
 def tracked_text(
@@ -146,26 +148,19 @@ def draw_waveform(
     draw: ImageDraw.ImageDraw,
     peaks: list[float],
     box: tuple[int, int, int, int],
+    accent: tuple[int, int, int] = SIGNAL,
 ):
     x0, y0, x1, y1 = box
     mid = (y0 + y1) / 2
     half = (y1 - y0) / 2
     draw.line((x0, mid, x1, mid), fill=LINE, width=1)
     step = (x1 - x0) / max(1, len(peaks) - 1)
-    quiet = mix(BG, SIGNAL, 0.54)
+    quiet = mix(BG, accent, 0.54)
     for i, peak in enumerate(peaks):
         x = round(x0 + i * step)
         amp = max(2, round(peak * half))
-        color = SIGNAL if peak > 0.72 else quiet
+        color = accent if peak > 0.72 else quiet
         draw.line((x, mid - amp, x, mid + amp), fill=color, width=2)
-
-
-def header(draw: ImageDraw.ImageDraw, number: str, duration: str):
-    tracked_text(draw, (58, 41), "MEN DON'T TALK", F_MONO_BOLD(18), INK, 2)
-    right = f"EPISODE {number}   /   {duration}"
-    fnt = F_MONO(16)
-    draw.text((W - 58 - draw.textlength(right, font=fnt), 43), right, font=fnt, fill=DIM)
-    draw.line((58, 82, W - 58, 82), fill=LINE, width=1)
 
 
 def guest_lines(name: str) -> list[str]:
@@ -176,85 +171,78 @@ def guest_lines(name: str) -> list[str]:
 
 
 def render_episode(episode: dict) -> Image.Image:
-    img, draw = base_canvas()
-    header(draw, episode["number"], episode["duration"])
+    accent = hex_color(episode["accent"])
+    img = Image.new("RGB", (W, H), BG)
+    draw = ImageDraw.Draw(img)
+    tracked_text(draw, (58, 41), "MEN DON'T TALK", F_MONO_BOLD(18), INK, 2)
+    marker = f"EPISODE {episode['number']}  /  {episode['duration']}"
+    draw.text((598, 45), marker, anchor="ra", font=F_MONO(15), fill=DIM)
+    draw.line((58, 82, 606, 82), fill=LINE, width=1)
 
-    # The episode number is structural, not ornament: a quiet registration
-    # mark that makes a growing collection scan quickly.
-    number_font = F_DISPLAY(300)
-    draw.text(
-        (W - 52, 70), episode["number"], anchor="ra", font=number_font,
-        fill=BG, stroke_width=2, stroke_fill=LINE,
-    )
-
-    title_font = F_DISPLAY(104)
-    lines = guest_lines(episode["guest"])
-    title_y = 108
-    for line in lines:
-        draw.text((54, title_y), line, font=title_font, fill=INK, stroke_width=1, stroke_fill=INK)
-        title_y += 100
+    title_y = 104
+    for line in guest_lines(episode["guest"]):
+        draw.text((54, title_y), line, font=F_DISPLAY(66), fill=INK)
+        title_y += 64
 
     label = f"WESLEY BECKNER WITH {episode['guest'].upper()}"
-    tracked_text(draw, (59, 326), label, F_MONO_BOLD(15), SIGNAL, 1)
+    tracked_text(draw, (59, 253), label, F_MONO_BOLD(12), accent, 1)
 
-    quote_font = F_TEXT(24)
-    quote_lines = wrap_pixels(draw, f'“{episode["quote"]}”', quote_font, 850, 2)
-    quote_y = 367
-    draw.rectangle((58, quote_y + 4, 63, quote_y + 56), fill=WARM)
+    quote_font = F_TEXT(22)
+    quote_lines = wrap_pixels(draw, f'“{episode["quote"]}”', quote_font, 500, 3)
+    quote_y = 300
+    draw.rectangle((58, quote_y + 3, 63, quote_y + 74), fill=WARM)
     for line in quote_lines:
         draw.text((82, quote_y), line, font=quote_font, fill=DIM)
-        quote_y += 32
+        quote_y += 29
 
-    draw_waveform(draw, audio_peaks(MDT / episode["audio"]), (58, 475, W - 58, 553))
-
-    footer_font = F_MONO(14)
-    draw.text((58, 582), "WABBAZZAR.COM / MDT", font=footer_font, fill=FAINT)
-    version = episode["version"].upper()
-    draw.text(
-        (W - 58 - draw.textlength(version, font=footer_font), 582),
-        version,
-        font=footer_font,
-        fill=FAINT,
+    draw_waveform(
+        draw,
+        audio_peaks(MDT / episode["audio"], 180),
+        (58, 478, 602, 548),
+        accent,
     )
+    draw.text((58, 582), "WABBAZZAR.COM / MDT", font=F_MONO(13), fill=FAINT)
+
+    photo = cover_photo(load_photo(episode), (500, 500), episode["photo_center"])
+    img.paste(photo, (650, 65))
+    draw = ImageDraw.Draw(img)
+    draw.rectangle((649, 64, 1150, 565), outline=LINE, width=2)
+    draw.rectangle((650, 65, 662, 565), fill=accent)
+    draw.text((1120, 535), episode["number"], anchor="rb", font=F_DISPLAY(104), fill=INK)
     return img
 
 
 def render_show(episodes: list[dict]) -> Image.Image:
-    img, draw = base_canvas()
+    img = Image.new("RGB", (W, H), BG)
+    draw = ImageDraw.Draw(img)
     tracked_text(draw, (58, 41), "A WABBAZZAR PODCAST", F_MONO_BOLD(17), SIGNAL, 2)
     draw.line((58, 82, W - 58, 82), fill=LINE, width=1)
 
-    # Keep the show title inside the left column; the episode ledger on the
-    # right should remain a distinct, scannable object at thumbnail size.
-    title_font = F_DISPLAY(90)
-    draw.text((54, 119), "MEN DON'T", font=title_font, fill=INK)
-    draw.text((54, 207), "TALK.", font=title_font, fill=INK)
-    draw.text(
-        (62, 326),
-        "Long conversations with old friends.",
-        font=F_TEXT(28),
-        fill=DIM,
-    )
+    draw.text((52, 112), "MEN DON'T", font=F_DISPLAY(88), fill=INK)
+    draw.text((52, 198), "TALK.", font=F_DISPLAY(88), fill=INK)
+    draw.text((58, 323), "Long conversations with old friends.", font=F_TEXT(26), fill=DIM)
 
-    x = 680
-    draw.line((x, 116, x, 405), fill=LINE, width=1)
+    x = 684
     for i, episode in enumerate(episodes):
-        y = 123 + i * 132
-        draw.text((x + 36, y), episode["number"], font=F_MONO_BOLD(16), fill=SIGNAL)
-        draw.text((x + 94, y - 10), episode["guest"].upper(), font=F_DISPLAY(34), fill=INK)
-        draw.text((x + 94, y + 34), episode["duration"], font=F_MONO(14), fill=FAINT)
+        y = 116 + i * 174
+        thumb = cover_photo(load_photo(episode), (128, 128), episode["photo_center"])
+        img.paste(thumb, (x, y))
+        draw = ImageDraw.Draw(img)
+        draw.text((x + 150, y + 12), episode["number"], font=F_MONO_BOLD(14), fill=hex_color(episode["accent"]))
+        draw.text((x + 150, y + 42), episode["guest"].upper(), font=F_DISPLAY(27), fill=INK)
+        draw.text((x + 150, y + 83), episode["duration"], font=F_MONO(13), fill=FAINT)
 
     combined: list[float] = []
     for episode in episodes:
-        combined.extend(audio_peaks(MDT / episode["audio"], 170))
+        combined.extend(audio_peaks(MDT / episode["audio"], 90))
     draw_waveform(draw, combined, (58, 475, W - 58, 553))
-    draw.text((58, 582), "WABBAZZAR.COM / MEN-DONT-TALK", font=F_MONO(14), fill=FAINT)
+    draw.text((58, 582), "WABBAZZAR.COM / MEN-DONT-TALK", font=F_MONO(13), fill=FAINT)
     return img
 
 
 def route_html(episode: dict) -> str:
     route = f"https://wabbazzar.com/men-dont-talk/episode/{episode['number']}-{episode['slug']}/"
-    image = f"https://wabbazzar.com/men-dont-talk/previews/episode-{episode['number']}-{episode['slug']}.png"
+    image = f"https://wabbazzar.com/men-dont-talk/previews/episode-{episode['number']}-{episode['slug']}.png?v=20260824-1"
     target = f"/men-dont-talk/#{episode['anchor']}"
     handoff = f"/men-dont-talk/?episode={episode['anchor']}#{episode['anchor']}"
     title = f"{episode['guest']} — Men Don't Talk"

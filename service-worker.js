@@ -11,7 +11,7 @@
 //
 // Bump VERSION to invalidate old caches on next activation.
 
-const VERSION = 'v22';
+const VERSION = 'v23';
 const CACHE_STATIC = `wz-static-${VERSION}`;
 const CACHE_RUNTIME = `wz-runtime-${VERSION}`;
 
@@ -23,7 +23,9 @@ const PRECACHE_URLS = [
     '/men-dont-talk/styles.css',
     '/men-dont-talk/previews/show.png',
     '/men-dont-talk/previews/episode-01-tatum.png',
-    '/men-dont-talk/previews/episode-05-camille-richie.png',
+    '/men-dont-talk/previews/episode-05-camille-ritchie.png',
+    '/men-dont-talk/artwork/episode-01-tatum.png',
+    '/men-dont-talk/artwork/episode-05-camille-ritchie.png',
     '/ascii.js',
     '/fracture.js',
     '/easter-egg.js',
