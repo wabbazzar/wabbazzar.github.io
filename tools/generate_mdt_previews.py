@@ -223,19 +223,20 @@ def render_show(episodes: list[dict]) -> Image.Image:
     draw.text((58, 323), "Long conversations with old friends.", font=F_TEXT(26), fill=DIM)
 
     x = 684
+    thumb_size = 104
     for i, episode in enumerate(episodes):
-        y = 116 + i * 174
-        thumb = cover_photo(load_photo(episode), (128, 128), episode["photo_center"])
+        y = 96 + i * 128
+        thumb = cover_photo(load_photo(episode), (thumb_size, thumb_size), episode["photo_center"])
         img.paste(thumb, (x, y))
         draw = ImageDraw.Draw(img)
-        draw.text((x + 150, y + 12), episode["number"], font=F_MONO_BOLD(14), fill=hex_color(episode["accent"]))
-        draw.text((x + 150, y + 42), episode["guest"].upper(), font=F_DISPLAY(27), fill=INK)
-        draw.text((x + 150, y + 83), episode["duration"], font=F_MONO(13), fill=FAINT)
+        draw.text((x + 126, y + 8), episode["number"], font=F_MONO_BOLD(13), fill=hex_color(episode["accent"]))
+        draw.text((x + 126, y + 34), episode["guest"].upper(), font=F_DISPLAY(24), fill=INK)
+        draw.text((x + 126, y + 71), episode["duration"], font=F_MONO(12), fill=FAINT)
 
     combined: list[float] = []
     for episode in episodes:
         combined.extend(audio_peaks(MDT / episode["audio"], 90))
-    draw_waveform(draw, combined, (58, 475, W - 58, 553))
+    draw_waveform(draw, combined, (58, 490, W - 58, 553))
     draw.text((58, 582), "WABBAZZAR.COM / MEN-DONT-TALK", font=F_MONO(13), fill=FAINT)
     return img
 

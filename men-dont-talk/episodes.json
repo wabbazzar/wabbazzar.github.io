@@ -15,6 +15,21 @@
     "quote": "The whole point was to prevent a Medici-type family coming forward."
   },
   {
+    "number": "03",
+    "slug": "neel-shah",
+    "anchor": "episode-03-neel-shah",
+    "guest": "Neel Shah",
+    "duration": "43:13",
+    "version": "Production cut v1",
+    "recorded": "August 8, 2026",
+    "audio": "neel-v1.mp3",
+    "photo": "artwork/episode-03-neel-shah.png",
+    "photo_center": [0.5, 0.5],
+    "accent": "#8fd4c1",
+    "description": "Old friends on marriage, parents, work, coding agents, the boundary around children, and the difficult work of knowing what you want.",
+    "quote": "A lot of those decisions I've outsourced to the agent."
+  },
+  {
     "number": "05",
     "slug": "camille-ritchie",
     "anchor": "episode-05-camille-richie",
