@@ -25,13 +25,29 @@ body {
     border-bottom: 1px solid var(--mdt-line);
 }
 
-.episode-index p,
+.episode-index-head,
 .episode-index a {
     min-height: 5.5rem;
     padding: 1rem;
 }
 
+.episode-index-head {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.episode-index h1 {
+    max-width: none;
+    color: var(--mdt-ink);
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+
 .episode-index p {
+    margin-top: 0.45rem;
     color: var(--mdt-faint);
     font: 0.66rem/1.4 var(--mdt-mono);
     letter-spacing: 0.08em;
@@ -116,7 +132,7 @@ body {
     color: var(--mdt-faint);
 }
 
-.episode h1 {
+.episode h2 {
     max-width: none;
     font-size: clamp(4.6rem, 15vw, 12rem);
     font-weight: 600;
@@ -439,9 +455,9 @@ a:focus-visible {
         margin-top: 1.5rem;
     }
 
-    .episode-index p {
+    .episode-index-head {
         min-height: 0;
-        padding-bottom: 0.5rem;
+        padding-bottom: 0.75rem;
     }
 
     .episode-index a {
@@ -481,7 +497,7 @@ a:focus-visible {
         padding-right: 0.75rem;
     }
 
-    .episode h1 {
+    .episode h2 {
         font-size: clamp(4.25rem, 23vw, 7rem);
     }
 
@@ -526,6 +542,10 @@ a:focus-visible {
 }
 
 @media (max-width: 350px) {
+    .site-header .brand span {
+        display: none;
+    }
+
     .kicker-detail {
         display: none;
     }
