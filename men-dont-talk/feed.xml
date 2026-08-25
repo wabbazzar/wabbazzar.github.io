@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+     xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <atom:link href="https://wabbazzar.com/men-dont-talk/feed.xml" rel="self" type="application/rss+xml"/>
+    <title>Men Don't Talk</title>
+    <link>https://wabbazzar.com/men-dont-talk/</link>
+    <language>en-us</language>
+    <copyright>&#169; 2026 Wesley Beckner</copyright>
+    <description>Long conversations with old friends about kids, work, power, and the elaborate lengths men go to just to stay in touch.</description>
+    <itunes:summary>Long conversations with old friends about kids, work, power, and the elaborate lengths men go to just to stay in touch.</itunes:summary>
+    <itunes:author>Wesley Beckner</itunes:author>
+    <itunes:type>episodic</itunes:type>
+    <itunes:explicit>true</itunes:explicit>
+    <itunes:owner>
+      <itunes:name>Wesley Beckner</itunes:name>
+      <itunes:email>wesleybeckner@gmail.com</itunes:email>
+    </itunes:owner>
+    <itunes:image href="https://wabbazzar.com/men-dont-talk/artwork/show-3000.png"/>
+    <itunes:category text="Society &amp; Culture">
+      <itunes:category text="Personal Journals"/>
+    </itunes:category>
+    <image>
+      <url>https://wabbazzar.com/men-dont-talk/artwork/show-3000.png</url>
+      <title>Men Don't Talk</title>
+      <link>https://wabbazzar.com/men-dont-talk/</link>
+    </image>
+
+    <item>
+      <title>01. Wesley Tatum</title>
+      <link>https://wabbazzar.com/men-dont-talk/episode/01-tatum/</link>
+      <guid isPermaLink="false">wabbazzar-mdt-episode-01-tatum</guid>
+      <pubDate>Tue, 25 Aug 2026 12:00:00 +0000</pubDate>
+      <description>Two old friends on kids, work, AI, power, and the elaborate lengths men go to just to stay in touch. Recorded June 10, 2026.</description>
+      <itunes:summary>Two old friends on kids, work, AI, power, and the elaborate lengths men go to just to stay in touch. Recorded June 10, 2026.</itunes:summary>
+      <itunes:author>Wesley Beckner</itunes:author>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:episode>1</itunes:episode>
+      <itunes:explicit>true</itunes:explicit>
+      <itunes:duration>2649</itunes:duration>
+      <itunes:image href="https://wabbazzar.com/men-dont-talk/artwork/episode-01-tatum-3000.png"/>
+      <enclosure url="https://wabbazzar.com/men-dont-talk/tatum-v3.mp3" length="42389882" type="audio/mpeg"/>
+    </item>
+  </channel>
+</rss>
