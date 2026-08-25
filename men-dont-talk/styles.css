@@ -585,10 +585,6 @@ a:focus-visible {
     .site-header .brand span {
         display: none;
     }
-
-    .kicker-detail {
-        display: none;
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {

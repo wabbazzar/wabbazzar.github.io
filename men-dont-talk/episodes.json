@@ -5,11 +5,13 @@
     "anchor": "episode-01-tatum",
     "guest": "Wesley Tatum",
     "duration": "44:09",
-    "version": "Production cut v3",
     "recorded": "June 10, 2026",
     "audio": "tatum-v3.mp3",
     "photo": "artwork/episode-01-tatum.png",
-    "photo_center": [0.5, 0.46],
+    "photo_center": [
+      0.5,
+      0.46
+    ],
     "accent": "#b9adff",
     "description": "Two old friends on kids, work, AI, power, and the elaborate lengths men go to just to stay in touch.",
     "quote": "The whole point was to prevent a Medici-type family coming forward."
@@ -20,11 +22,13 @@
     "anchor": "episode-03-neel-shah",
     "guest": "Neel Shah",
     "duration": "43:10",
-    "version": "Production cut v1",
     "recorded": "August 8, 2026",
     "audio": "neel-v1.mp3",
     "photo": "artwork/episode-03-neel-shah.png",
-    "photo_center": [0.5, 0.5],
+    "photo_center": [
+      0.5,
+      0.5
+    ],
     "accent": "#8fd4c1",
     "description": "Old friends on marriage, parents, work, coding agents, the boundary around children, and the difficult work of knowing what you want.",
     "quote": "A lot of those decisions I've outsourced to the agent."
@@ -35,11 +39,13 @@
     "anchor": "episode-05-camille-ritchie",
     "guest": "Camille Ritchie",
     "duration": "44:07",
-    "version": "Production cut v1",
     "recorded": "August 16, 2026",
     "audio": "camille-v1.mp3",
     "photo": "artwork/episode-05-camille-ritchie.png",
-    "photo_center": [0.5, 0.48],
+    "photo_center": [
+      0.5,
+      0.48
+    ],
     "accent": "#eadf9f",
     "description": "Lifelong friends on Adelaide, becoming a parent, politics, protest, power, and what it means to keep speaking anyway.",
     "quote": "If you're not outraged, you're not paying attention."
