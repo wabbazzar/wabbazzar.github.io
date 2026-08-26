@@ -17,6 +17,23 @@
     "quote": "The whole point was to prevent a Medici-type family coming forward."
   },
   {
+    "number": "02",
+    "slug": "camille-ritchie",
+    "anchor": "episode-02-camille-ritchie",
+    "guest": "Camille Ritchie",
+    "duration": "44:07",
+    "recorded": "August 16, 2026",
+    "audio": "camille-v1.mp3",
+    "photo": "artwork/episode-02-camille-ritchie.png",
+    "photo_center": [
+      0.5,
+      0.48
+    ],
+    "accent": "#eadf9f",
+    "description": "Lifelong friends on Adelaide, becoming a parent, politics, protest, power, and what it means to keep speaking anyway.",
+    "quote": "If you're not outraged, you're not paying attention."
+  },
+  {
     "number": "03",
     "slug": "neel-shah",
     "anchor": "episode-03-neel-shah",
@@ -32,22 +49,5 @@
     "accent": "#8fd4c1",
     "description": "Old friends on marriage, parents, work, coding agents, the boundary around children, and the difficult work of knowing what you want.",
     "quote": "A lot of those decisions I've outsourced to the agent."
-  },
-  {
-    "number": "05",
-    "slug": "camille-ritchie",
-    "anchor": "episode-05-camille-ritchie",
-    "guest": "Camille Ritchie",
-    "duration": "44:07",
-    "recorded": "August 16, 2026",
-    "audio": "camille-v1.mp3",
-    "photo": "artwork/episode-05-camille-ritchie.png",
-    "photo_center": [
-      0.5,
-      0.48
-    ],
-    "accent": "#eadf9f",
-    "description": "Lifelong friends on Adelaide, becoming a parent, politics, protest, power, and what it means to keep speaking anyway.",
-    "quote": "If you're not outraged, you're not paying attention."
   }
 ]
