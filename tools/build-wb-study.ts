@@ -6,7 +6,7 @@ const require = createRequire(new URL('../../portavec/package.json', import.meta
 const { PNG } = require('pngjs');
 const out = new URL('../docs/wb-logo-study/', import.meta.url);
 mkdirSync(out, { recursive: true });
-const source = PNG.sync.read(readFileSync(new URL('../icon-512.png', import.meta.url)));
+const source = PNG.sync.read(readFileSync(new URL('../docs/wb-logo-study/original.png', import.meta.url)));
 const data = new Uint8ClampedArray(source.data);
 // Invert: Portavec treats dark pixels as foreground. Threshold 55 excludes
 // the original's dark texture and gray corner sparkle.
@@ -63,7 +63,7 @@ writeFileSync(new URL('construction.svg', out), svg(`<rect width="512" height="5
 // Omit timing so repeated runs produce stable artifacts.
 const { processingTimeMs, stages, ...geometry } = result.metrics;
 writeFileSync(new URL('trace-metrics.json', out), JSON.stringify({
-  source: '../../icon-512.png', portavecRevision: '0b91cc7', inverted: true,
+  source: 'original.png', portavecRevision: '0b91cc7', inverted: true,
   options, geometry, contours: result.debug?.contours.contours.map(c => ({ points: c.points, isHole: c.isHole })),
 }, null, 2) + '\n');
 console.log(JSON.stringify({ output: out.pathname, geometry }));

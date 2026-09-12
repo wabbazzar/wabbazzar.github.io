@@ -1,4 +1,8 @@
-.PHONY: serve test visual-test verify-render clean-cache debug-render auto-test ascii-art
+.PHONY: serve test visual-test verify-render clean-cache debug-render auto-test ascii-art brand-assets
+
+# Regenerate site icons/share image from assets/brand/wb.svg.
+brand-assets:
+	@node tools/build-brand-assets.mjs
 
 # Regenerate /ascii-art.json from tile icons (consumed by puffacles easter-egg)
 ascii-art:

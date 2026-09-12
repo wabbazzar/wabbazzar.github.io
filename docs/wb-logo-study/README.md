@@ -1,7 +1,7 @@
 # WB crossover study
 
-Review `index.html` locally. This is a design proposal; production icons,
-site references, and deployment are unchanged.
+Review `index.html` locally. The crossover proposal was approved and promoted to `assets/brand/wb.svg`.
+The original raster is frozen in `original.png` to preserve this comparison.
 
 The design thesis is to make Wesley's WB monogram immediately readable while
 retaining its angular, interlocking ribbon construction. The W's central
@@ -43,7 +43,7 @@ Rebuild SVGs and trace data from the site root:
 
 Requires the adjacent Portavec checkout and its existing dependencies. The
 study used Portavec revision `0b91cc7`, with its algorithm files unchanged.
-The generator reads `icon-512.png`, inverts it, then calls `runPipeline` with
+The generator reads `original.png`, inverts it, then calls `runPipeline` with
 manual threshold 55, polyline fitting, and tolerance 1.4. This deliberately
 excludes the background texture and the gray corner sparkle. It does not
 alter the original raster. All generated art is deterministic; screenshots

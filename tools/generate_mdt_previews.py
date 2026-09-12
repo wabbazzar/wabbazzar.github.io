@@ -254,6 +254,8 @@ def route_html(episode: dict) -> str:
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{esc(title)}</title>
+    <link rel="icon" type="image/png" href="/favicon.png?v=wb1">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=wb1">
     <meta name="description" content="{esc(episode['description'], quote=True)}">
     <link rel="canonical" href="{route}">
     <meta property="og:type" content="article">

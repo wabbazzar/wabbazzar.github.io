@@ -11,7 +11,7 @@
 //
 // Bump VERSION to invalidate old caches on next activation.
 
-const VERSION = 'v30';
+const VERSION = 'v31';
 const CACHE_STATIC = `wz-static-${VERSION}`;
 const CACHE_RUNTIME = `wz-runtime-${VERSION}`;
 
@@ -36,6 +36,16 @@ const PRECACHE_URLS = [
     '/apple-touch-icon.png',
     '/icon-192.png',
     '/icon-512.png',
+    '/favicon.ico',
+    '/favicon.svg?v=wb1',
+    '/favicon.png?v=wb1',
+    '/assets/brand/wb.svg?v=wb1',
+    '/apple-touch-icon.png?v=wb1',
+    '/icon-192.png?v=wb1',
+    '/icon-512.png?v=wb1',
+    '/icon-maskable-192.png?v=wb1',
+    '/icon-maskable-512.png?v=wb1',
+    '/assets/icons/wabbazzar.png',
     '/manifest.webmanifest',
     // All tile icons above the fold in the work index (truffletopia's is CSS-drawn).
     '/assets/icons/bopthere.png',
