@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" color="#fff" role="img" aria-labelledby="title">
+  <title id="title">WB construction: gold W, teal B, source coordinates</title>
+<rect width="512" height="512" fill="#0b0b0b"/>
+  <g stroke="#333" stroke-width="0.6"><path d="M0 0V512M0 0H512"/><path d="M64 0V512M0 64H512"/><path d="M128 0V512M0 128H512"/><path d="M192 0V512M0 192H512"/><path d="M256 0V512M0 256H512"/><path d="M320 0V512M0 320H512"/><path d="M384 0V512M0 384H512"/><path d="M448 0V512M0 448H512"/><path d="M512 0V512M0 512H512"/></g>
+  <defs>
+    <mask id="underpass" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512" style="mask-type:luminance">
+      <rect width="512" height="512" fill="white"/>
+      <!-- The W passes in front. Ten units of outline leave a five-unit reveal. -->
+      <path d="M63 128H128L177 319L212 210H242L300 395H260L228 295L195 395H134Z" fill="black" stroke="black" stroke-width="10" stroke-linejoin="miter"/>
+      <!-- Restore the shared heel below the B counter's baseline. -->
+      <rect y="338" width="512" height="174" fill="white"/>
+    </mask>
+  </defs>
+  <g fill="#79d5ca" mask="url(#underpass)">
+    <path id="shared-spine" d="M306 128H323L361 181H308V337H362L375 325L334 395H270L244 302Z"/>
+    <path id="upper-bowl" d="M334 128H415L460 202L386 308V273L367 254L386 236V196Z"/>
+    <path id="lower-bowl" d="M420 269L460 321L415 395H345Z"/>
+  </g>
+  <path id="w-overpass" fill="#f4c56c" d="M63 128H128L177 319L212 210H242L300 395H260L228 295L195 395H134Z"/>
+  <g font-family="monospace" font-size="11" fill="#fff" paint-order="stroke" stroke="#0b0b0b" stroke-width="3"><circle cx="177" cy="319" r="3" fill="#fff"/><text x="169" y="337" text-anchor="end">177,319</text>
+<circle cx="212" cy="210" r="3" fill="#fff"/><text x="204" y="200" text-anchor="end">212,210</text>
+<circle cx="242" cy="210" r="3" fill="#fff"/><text x="250" y="228" text-anchor="start">242,210</text>
+<circle cx="228" cy="295" r="3" fill="#fff"/><text x="220" y="313" text-anchor="end">228,295</text>
+<circle cx="260" cy="395" r="3" fill="#fff"/><text x="252" y="413" text-anchor="end">260,395</text>
+<circle cx="300" cy="395" r="3" fill="#fff"/><text x="308" y="413" text-anchor="start">300,395</text>
+<circle cx="306" cy="128" r="3" fill="#fff"/><text x="298" y="118" text-anchor="end">306,128</text>
+<circle cx="308" cy="181" r="3" fill="#fff"/><text x="316" y="199" text-anchor="start">308,181</text>
+<circle cx="308" cy="337" r="3" fill="#fff"/><text x="316" y="355" text-anchor="start">308,337</text></g>
+</svg>
