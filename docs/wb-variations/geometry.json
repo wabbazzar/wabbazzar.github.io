@@ -1,0 +1,141 @@
+[
+  {
+    "id": "01-steep-parallels",
+    "name": "Steep parallels",
+    "brief": "Keep the inner-spine crossover. Match the W rise and both B clefts at 70.4°.",
+    "k": 0.3563218390804598,
+    "d": 0.75,
+    "w": [
+      "M63 128L128 128L179.178 319L218.017 210L248.017 210L297.588 395L257.588 395L230.793 295L195.161 395L134.542 395Z"
+    ],
+    "b": [
+      "M306 128L360.23 128L399.98 181L308 181L308 337L354.667 337L334 395L270 395L244 302Z",
+      "M371.23 128L404.5 128L460 202L422.23 308L422.23 273L407.98 254L422.23 214.008L422.23 196Z",
+      "M389.897 269L428.897 321L402.529 395L345 395Z"
+    ],
+    "guide": [
+      [
+        244,
+        302
+      ],
+      [
+        306,
+        128
+      ]
+    ],
+    "change": "Alignment only; narrow, upright B.",
+    "ascendingAngle": 70.388
+  },
+  {
+    "id": "02-sixty-degree",
+    "name": "60° rhythm",
+    "brief": "Open the upward diagonals to 60°. Pair the B’s chevrons at ±60° and keep the W downstrokes parallel at 75°.",
+    "k": 0.5773502691896258,
+    "d": 0.5773502691896258,
+    "w": [
+      "M63 128L128 128L179.178 319L242.109 210L272.109 210L321.68 395L281.68 395L254.885 295L197.15 395L134.542 395Z"
+    ],
+    "b": [
+      "M320.459 128L348.541 128L379.141 181L308 181L308 337L367.486 337L334 395L270 395L220 302Z",
+      "M359.541 128L417.276 128L460 202L398.801 308L398.801 273L387.831 254L398.801 235L398.801 196Z",
+      "M417.746 269L447.768 321L405.044 395L345 395Z"
+    ],
+    "guide": [
+      [
+        220,
+        302
+      ],
+      [
+        320.4589468389949,
+        128
+      ]
+    ],
+    "change": "Alignment only; a broader, more regular rhythm.",
+    "ascendingAngle": 60
+  },
+  {
+    "id": "03-outer-reach",
+    "name": "Outer reach",
+    "brief": "Extend the W’s final arm to the B’s far-right point. Keep the inherited B as a control for the reach change.",
+    "k": 0.6839378238341969,
+    "d": null,
+    "w": [
+      "M63 128H128L177 319L212 210H242L300 395H260L228 295L195 395H134Z",
+      "M270 395L328 395L460 202L402 202Z"
+    ],
+    "b": [
+      "M306 128H323L361 181H308V337H362L375 325L334 395H270L244 302Z",
+      "M334 128H415L460 202L386 308V273L367 254L386 236V196Z",
+      "M420 269L460 321L415 395H345Z"
+    ],
+    "guide": [
+      [
+        328,
+        395
+      ],
+      [
+        460,
+        202
+      ]
+    ],
+    "change": "Reach only; original B angles intentionally retained.",
+    "ascendingAngle": 55.63
+  },
+  {
+    "id": "04-outer-grid",
+    "name": "Outer reach / 3:2 grid",
+    "brief": "Extend the W to the outside and align the rising edges on a 2-right / 3-up grid: 56.3°. B folds use a second repeated ratio.",
+    "k": 0.6666666666666666,
+    "d": 0.75,
+    "w": [
+      "M63 128L128 128L179.178 319L251.845 210L281.845 210L331.416 395L291.416 395L264.621 295L197.954 395L134.542 395Z",
+      "M271.333 395L331.333 395L460 202L400 202Z"
+    ],
+    "b": [
+      "M276 128L327.333 128L367.083 181L308 181L308 337L372.667 337L334 395L276 395Z",
+      "M338.333 128L404.5 128L460 202L389.333 308L389.333 273L375.083 254L389.333 232.625L389.333 196Z",
+      "M429 269L468 321L418.667 395L345 395Z"
+    ],
+    "guide": [
+      [
+        331.33333333333337,
+        395
+      ],
+      [
+        460,
+        202
+      ]
+    ],
+    "change": "Reach + alignment; long shared diagonal through the counter.",
+    "ascendingAngle": 56.31
+  },
+  {
+    "id": "05-wide-lattice",
+    "name": "45° lattice",
+    "brief": "A wider experiment: the W reaches the outer bowl on a 45° diagonal; all B chamfers use the same 45° grid.",
+    "k": 1,
+    "d": 1,
+    "w": [
+      "M63 128L128 128L179.178 319L288.178 210L318.178 210L367.749 395L327.749 395L300.954 295L200.954 395L134.542 395Z",
+      "M310 395L370 395L563 202L503 202Z"
+    ],
+    "b": [
+      "M338 128L378 128L431 181L370 181L370 337L434 337L376 395L338 395Z",
+      "M389 128L489 128L563 202L457 308L457 273L438 254L457 235L457 196Z",
+      "M513 269L565 321L491 395L387 395Z"
+    ],
+    "guide": [
+      [
+        370,
+        395
+      ],
+      [
+        563,
+        202
+      ]
+    ],
+    "change": "Reach + alignment; intentionally wider proportions.",
+    "transform": "translate(13.18 54.28) scale(0.79)",
+    "ascendingAngle": 45
+  }
+]

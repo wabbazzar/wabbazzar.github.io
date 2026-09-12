@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" color="#fff" role="img" aria-labelledby="title">
+  <title id="title">WB with W crossing over the B spine</title>
+<defs>
+    <mask id="underpass" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512" style="mask-type:luminance">
+      <rect width="512" height="512" fill="white"/>
+      <!-- The W passes in front. Ten units of outline leave a five-unit reveal. -->
+      <path d="M63 128H128L177 319L212 210H242L300 395H260L228 295L195 395H134Z" fill="black" stroke="black" stroke-width="10" stroke-linejoin="miter"/>
+      <!-- Restore the shared heel below the B counter's baseline. -->
+      <rect y="338" width="512" height="174" fill="white"/>
+    </mask>
+  </defs>
+  <g fill="currentColor" mask="url(#underpass)">
+    <path id="shared-spine" d="M306 128H323L361 181H308V337H362L375 325L334 395H270L244 302Z"/>
+    <path id="upper-bowl" d="M334 128H415L460 202L386 308V273L367 254L386 236V196Z"/>
+    <path id="lower-bowl" d="M420 269L460 321L415 395H345Z"/>
+  </g>
+  <path id="w-overpass" fill="currentColor" d="M63 128H128L177 319L212 210H242L300 395H260L228 295L195 395H134Z"/>
+</svg>
