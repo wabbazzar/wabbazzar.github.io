@@ -1,0 +1,71 @@
+{
+  "engine": "Portavec runMultiColorPipeline",
+  "sourceCommit": "0b91cc76e391a822399f00f126194e4eb8b6cb37",
+  "treatment": "40-color quantization, finer traced Bézier contours, preserved source hues with gentle warm/lilac tint and 10% contrast compression, hand-fit clipping paths for sitting and hoodie photos",
+  "artwork": [
+    {
+      "id": 68,
+      "name": "puffy-sitting",
+      "colors": 40,
+      "paths": 7308,
+      "width": 600,
+      "height": 800
+    },
+    {
+      "id": 495,
+      "name": "puffy-hoodie",
+      "colors": 40,
+      "paths": 9263,
+      "width": 600,
+      "height": 800
+    },
+    {
+      "id": 152,
+      "name": "puffy-closeup",
+      "colors": 40,
+      "paths": 4424,
+      "width": 600,
+      "height": 800
+    },
+    {
+      "id": 90,
+      "name": "puffy-hammock",
+      "colors": 40,
+      "paths": 8339,
+      "width": 600,
+      "height": 800
+    },
+    {
+      "id": 299,
+      "name": "puffy-napping",
+      "colors": 40,
+      "paths": 9226,
+      "width": 600,
+      "height": 800
+    },
+    {
+      "id": 203,
+      "name": "puffy-and-dad",
+      "colors": 40,
+      "paths": 15827,
+      "width": 600,
+      "height": 800
+    },
+    {
+      "id": 372,
+      "name": "puffy-yawn",
+      "colors": 40,
+      "paths": 7426,
+      "width": 600,
+      "height": 800
+    },
+    {
+      "id": 1042,
+      "name": "puffy-kisses",
+      "colors": 40,
+      "paths": 7661,
+      "width": 600,
+      "height": 800
+    }
+  ]
+}

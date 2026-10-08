@@ -1,0 +1,102 @@
+{
+  "brand": "Puffy’s Dad’s Podcast",
+  "release": "2026-10-08",
+  "episodes": [
+    {
+      "episode": "tatum",
+      "audio": "audio/tatum-puffy-v1.mp3",
+      "sha256": "ac0db4c8ee8ee74ba5145774a73c0e81dfb2d6d9b2e7ba04874be223a1c692cf",
+      "duration_s": 2625.48898,
+      "marks_s": {
+        "cold_open": [
+          0,
+          10.87
+        ],
+        "opening": [
+          11.09,
+          25.009999999999998
+        ],
+        "episode_intro": [
+          25.28,
+          57.17
+        ],
+        "episode": [
+          57.17,
+          2625.48898
+        ],
+        "break": [
+          1172.3700000000001,
+          1205.0300000000004
+        ],
+        "sting": [
+          1195.7900000000002,
+          1204.7100000000003
+        ]
+      }
+    },
+    {
+      "episode": "camille_richie",
+      "audio": "audio/camille-puffy-v1.mp3",
+      "sha256": "0ce3915533bda0d9acc4ed6815bd30ac95ddef5fb2838f1e89665a1307c0de2f",
+      "duration_s": 2647.092245,
+      "marks_s": {
+        "cold_open": [
+          0,
+          9.84
+        ],
+        "opening": [
+          10.06,
+          23.98
+        ],
+        "episode_intro": [
+          24.250000000000004,
+          37.230000000000004
+        ],
+        "episode": [
+          37.230000000000004,
+          2647.092245
+        ],
+        "break": [
+          1280.78,
+          1320.1000000000004
+        ],
+        "sting": [
+          1310.8600000000001,
+          1319.7800000000002
+        ]
+      }
+    },
+    {
+      "episode": "neel_shah",
+      "audio": "audio/neel-puffy-v1.mp3",
+      "sha256": "fa9ee881180a01abf0ea271061daec8d58cd2b3cb0230fc22c5dde5574eab912",
+      "duration_s": 2589.753469,
+      "marks_s": {
+        "cold_open": [
+          0,
+          30.34
+        ],
+        "opening": [
+          30.560000000000002,
+          44.480000000000004
+        ],
+        "episode_intro": [
+          44.75000000000001,
+          63.56
+        ],
+        "episode": [
+          63.56,
+          2589.753469
+        ],
+        "break": [
+          869.1099999999999,
+          923.4199999999998
+        ],
+        "sting": [
+          914.18,
+          923.0999999999999
+        ]
+      }
+    }
+  ]
+}

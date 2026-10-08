@@ -1,0 +1,65 @@
+[
+  {
+    "number": "01",
+    "slug": "tatum",
+    "anchor": "episode-01-tatum",
+    "guest": "Wesley Tatum",
+    "duration": "43:45",
+    "recorded": "June 10, 2026",
+    "audio": "audio/tatum-puffy-v1.mp3",
+    "photo": "../men-dont-talk/artwork/episode-01-tatum.png",
+    "photo_center": [
+      0.5,
+      0.46
+    ],
+    "accent": "#b9adff",
+    "description": "Two old friends on kids, work, AI, power, and the elaborate lengths men go to just to stay in touch.",
+    "quote": "The whole point was to prevent a Medici-type family coming forward.",
+    "seconds": 2625,
+    "published": "Tue, 25 Aug 2026 12:00:00 +0000",
+    "guid": "wabbazzar-mdt-episode-01-tatum",
+    "bytes": 42008365
+  },
+  {
+    "number": "02",
+    "slug": "camille-ritchie",
+    "anchor": "episode-02-camille-ritchie",
+    "guest": "Camille Ritchie",
+    "duration": "44:07",
+    "recorded": "August 16, 2026",
+    "audio": "audio/camille-puffy-v1.mp3",
+    "photo": "../men-dont-talk/artwork/episode-02-camille-ritchie.png",
+    "photo_center": [
+      0.5,
+      0.48
+    ],
+    "accent": "#eadf9f",
+    "description": "Lifelong friends on Adelaide, becoming a parent, politics, protest, power, and what it means to keep speaking anyway.",
+    "quote": "If you're not outraged, you're not paying attention.",
+    "seconds": 2647,
+    "published": "Tue, 18 Aug 2026 18:41:56 +0000",
+    "guid": "wabbazzar-mdt-episode-02-camille-ritchie",
+    "bytes": 42354019
+  },
+  {
+    "number": "03",
+    "slug": "neel-shah",
+    "anchor": "episode-03-neel-shah",
+    "guest": "Neel Shah",
+    "duration": "43:10",
+    "recorded": "August 8, 2026",
+    "audio": "audio/neel-puffy-v1.mp3",
+    "photo": "../men-dont-talk/artwork/episode-03-neel-shah.png",
+    "photo_center": [
+      0.5,
+      0.5
+    ],
+    "accent": "#8fd4c1",
+    "description": "Old friends on marriage, parents, work, coding agents, the boundary around children, and the difficult work of knowing what you want.",
+    "quote": "A lot of those decisions I've outsourced to the agent.",
+    "seconds": 2590,
+    "published": "Mon, 24 Aug 2026 19:37:33 +0000",
+    "guid": "wabbazzar-mdt-episode-03-neel-shah",
+    "bytes": 41436596
+  }
+]

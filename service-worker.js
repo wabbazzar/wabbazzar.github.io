@@ -11,7 +11,7 @@
 //
 // Bump VERSION to invalidate old caches on next activation.
 
-const VERSION = 'v31';
+const VERSION = 'v32-puffy';
 const CACHE_STATIC = `wz-static-${VERSION}`;
 const CACHE_RUNTIME = `wz-runtime-${VERSION}`;
 
@@ -19,6 +19,10 @@ const PRECACHE_URLS = [
     '/',
     '/index.html',
     '/styles.css',
+    '/puffys-dads-podcast/',
+    '/puffys-dads-podcast/styles.css?v=10',
+    '/puffys-dads-podcast/app.js?v=7',
+    '/puffys-dads-podcast/assets/share.png',
     '/men-dont-talk/',
     '/men-dont-talk/styles.css',
     '/men-dont-talk/previews/show.png',
@@ -102,6 +106,8 @@ self.addEventListener('fetch', (event) => {
     if (req.method !== 'GET') return;
 
     const url = new URL(req.url);
+    // Media requests need real HTTP ranges, never a cached full-file response.
+    if (req.headers.has('range') || /\.(mp3|m4a|wav)$/i.test(url.pathname)) return;
 
     // Same-origin: stale-while-revalidate, with a navigation fallback to '/'.
     if (url.origin === self.location.origin) {
