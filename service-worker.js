@@ -11,7 +11,7 @@
 //
 // Bump VERSION to invalidate old caches on next activation.
 
-const VERSION = 'v32-puffy';
+const VERSION = 'v33-puffy-cleanup';
 const CACHE_STATIC = `wz-static-${VERSION}`;
 const CACHE_RUNTIME = `wz-runtime-${VERSION}`;
 
@@ -20,9 +20,10 @@ const PRECACHE_URLS = [
     '/index.html',
     '/styles.css',
     '/puffys-dads-podcast/',
-    '/puffys-dads-podcast/styles.css?v=10',
+    '/puffys-dads-podcast/styles.css?v=11',
+    '/puffys-dads-podcast/assets/icons.svg',
     '/puffys-dads-podcast/app.js?v=7',
-    '/puffys-dads-podcast/assets/share.png',
+    '/puffys-dads-podcast/assets/share.png?v=2',
     '/men-dont-talk/',
     '/men-dont-talk/styles.css',
     '/men-dont-talk/previews/show.png',

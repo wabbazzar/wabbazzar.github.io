@@ -43,8 +43,8 @@ function landing(target,title,description){return `<!doctype html>
 <link rel="canonical" href="${base+target}"><meta property="og:type" content="website">
 <meta property="og:site_name" content="${brand}"><meta property="og:title" content="${xml(title)} — ${brand}">
 <meta property="og:description" content="${xml(description)}"><meta property="og:url" content="${base+target}">
-<meta property="og:image" content="${base+route}assets/share.png"><meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="${base+route}assets/share.png">
+<meta property="og:image" content="${base+route}assets/share.png?v=2"><meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${base+route}assets/share.png?v=2">
 <link rel="icon" href="/favicon.svg?v=wb1"><style>body{background:#e7d9f5;color:#623982;font:20px system-ui;display:grid;min-height:90vh;place-items:center}a{color:inherit}</style>
 <script>location.replace(${JSON.stringify(target)}+location.search+${target.includes('#')?'""':'location.hash'});</script>
 </head><body><a href="${target}">Open ${xml(title)}</a></body></html>\n`;}
@@ -72,14 +72,14 @@ function feed(self){return `<?xml version="1.0" encoding="UTF-8"?>
 <itunes:summary>I'm Puffy's dad. These are my friends. Long conversations about life, supervised by one orange cat.</itunes:summary>
 <itunes:author>Wesley Beckner</itunes:author><itunes:type>episodic</itunes:type><itunes:explicit>true</itunes:explicit>
 <itunes:owner><itunes:name>Wesley Beckner</itunes:name><itunes:email>wesleybeckner@gmail.com</itunes:email></itunes:owner>
-<itunes:image href="${base+route}assets/show-3000.png"/>
+<itunes:image href="${base+route}assets/show-3000.png?v=2"/>
 <itunes:category text="Society &amp; Culture"><itunes:category text="Personal Journals"/></itunes:category>
-<image><url>${base+route}assets/show-3000.png</url><title>${brand}</title><link>${base+route}</link></image>
+<image><url>${base+route}assets/show-3000.png?v=2</url><title>${brand}</title><link>${base+route}</link></image>
 ${metadata.map(e=>`<item><title>${e.number}. ${xml(e.guest)}</title><link>${base+route}episode/${e.number}-${e.slug}/</link>
 <guid isPermaLink="false">${e.guid}</guid><pubDate>${e.published}</pubDate><description>${xml(e.description)} Recorded ${e.recorded}.</description>
 <itunes:summary>${xml(e.description)}</itunes:summary><itunes:author>Wesley Beckner</itunes:author><itunes:episodeType>full</itunes:episodeType>
 <itunes:episode>${Number(e.number)}</itunes:episode><itunes:explicit>true</itunes:explicit><itunes:duration>${e.seconds}</itunes:duration>
-<itunes:image href="${base+route}assets/show-3000.png"/>
+<itunes:image href="${base+route}assets/show-3000.png?v=2"/>
 <enclosure url="${base+route+e.audio}" length="${e.bytes}" type="audio/mpeg"/></item>`).join('\n')}
 </channel></rss>\n`;}
 for(const url of [route+'feed.xml','/men-dont-talk/feed.xml'])writeFileSync(resolve(root,url.slice(1)),feed(url));
