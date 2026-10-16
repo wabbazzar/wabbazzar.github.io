@@ -35,7 +35,7 @@ Fields NOT rendered to consumers (safe place for internal notes):
 
 ```bash
 cd /home/wabbazzar/.claude/plugins/cache/dev-browser-marketplace/dev-browser/66682fb0513a/skills/dev-browser
-node /home/wabbazzar/code/wabbazzar.github.io/receipts/tools/ingest-reel.mjs <SHORTCODE>
+node /home/wabbazzar/code/github-website/receipts/tools/ingest-reel.mjs <SHORTCODE>
 ```
 
 Accepts a full IG URL too (`https://www.instagram.com/reel/<SHORTCODE>/`). Default model is `base.en`. Override with `--model=small.en` for higher-stakes transcription. Use `--skip-capture` to reuse an existing `reel.webm`. Use `--skip-transcribe` to skip whisper.
@@ -81,7 +81,7 @@ After ingest:
 6. **Run clip-evidence** to generate inline screenshots:
    ```bash
    cd /home/wabbazzar/.claude/plugins/cache/dev-browser-marketplace/dev-browser/66682fb0513a/skills/dev-browser
-   node /home/wabbazzar/code/wabbazzar.github.io/receipts/tools/clip-evidence.mjs <id1> <id2> ...
+   node /home/wabbazzar/code/github-website/receipts/tools/clip-evidence.mjs <id1> <id2> ...
    ```
    Tool tries: exact in-node → cross-node Range fallback → head60 → cross-node60 → head30 → cross-node30. Logs which method matched. Sets `clip_status` on each source: `ok-<method>`, `http-<status>`, `quote-not-found`, or `error: ...`.
 

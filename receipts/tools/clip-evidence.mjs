@@ -7,14 +7,14 @@
 //
 // Run with the dev-browser plugin's playwright install:
 //   cd /home/wabbazzar/.claude/plugins/cache/dev-browser-marketplace/dev-browser/66682fb0513a/skills/dev-browser
-//   node /home/wabbazzar/code/wabbazzar.github.io/receipts/tools/clip-evidence.mjs <evidence-id> [<id2> ...]
+//   node /home/wabbazzar/code/github-website/receipts/tools/clip-evidence.mjs <evidence-id> [<id2> ...]
 //
 // Use --all to process every record listed in receipts/sources/evidence/manifest.json.
 
 import { chromium } from "playwright";
 import * as fs from "node:fs";
 
-const ROOT = "/home/wabbazzar/code/wabbazzar.github.io/receipts";
+const ROOT = "/home/wabbazzar/code/github-website/receipts";
 const EVIDENCE_DIR = `${ROOT}/sources/evidence`;
 const CLIPS_DIR = `${ROOT}/sources/clips`;
 

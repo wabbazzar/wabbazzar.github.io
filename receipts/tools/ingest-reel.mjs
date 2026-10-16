@@ -32,14 +32,14 @@
 //
 // Invoke from the dev-browser plugin dir for playwright resolution:
 //   cd /home/wabbazzar/.claude/plugins/cache/dev-browser-marketplace/dev-browser/66682fb0513a/skills/dev-browser
-//   node /home/wabbazzar/code/wabbazzar.github.io/receipts/tools/ingest-reel.mjs <SHORTCODE>
+//   node /home/wabbazzar/code/github-website/receipts/tools/ingest-reel.mjs <SHORTCODE>
 
 import { chromium } from "playwright";
 import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-const ROOT = "/home/wabbazzar/code/wabbazzar.github.io/receipts";
+const ROOT = "/home/wabbazzar/code/github-website/receipts";
 const CAPS_DIR = `${ROOT}/sources/captures`;
 const WHISPER = "/tmp/whisper-venv/bin/whisper";
 
