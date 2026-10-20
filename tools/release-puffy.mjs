@@ -1,5 +1,5 @@
 /** Package QC-reviewed audio, canonical episode routes, and a compatible RSS feed.
- * node tools/release-puffy.mjs /path/to/men_dont_talk --reviewed
+ * node tools/release-puffy.mjs /path/to/puffys-dads-podcast --reviewed
  * No deployment; git diff and browser QA are separate gates.
  */
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync,statSync} from 'node:fs';
