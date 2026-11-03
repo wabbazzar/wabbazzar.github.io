@@ -49,5 +49,26 @@
     "accent": "#8fd4c1",
     "description": "Old friends on marriage, parents, work, coding agents, the boundary around children, and the difficult work of knowing what you want.",
     "quote": "A lot of those decisions I've outsourced to the agent."
+  },
+  {
+    "number": "04",
+    "slug": "karli-beckner",
+    "anchor": "episode-04-karli-beckner",
+    "guest": "Karli Beckner",
+    "duration": "85:23",
+    "recorded": "October 19, 2026",
+    "audio": "audio/karli-puffy-v1.mp3",
+    "photo": "artwork/episode-04-karli-beckner.png",
+    "photo_center": [
+      0.5,
+      0.5
+    ],
+    "accent": "#f2b8c6",
+    "description": "Brother and sister on what we're pissed off about, growing up in the same house without being twins, choosing to be here, how men and women are raised to care, and the fear of the pain.",
+    "quote": "Men are raised to be concerned about themselves, and women are raised to be concerned about others.",
+    "seconds": 5123,
+    "published": "Sat, 31 Oct 2026 14:30:00 +0000",
+    "guid": "wabbazzar-mdt-episode-04-karli-beckner",
+    "bytes": 81968109
   }
 ]

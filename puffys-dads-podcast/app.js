@@ -1,7 +1,8 @@
 const episodes=[
   {guest:'Wesley Tatum',src:'audio/tatum-puffy-v1.mp3',anchor:'episode-01-tatum'},
   {guest:'Camille Ritchie',src:'audio/camille-puffy-v1.mp3',anchor:'episode-02-camille-ritchie'},
-  {guest:'Neel Shah',src:'audio/neel-puffy-v1.mp3',anchor:'episode-03-neel-shah'}
+  {guest:'Neel Shah',src:'audio/neel-puffy-v1.mp3',anchor:'episode-03-neel-shah'},
+  {guest:'Karli Beckner',src:'audio/karli-puffy-v1.mp3',anchor:'episode-04-karli-beckner'}
 ];
 const audio=document.getElementById('audio');
 const dock=document.querySelector('.audio-dock');

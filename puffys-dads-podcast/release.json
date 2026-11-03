@@ -1,6 +1,6 @@
 {
-  "brand": "Puffy’s Dad’s Podcast",
-  "release": "2026-10-08",
+  "brand": "Puffy\u2019s Dad\u2019s Podcast",
+  "release": "2026-10-31",
   "episodes": [
     {
       "episode": "tatum",
@@ -95,6 +95,34 @@
         "sting": [
           914.18,
           923.0999999999999
+        ]
+      }
+    },
+    {
+      "episode": "karli_beckner",
+      "audio": "audio/karli-puffy-v1.mp3",
+      "sha256": "948f9abc11e0bf5f58feb8945be1362b1acbea54dcfeed71c85c70fc9986ce5f",
+      "duration_s": 5122.97,
+      "marks_s": {
+        "cold_open": [
+          0.1,
+          20.85
+        ],
+        "theme": [
+          17.19,
+          28.8
+        ],
+        "intro": [
+          29.05,
+          65.79
+        ],
+        "episode": [
+          66.49,
+          5122.97
+        ],
+        "break": [
+          1295.51,
+          1319.04
         ]
       }
     }
