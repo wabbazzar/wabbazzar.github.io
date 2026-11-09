@@ -1,0 +1,394 @@
+{
+ "songs": [
+  {
+   "slug": "yjm",
+   "title": "Xue Hua Mao Mao",
+   "subtitle": "雪花毛毛 北風嘯嘯 / 天地一片汪汪 — over the Yi Jian Mei (一剪梅) instrumental",
+   "episode": "Jacob Surratt",
+   "pick": "v2/a_plate",
+   "versions": [
+    {
+     "version": "v2",
+     "note": "Take 3 of the vocal. No leading bars, denoise/de-ess/EQ, detuned doubles, plate.",
+     "takes": [
+      {
+       "name": "a_plate",
+       "file": "yjm/v2/a_plate.mp3",
+       "seconds": 15.29,
+       "bytes": 490029,
+       "sha256": "52cd34944503dd301c4da9ff0cc0817f23fc3aa6bb7c523974a8b43b043db1e3",
+       "note": "no leading bars; plate 1.6 s + detuned doubles",
+       "lufs": -15.6,
+       "pick": true
+      },
+      {
+       "name": "b_room",
+       "file": "yjm/v2/b_room.mp3",
+       "seconds": 15.29,
+       "bytes": 490029,
+       "sha256": "730d83ff86a080033ae0804f09324c0c6e3b974eaba0971c3fbc5ee0ce16b795",
+       "note": "no leading bars; short room 0.7 s, no doubles",
+       "lufs": -15.7,
+       "pick": false
+      },
+      {
+       "name": "c_plate_outro",
+       "file": "yjm/v2/c_plate_outro.mp3",
+       "seconds": 18.65,
+       "bytes": 597549,
+       "sha256": "981f67d0181a962efae7d23ad963f6d82d2380d99c6b0830b73b90cfbe5f96b8",
+       "note": "A, riding one bar out",
+       "lufs": -16.0,
+       "pick": false
+      },
+      {
+       "name": "d_dry",
+       "file": "yjm/v2/d_dry.mp3",
+       "seconds": 15.29,
+       "bytes": 490029,
+       "sha256": "8c21a1018ce33529ff60893f9fd34791b19d0839a3c3bd4d65216b36d8bc92e3",
+       "note": "no leading bars; dry voice, cleaned only",
+       "lufs": -15.7,
+       "pick": false
+      }
+     ]
+    },
+    {
+     "version": "v1",
+     "note": "Take 2 of the vocal. Whole-phrase placement, one bar of intro on most options.",
+     "takes": [
+      {
+       "name": "a_flow",
+       "file": "yjm/v1/a_flow.mp3",
+       "seconds": 18.29,
+       "bytes": 586029,
+       "sha256": "f4d6cf5d64b80e8314dff685e0d76259cd2fc4a74473064789ad0d1856ded2cc",
+       "note": "one bar of intro; lines 1+2 as he sang them (no stretch)",
+       "lufs": -15.8,
+       "pick": false
+      },
+      {
+       "name": "a_one_bar",
+       "file": "yjm/v1/a_one_bar.mp3",
+       "seconds": 18.29,
+       "bytes": 586029,
+       "sha256": "78a4752a6aebbe77b0e8af4004c5f1f62e387b776afc69654a8bc042d88facc0",
+       "note": null,
+       "lufs": null,
+       "pick": false
+      },
+      {
+       "name": "b_grid",
+       "file": "yjm/v1/b_grid.mp3",
+       "seconds": 18.29,
+       "bytes": 586029,
+       "sha256": "e1bc4d39f532080e1b2f3694c71027230b743b03c6a7980670d49c866b87715b",
+       "note": "one bar of intro; line 2 pinned to Fei's 北 (1.45x / 0.73x)",
+       "lufs": -15.8,
+       "pick": false
+      },
+      {
+       "name": "b_half_bar",
+       "file": "yjm/v1/b_half_bar.mp3",
+       "seconds": 16.66,
+       "bytes": 533805,
+       "sha256": "4e8e32a6c07deb02978aa08f05e681c2fb48f364d8c08da2ae627a66d0f244f1",
+       "note": null,
+       "lufs": null,
+       "pick": false
+      },
+      {
+       "name": "c_zither",
+       "file": "yjm/v1/c_zither.mp3",
+       "seconds": 21.53,
+       "bytes": 689709,
+       "sha256": "94b69f1fd0f545e5af3eb8e98667c990ad0cb9dfb375802ba20a017baf3fa5e9",
+       "note": "second chorus, two bars of zither lead in; flow timing",
+       "lufs": -15.8,
+       "pick": false
+      },
+      {
+       "name": "d_flow_outro",
+       "file": "yjm/v1/d_flow_outro.mp3",
+       "seconds": 21.65,
+       "bytes": 693549,
+       "sha256": "31f017486b886caaa981d764d47856a293323add45f8133d2dc4622d9210bbd7",
+       "note": "A, riding one bar out",
+       "lufs": -16.0,
+       "pick": false
+      },
+      {
+       "name": "d_one_bar_outro",
+       "file": "yjm/v1/d_one_bar_outro.mp3",
+       "seconds": 21.65,
+       "bytes": 693549,
+       "sha256": "70fd8952f234092b039c15e6fe90bcc00924d833cc2c62355afe585aec28d46c",
+       "note": null,
+       "lufs": null,
+       "pick": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "lovely",
+   "title": "My Lovely Fluffy Puff",
+   "subtitle": "My Humps parody",
+   "episode": "Karli Beckner",
+   "pick": "v3/d_track_tempo_outro",
+   "versions": [
+    {
+     "version": "v3",
+     "note": "Over the My Humps instrumental.",
+     "takes": [
+      {
+       "name": "a_track_tempo",
+       "file": "lovely/v3/a_track_tempo.mp3",
+       "seconds": 8.23,
+       "bytes": 264237,
+       "sha256": "cec3178a70b5280e75455396e1e0454a5c8686fa93c3c68f0ac459205cf282fe",
+       "note": "record tempo, her take sped up to it, one-bar intro",
+       "lufs": -15.9,
+       "pick": false
+      },
+      {
+       "name": "b_her_tempo",
+       "file": "lovely/v3/b_her_tempo.mp3",
+       "seconds": 8.88,
+       "bytes": 284973,
+       "sha256": "5c1e56fb9f6e13ac0e29bd77de5caa83428bf40981e3ee976442ed8619f41223",
+       "note": "her tempo, the record slowed to it",
+       "lufs": -16.0,
+       "pick": false
+      },
+      {
+       "name": "c_long",
+       "file": "lovely/v3/c_long.mp3",
+       "seconds": 11.9,
+       "bytes": 381741,
+       "sha256": "59605df8201e54867b304ea324d93924821c81e411587ec670c5b91ab07ef161",
+       "note": "record tempo, two-bar intro, rides one bar out",
+       "lufs": -15.9,
+       "pick": false
+      },
+      {
+       "name": "d_track_tempo_outro",
+       "file": "lovely/v3/d_track_tempo_outro.mp3",
+       "seconds": 10.39,
+       "bytes": 333357,
+       "sha256": "224b9469477c880ccff2803f0142fd05ba2cc0f4f17dc683539f3fad7cc5d292",
+       "note": "A with one bar out (the production pick)",
+       "lufs": -16.0,
+       "pick": true
+      }
+     ]
+    },
+    {
+     "version": "v2",
+     "note": "Synthesized beds, no sample of the record.",
+     "takes": [
+      {
+       "name": "a_electro",
+       "file": "lovely/v2/a_electro.mp3",
+       "seconds": 8.57,
+       "bytes": 274989,
+       "sha256": "15aa95e3339d56b35c6257b229e4dd7f99ae9235c79cffea6c384b4f8c946c8a",
+       "note": null,
+       "lufs": null,
+       "pick": false
+      },
+      {
+       "name": "b_autotune",
+       "file": "lovely/v2/b_autotune.mp3",
+       "seconds": 8.57,
+       "bytes": 274989,
+       "sha256": "5906240076725415fdfa0f98693f8f13a501a50602d148df9a3f928aa634014a",
+       "note": null,
+       "lufs": null,
+       "pick": false
+      },
+      {
+       "name": "c_stop_time",
+       "file": "lovely/v2/c_stop_time.mp3",
+       "seconds": 7.87,
+       "bytes": 252717,
+       "sha256": "ab92b17d6194bba29f8a0783834ffb81d40b569b0c8718fe895c9dad82db2d34",
+       "note": null,
+       "lufs": null,
+       "pick": false
+      },
+      {
+       "name": "d_toy_box",
+       "file": "lovely/v2/d_toy_box.mp3",
+       "seconds": 7.85,
+       "bytes": 251949,
+       "sha256": "d7807798ff532d46cbc8e683cf6782cdb0b27be993d8d1a79c772a5abbcee853",
+       "note": null,
+       "lufs": null,
+       "pick": false
+      }
+     ]
+    },
+    {
+     "version": "v1",
+     "note": "A cappella: voice chain and stereo room only.",
+     "takes": [
+      {
+       "name": "01_lovely_fluffy_puff",
+       "file": "lovely/v1/01_lovely_fluffy_puff.mp3",
+       "seconds": 6.65,
+       "bytes": 213549,
+       "sha256": "b6c95767a1a82c5ee9f7799a3342075164ecc4a2a4a0740f776fad9e7b1bab3c",
+       "note": "song",
+       "lufs": null,
+       "pick": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "brand",
+   "title": "Hey Mr. Puffy / Mr. Puffacles",
+   "subtitle": "Title fanfare, the two sung jingles, and the assembled openings",
+   "episode": "Show branding",
+   "pick": "v2/04_opening_hey_mr_puffy_short",
+   "versions": [
+    {
+     "version": "v2",
+     "note": "Hey Mr. Puffy shortened after the first complete refrain.",
+     "takes": [
+      {
+       "name": "02_hey_mr_puffy_short",
+       "file": "brand/v2/02_hey_mr_puffy_short.mp3",
+       "seconds": 8.38,
+       "bytes": 268845,
+       "sha256": "5c1bec077250ebfc559d6105f96972ee42da06bfbc6513df292794ca7aa4b66d",
+       "note": "song",
+       "lufs": null,
+       "pick": false
+      },
+      {
+       "name": "04_opening_hey_mr_puffy_short",
+       "file": "brand/v2/04_opening_hey_mr_puffy_short.mp3",
+       "seconds": 13.94,
+       "bytes": 447021,
+       "sha256": "d4741f01417d42c6b51c22c2719ceab9a5fb827ce9c47915448487ff4bb7bbe7",
+       "note": "opening",
+       "lufs": null,
+       "pick": true
+      }
+     ]
+    },
+    {
+     "version": "v1",
+     "note": "First demos: title fanfare, both songs, both openings.",
+     "takes": [
+      {
+       "name": "01_puffy_title_fanfare",
+       "file": "brand/v1/01_puffy_title_fanfare.mp3",
+       "seconds": 5.69,
+       "bytes": 182829,
+       "sha256": "c3a44e9bbe5859d0cdd44496eb4ba4bcb2581833cc56049644df4ea68dc70e1a",
+       "note": "title",
+       "lufs": null,
+       "pick": false
+      },
+      {
+       "name": "02_hey_mr_puffy_song",
+       "file": "brand/v1/02_hey_mr_puffy_song.mp3",
+       "seconds": 16.22,
+       "bytes": 519981,
+       "sha256": "ad41596060754235e3ce82efdc7033aa468ae6f22cdb9fca459d8df159d85792",
+       "note": "song a",
+       "lufs": null,
+       "pick": false
+      },
+      {
+       "name": "03_puffacles_song",
+       "file": "brand/v1/03_puffacles_song.mp3",
+       "seconds": 8.95,
+       "bytes": 287277,
+       "sha256": "a99772a4823596a4826bf83f12d7106bb93daee1db763f1176a32b089823bfa3",
+       "note": "song b",
+       "lufs": null,
+       "pick": false
+      },
+      {
+       "name": "04_opening_hey_mr_puffy",
+       "file": "brand/v1/04_opening_hey_mr_puffy.mp3",
+       "seconds": 21.79,
+       "bytes": 698157,
+       "sha256": "52958139a16c911765e3595c9b5f527fcadf02d08f6d2a1327eb6844baab0d37",
+       "note": "opening a",
+       "lufs": null,
+       "pick": false
+      },
+      {
+       "name": "05_opening_puffacles",
+       "file": "brand/v1/05_opening_puffacles.mp3",
+       "seconds": 14.52,
+       "bytes": 465453,
+       "sha256": "cd95b814f2345f2634d0289ef7b5d1b9a5cbe78cf4f62eca92495f720a1ce3cf",
+       "note": "opening b",
+       "lufs": null,
+       "pick": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "rock_demo",
+   "title": "Rock n and a Rolln",
+   "subtitle": "Private demo",
+   "episode": "Unassigned",
+   "pick": null,
+   "versions": [
+    {
+     "version": "v2",
+     "note": "One nylon guitar, gentle.",
+     "takes": [
+      {
+       "name": "01_puffy_gentle",
+       "file": "rock_demo/v2/01_puffy_gentle.mp3",
+       "seconds": 12.29,
+       "bytes": 394029,
+       "sha256": "c2ab70a1e53d3db78b51470d20ac333c69da77a7cd17799b5fd4451fae7dac51",
+       "note": "song",
+       "lufs": null,
+       "pick": false
+      }
+     ]
+    },
+    {
+     "version": "v1",
+     "note": "Boogie-woogie piano arrangement.",
+     "takes": [
+      {
+       "name": "01_rock_n_and_a_rolln",
+       "file": "rock_demo/v1/01_rock_n_and_a_rolln.mp3",
+       "seconds": 12.58,
+       "bytes": 403245,
+       "sha256": "f9bc828a51f2f0fc6f54e672fa99e24219e0383aba91c0c5d79cfb342f481794",
+       "note": "song",
+       "lufs": null,
+       "pick": false
+      },
+      {
+       "name": "02_rock_song_then_title",
+       "file": "rock_demo/v1/02_rock_song_then_title.mp3",
+       "seconds": 18.14,
+       "bytes": 581421,
+       "sha256": "35308504ce4ac8eae002db92d312120529c3f31df4b7e9eafd44b3ecef554e50",
+       "note": "opening",
+       "lufs": null,
+       "pick": false
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
