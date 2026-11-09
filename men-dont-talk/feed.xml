@@ -2,7 +2,8 @@
 <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom"><channel>
 <atom:link href="https://wabbazzar.com/men-dont-talk/feed.xml" rel="self" type="application/rss+xml"/>
 <title>Puffy’s Dad’s Podcast</title><link>https://wabbazzar.com/puffys-dads-podcast/</link><language>en-us</language>
-<copyright>© 2026 Wesley Beckner</copyright><description>I'm Puffy's dad. These are my friends. Long conversations about life, supervised by one orange cat.</description>
+<itunes:new-feed-url>https://wabbazzar.com/puffys-dads-podcast/feed.xml</itunes:new-feed-url>
+<copyright>© 2026 Wesley Beckner</copyright><description>This feed address is retired; subscribe at https://wabbazzar.com/puffys-dads-podcast/feed.xml. I'm Puffy's dad. These are my friends. Long conversations about life, supervised by one orange cat.</description>
 <itunes:summary>I'm Puffy's dad. These are my friends. Long conversations about life, supervised by one orange cat.</itunes:summary>
 <itunes:author>Wesley Beckner</itunes:author><itunes:type>episodic</itunes:type><itunes:explicit>true</itunes:explicit>
 <itunes:owner><itunes:name>Wesley Beckner</itunes:name><itunes:email>wesleybeckner@gmail.com</itunes:email></itunes:owner>

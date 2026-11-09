@@ -7,7 +7,7 @@
     "duration": "43:45",
     "recorded": "June 10, 2026",
     "audio": "audio/tatum-puffy-v1.mp3",
-    "photo": "../men-dont-talk/artwork/episode-01-tatum.png",
+    "photo": "artwork/episode-01-tatum.png",
     "photo_center": [
       0.5,
       0.46
@@ -28,7 +28,7 @@
     "duration": "44:07",
     "recorded": "August 16, 2026",
     "audio": "audio/camille-puffy-v1.mp3",
-    "photo": "../men-dont-talk/artwork/episode-02-camille-ritchie.png",
+    "photo": "artwork/episode-02-camille-ritchie.png",
     "photo_center": [
       0.5,
       0.48
@@ -49,7 +49,7 @@
     "duration": "43:10",
     "recorded": "August 8, 2026",
     "audio": "audio/neel-puffy-v1.mp3",
-    "photo": "../men-dont-talk/artwork/episode-03-neel-shah.png",
+    "photo": "artwork/episode-03-neel-shah.png",
     "photo_center": [
       0.5,
       0.5
@@ -70,7 +70,7 @@
     "duration": "85:23",
     "recorded": "October 19, 2026",
     "audio": "audio/karli-puffy-v1.mp3",
-    "photo": "../men-dont-talk/artwork/episode-04-karli-beckner.png",
+    "photo": "artwork/episode-04-karli-beckner.png",
     "photo_center": [
       0.5,
       0.5
