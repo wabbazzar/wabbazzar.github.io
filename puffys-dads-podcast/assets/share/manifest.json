@@ -1,0 +1,22 @@
+{
+  "episode-01-tatum": {
+    "photo": "artwork/episode-01-tatum.png",
+    "photo_sha256": "e0955c2043dfd06ee58cdf40d89a0ff90ed5f622ccf94801eff5471f52d1ad50",
+    "card_sha256": "563ed7072c5ddb9812aeb132671249b4cdf20fd7aa3b33a1c2f7cf2e7d1e136a"
+  },
+  "episode-02-camille-ritchie": {
+    "photo": "artwork/episode-02-camille-ritchie.png",
+    "photo_sha256": "27f27d56c754130d62261453ca9c36e94d90ba178e963f4197476cd47ffbb3ad",
+    "card_sha256": "3604de3ecb3e38f2d35e4c6ea637f6139e79bb8c274f164264533b6f8b1ee276"
+  },
+  "episode-03-neel-shah": {
+    "photo": "artwork/episode-03-neel-shah.png",
+    "photo_sha256": "08de0a669733a7cf9e346fa56ae01b67979af7ed931413ced83c4f331c4aced0",
+    "card_sha256": "04436e5220036416adcbf1cd2258e29ab7edcfe7dc8b55bc8b0ae0779284d250"
+  },
+  "episode-04-karli-beckner": {
+    "photo": "artwork/episode-04-karli-beckner.png",
+    "photo_sha256": "16e9244e5f6795211014ba32938da8c21022f6162d5b4962ce9eebf2383c721c",
+    "card_sha256": "c2ff38983087bf9916c697808d8014dc0512ba6cb3887f58ff9566239090225d"
+  }
+}

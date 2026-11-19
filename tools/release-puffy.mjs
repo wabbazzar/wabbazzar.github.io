@@ -37,14 +37,14 @@ for(let i=0;i<metadata.length;i++){
 writeFileSync(resolve(out,'episodes.json'),JSON.stringify(metadata,null,2)+'\n');
 writeFileSync(resolve(out,'release.json'),JSON.stringify({brand,release:'2026-10-08',episodes:release},null,2)+'\n');
 
-function landing(target,title,description){return `<!doctype html>
+function landing(target,title,description,image=`${base+route}assets/share.png?v=2`){return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${xml(title)} — ${brand}</title><meta name="description" content="${xml(description)}">
 <link rel="canonical" href="${base+target}"><meta property="og:type" content="website">
 <meta property="og:site_name" content="${brand}"><meta property="og:title" content="${xml(title)} — ${brand}">
 <meta property="og:description" content="${xml(description)}"><meta property="og:url" content="${base+target}">
-<meta property="og:image" content="${base+route}assets/share.png?v=2"><meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="${base+route}assets/share.png?v=2">
+<meta property="og:image" content="${image}"><meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${image}">
 <link rel="icon" href="/favicon.svg?v=wb1"><style>body{background:#e7d9f5;color:#623982;font:20px system-ui;display:grid;min-height:90vh;place-items:center}a{color:inherit}</style>
 <script>location.replace(${JSON.stringify(target)}+location.search+${target.includes('#')?'""':'location.hash'});</script>
 </head><body><a href="${target}">Open ${xml(title)}</a></body></html>\n`;}
@@ -52,7 +52,8 @@ for(const e of metadata){
  const pageRoute=`episode/${e.number}-${e.slug}/`;
  const target=route+`?episode=${e.anchor}#${e.anchor}`;
  // Canonical share route has its own metadata; browsers land on the matching card.
- let page=landing(target,e.guest,e.description).replace(base+target,base+route+pageRoute);
+ // Episode links preview the photo of Wesley and the guest; scripts/share_cards.py in the pipeline repo builds the card.
+ let page=landing(target,e.guest,e.description,`${base+route}assets/share/episode-${e.number}-${e.slug}.png`).replace(base+target,base+route+pageRoute);
  // target already has a query/hash; don't append a second query.
  page=page.replace(`+location.search+""`, '');
  for(const dir of [resolve(out,pageRoute),resolve(root,'men-dont-talk',pageRoute)]){
