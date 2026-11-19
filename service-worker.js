@@ -11,7 +11,7 @@
 //
 // Bump VERSION to invalidate old caches on next activation.
 
-const VERSION = 'v34-mdt-deprecated';
+const VERSION = 'v35-podcast-share';
 const CACHE_STATIC = `wz-static-${VERSION}`;
 const CACHE_RUNTIME = `wz-runtime-${VERSION}`;
 
@@ -20,9 +20,10 @@ const PRECACHE_URLS = [
     '/index.html',
     '/styles.css',
     '/puffys-dads-podcast/',
-    '/puffys-dads-podcast/styles.css?v=11',
+    '/puffys-dads-podcast/styles.css?v=12',
     '/puffys-dads-podcast/assets/icons.svg',
-    '/puffys-dads-podcast/app.js?v=7',
+    '/puffys-dads-podcast/app.js?v=8',
+    '/puffys-dads-podcast/assets/share-icon-64.png',
     '/puffys-dads-podcast/assets/share.png?v=2',
     '/puffys-dads-podcast/artwork/episode-01-tatum.png',
     '/puffys-dads-podcast/artwork/episode-03-neel-shah.png',

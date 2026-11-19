@@ -15,7 +15,8 @@ const requestedEpisode=new URLSearchParams(location.search).get('episode')||loca
 if(episodes.some(episode=>episode.anchor===requestedEpisode)){
   requestAnimationFrame(()=>document.getElementById(requestedEpisode)?.scrollIntoView());
 }
-document.querySelectorAll('.play-episode').forEach(button=>button.addEventListener('click',async()=>{
+document.querySelectorAll('.play-episode').forEach(button=>button.addEventListener('click',async event=>{
+  event.preventDefault();  // the href exists so a long-press on iPhone can copy the episode link
   const index=Number(button.dataset.index);
   lastTrigger=button;
   dock.hidden=false;
@@ -24,6 +25,22 @@ document.querySelectorAll('.play-episode').forEach(button=>button.addEventListen
   if(current!==index){audio.src=episodes[index].src;current=index;}
   document.getElementById('playing-title').textContent=episodes[index].guest;
   try {await audio.play();} catch {message.textContent='Press play in the player to start the episode.';}
+}));
+// Share: Web Share sheet where it exists (iPhone), otherwise copy the link.
+// Each link points at episode/<nn-slug>/, the page that carries that episode's og: tags.
+document.querySelectorAll('.share-episode').forEach(link=>link.addEventListener('click',async event=>{
+  event.preventDefault();
+  const url=new URL(link.getAttribute('href'),location.href).href;
+  const title=`${episodes[Number(link.dataset.index)].guest} — Puffy’s Dad’s Podcast`;
+  if(navigator.share){
+    try{await navigator.share({title,url});return;}catch{/* cancelled or unsupported: fall through to copy */}
+  }
+  const label=link.querySelector('.share-label');
+  try{
+    await navigator.clipboard.writeText(url);
+    label.textContent='Link copied!';
+    window.setTimeout(()=>{label.textContent='Share';},2000);
+  }catch{window.prompt('Copy this link:',url);}
 }));
 audio.addEventListener('error',()=>{message.textContent='The recording could not load. Please try again.';});
 document.getElementById('close-player').addEventListener('click',()=>{
